@@ -1,0 +1,7 @@
+{
+  "name": "betterGS",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
