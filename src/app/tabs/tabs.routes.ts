@@ -1,36 +1,59 @@
 import { Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
+import { loginGuard } from '../core/guards/login.guard';
 
 export const routes: Routes = [
   {
     path: 'tabs',
     component: TabsPage,
+    canActivateChild: [loginGuard],
     children: [
       {
-        path: 'tab1',
+        path: 'my_activities',
         loadComponent: () =>
-          import('../tab1/tab1.page').then((m) => m.Tab1Page),
+          import('./my_activities/my_activities.page').then((m) => m.MyActivitiesPage),
       },
       {
-        path: 'tab2',
+        path: 'ranking',
         loadComponent: () =>
-          import('../tab2/tab2.page').then((m) => m.Tab2Page),
+          import('./ranking/ranking.page').then((m) => m.RankingPage),
       },
       {
-        path: 'tab3',
+        path: 'profile',
         loadComponent: () =>
-          import('../tab3/tab3.page').then((m) => m.Tab3Page),
+          import('./profile/profile.page').then((m) => m.ProfilePage),
+      },
+      {
+        path: 'admin',
+        loadComponent: () =>
+          import('./admin-page/admin-page.page').then((m) => m.AdminPagePage),
       },
       {
         path: '',
-        redirectTo: '/tabs/tab1',
+        redirectTo: '/tabs/my_activities',
         pathMatch: 'full',
+
       },
+
+      
     ],
   },
   {
     path: '',
-    redirectTo: '/tabs/tab1',
+    redirectTo: '/tabs/my_activities',
     pathMatch: 'full',
+  },
+        {
+        path: 'tracking/:activityId',
+        loadComponent: () =>
+          import('../singlePages/tracking/tracking.component').then((m) => m.TrackingComponent),
+      },
+  {
+    path: 'ranking',
+    loadComponent: () => import('./ranking/ranking.page').then( m => m.RankingPage)
+  },
+  {
+    path: 'admin-page',
+    loadComponent: () => import('./admin-page/admin-page.page').then( m => m.AdminPagePage)
   },
 ];

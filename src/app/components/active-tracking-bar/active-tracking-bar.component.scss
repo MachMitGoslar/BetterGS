@@ -1,0 +1,169 @@
+// Green pulsing background animation for active tracking
+@keyframes pulse-green {
+  0% {
+    background: linear-gradient(90deg, #10dc60, #28e070);
+    //box-shadow: 0 0 10px rgba(16, 220, 96, 0.5);
+  }
+  50% {
+    background: linear-gradient(90deg, #28e070, #42ed8d);
+    //box-shadow: 0 0 20px rgba(16, 220, 96, 0.8);
+  }
+  100% {
+    background: linear-gradient(90deg, #42ed8d, #10dc60);
+    //box-shadow: 0 0 10px rgba(16, 220, 96, 0.5);
+  }
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+@keyframes pulse-glow {
+  0% {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+  }
+  50% {
+    text-shadow: 0 0 15px rgba(255, 255, 255, 1);
+  }
+  100% {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+  }
+}
+
+.tracking_bar {
+  position: relative;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  background: linear-gradient(90deg, var(--ion-color-success-tint), var(--ion-color-success-shade));
+  background-size: 400% 400%;
+  color: white;
+  // Main pulsing background
+  animation: gradient 2s ease-in-out infinite;
+  width: 100%;
+  
+  // Add a subtle border
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  
+  // Ensure content is visible over the background
+  ion-title, ion-icon, ion-button {
+    position: relative;
+    z-index: 2;
+  }
+  
+  // Style the tracking text
+  .tracking-text {
+    font-weight: 600;
+    font-size: 1rem;
+    z-index: 20;
+  }
+  
+  .tracking_stopButton {
+
+    width: 40px;
+    height: 40px;
+    margin: 10px;
+    ion-icon {
+      font-size: 1.5rem;
+    }
+    
+    &:hover {
+      --background: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+  }
+  .tracking_timer {
+    font-size: 1.5rem;
+    margin-left: 8px;
+  }
+
+  .tracking-icon {
+    font-size: 1.5rem;
+    margin-left: 8px;
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  
+  // Add a subtle animated overlay for extra visual appeal
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent
+    );
+    animation: shimmer 3s ease-in-out infinite;
+    z-index: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  50% {
+    left: 100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+// Dark mode adjustments
+@media (prefers-color-scheme: dark) {
+  // Define the dark mode animation first
+  @keyframes pulse-green-dark {
+    0% {
+      background: linear-gradient(90deg, #0d8f4b, #189c5a);
+      box-shadow: 0 0 10px rgba(13, 143, 75, 0.6);
+    }
+    50% {
+      background: linear-gradient(90deg, #189c5a, #22b96a);
+      box-shadow: 0 0 20px rgba(13, 143, 75, 0.9);
+    }
+    100% {
+      background: linear-gradient(90deg, #0d8f4b, #189c5a);
+      box-shadow: 0 0 10px rgba(13, 143, 75, 0.6);
+    }
+  }
+  
+  .tracking_bar {
+    // Apply the dark mode animation
+    animation: pulse-green-dark 2s ease-in-out infinite;
+  }
+}
+
+// Reduced motion accessibility
+@media (prefers-reduced-motion: reduce) {
+  .tracking_bar {
+    animation: none;
+    background: linear-gradient(90deg, #10dc60, #28e070);
+    box-shadow: 0 0 10px rgba(16, 220, 96, 0.5);
+    
+    .tracking-text,
+    .tracking-icon {
+      animation: none;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    }
+    
+    &::before {
+      animation: none;
+      display: none;
+    }
+  }
+}

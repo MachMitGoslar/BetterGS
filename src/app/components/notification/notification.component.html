@@ -1,0 +1,10 @@
+<ion-toast
+  *ngFor="let notification of (notifications | async)"
+  [header]="notification.type"
+  [message]="notification.message"
+  [duration]="2000"
+  animated="true"
+  [color]="notification.type"
+  [position]="'top'"
+  (ionToastDidDismiss)="removeNotification(notification.id)">
+</ion-toast>

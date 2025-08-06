@@ -68,3 +68,13 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+
+# Environment files
+/.env
+src/environments/*
+firebase/*
+
+# Build directories
+ios/
+firebase/

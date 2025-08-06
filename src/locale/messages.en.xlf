@@ -1,0 +1,697 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <!-- Navigation & Headers -->
+      <trans-unit id="login.title" datatype="html">
+        <source>Login</source>
+        <target>Login</target>
+      </trans-unit>
+      <trans-unit id="signup.title" datatype="html">
+        <source>Sign Up</source>
+        <target>Sign Up</target>
+      </trans-unit>
+      <trans-unit id="profile.title" datatype="html">
+        <source>Profile</source>
+        <target>Profile</target>
+      </trans-unit>
+      <trans-unit id="tracking.title" datatype="html">
+        <source>Tracking</source>
+        <target>Tracking</target>
+      </trans-unit>
+
+      <!-- Login Page -->
+      <trans-unit id="login.welcome.title" datatype="html">
+        <source>Welcome Back</source>
+        <target>Welcome Back</target>
+      </trans-unit>
+      <trans-unit id="login.welcome.subtitle" datatype="html">
+        <source>Sign in to your account</source>
+        <target>Sign in to your account</target>
+      </trans-unit>
+      <trans-unit id="login.brand.subtitle" datatype="html">
+        <source>Track your activities and improve your performance</source>
+        <target>Track your activities and improve your performance</target>
+      </trans-unit>
+      <trans-unit id="login.email.placeholder" datatype="html">
+        <source>Email address</source>
+        <target>Email address</target>
+      </trans-unit>
+      <trans-unit id="login.password.placeholder" datatype="html">
+        <source>Password</source>
+        <target>Password</target>
+      </trans-unit>
+      <trans-unit id="login.remember.me" datatype="html">
+        <source>Remember me</source>
+        <target>Remember me</target>
+      </trans-unit>
+      <trans-unit id="login.forgot.password" datatype="html">
+        <source>Forgot Password?</source>
+        <target>Forgot Password?</target>
+      </trans-unit>
+      <trans-unit id="login.sign.in" datatype="html">
+        <source>Sign In</source>
+        <target>Sign In</target>
+      </trans-unit>
+      <trans-unit id="login.signing.in" datatype="html">
+        <source>Signing In...</source>
+        <target>Signing In...</target>
+      </trans-unit>
+      <trans-unit id="login.continue.guest" datatype="html">
+        <source>Try out with temporary account</source>
+        <target>Try out with temporary account</target>
+      </trans-unit>
+      <trans-unit id="login.no.account" datatype="html">
+        <source>Don't have an account?</source>
+        <target>Don't have an account?</target>
+      </trans-unit>
+
+      <!-- Sign Up Page -->
+      <trans-unit id="signup.join.title" datatype="html">
+        <source>Join BetterGS</source>
+        <target>Join BetterGS</target>
+      </trans-unit>
+      <trans-unit id="signup.join.subtitle" datatype="html">
+        <source>Start tracking your activities today</source>
+        <target>Start tracking your activities today</target>
+      </trans-unit>
+      <trans-unit id="signup.create.account" datatype="html">
+        <source>Create Account</source>
+        <target>Create Account</target>
+      </trans-unit>
+      <trans-unit id="signup.fill.details" datatype="html">
+        <source>Fill in your details to get started</source>
+        <target>Fill in your details to get started</target>
+      </trans-unit>
+      <trans-unit id="signup.display.name" datatype="html">
+        <source>Display Name</source>
+        <target>Display Name</target>
+      </trans-unit>
+      <trans-unit id="signup.password.min" datatype="html">
+        <source>Password (min. 6 characters)</source>
+        <target>Password (min. 6 characters)</target>
+      </trans-unit>
+      <trans-unit id="signup.confirm.password" datatype="html">
+        <source>Confirm Password</source>
+        <target>Confirm Password</target>
+      </trans-unit>
+      <trans-unit id="signup.agree.terms" datatype="html">
+        <source>I agree to the</source>
+        <target>I agree to the</target>
+      </trans-unit>
+      <trans-unit id="signup.terms.service" datatype="html">
+        <source>Terms of Service</source>
+        <target>Terms of Service</target>
+      </trans-unit>
+      <trans-unit id="signup.privacy.policy" datatype="html">
+        <source>Privacy Policy</source>
+        <target>Privacy Policy</target>
+      </trans-unit>
+      <trans-unit id="signup.creating.account" datatype="html">
+        <source>Creating Account...</source>
+        <target>Creating Account...</target>
+      </trans-unit>
+      <trans-unit id="signup.already.account" datatype="html">
+        <source>Already have an account?</source>
+        <target>Already have an account?</target>
+      </trans-unit>
+
+      <!-- Profile Page -->
+      <trans-unit id="profile.anonymous.user" datatype="html">
+        <source>Anonymous User</source>
+        <target>Anonymous User</target>
+      </trans-unit>
+      <trans-unit id="profile.not.registered" datatype="html">
+        <source>Your profile has not been registered yet. Your data is temporary. Enter your email address and password to create a profile</source>
+        <target>Your profile has not been registered yet. Your data is temporary. Enter your email address and password to create a profile</target>
+      </trans-unit>
+      <trans-unit id="profile.unknown.user" datatype="html">
+        <source>Unknown User</source>
+        <target>Unknown User</target>
+      </trans-unit>
+      <trans-unit id="profile.no.email" datatype="html">
+        <source>No email</source>
+        <target>No email</target>
+      </trans-unit>
+      <trans-unit id="profile.member.since" datatype="html">
+        <source>Member since</source>
+        <target>Member since {{ user.createdAt | date:'MMMM yyyy' }}</target>
+      </trans-unit>
+      <trans-unit id="profile.your.information" datatype="html">
+        <source>Your Information</source>
+        <target>Your Information</target>
+      </trans-unit>
+      <trans-unit id="profile.username" datatype="html">
+        <source>Username</source>
+        <target>Username</target>
+      </trans-unit>
+      <trans-unit id="profile.enter.username" datatype="html">
+        <source>Enter your username</source>
+        <target>Enter your username</target>
+      </trans-unit>
+      <trans-unit id="profile.email.address" datatype="html">
+        <source>Email Address</source>
+        <target>Email Address</target>
+      </trans-unit>
+      <trans-unit id="profile.enter.email" datatype="html">
+        <source>Enter your email address</source>
+        <target>Enter your email address</target>
+      </trans-unit>
+      <trans-unit id="profile.password.security" datatype="html">
+        <source>Password &amp; Security</source>
+        <target>Password &amp; Security</target>
+      </trans-unit>
+      <trans-unit id="profile.current.password" datatype="html">
+        <source>Current Password</source>
+        <target>Current Password</target>
+      </trans-unit>
+      <trans-unit id="profile.new.password" datatype="html">
+        <source>New Password</source>
+        <target>New Password</target>
+      </trans-unit>
+      <trans-unit id="profile.confirm.new.password" datatype="html">
+        <source>Confirm new Password</source>
+        <target>Confirm new Password</target>
+      </trans-unit>
+      <trans-unit id="profile.password.hint" datatype="html">
+        <source>Leave password fields empty if you don't want to change your password</source>
+        <target>Leave password fields empty if you don't want to change your password</target>
+      </trans-unit>
+      <trans-unit id="profile.account.statistics" datatype="html">
+        <source>Account Statistics</source>
+        <target>Account Statistics</target>
+      </trans-unit>
+      <trans-unit id="profile.total.trackings" datatype="html">
+        <source>Total Trackings</source>
+        <target>Total Trackings</target>
+      </trans-unit>
+      <trans-unit id="profile.total.time" datatype="html">
+        <source>Total Time</source>
+        <target>Total Time</target>
+      </trans-unit>
+      <trans-unit id="profile.activities" datatype="html">
+        <source>Activities</source>
+        <target>Activities</target>
+      </trans-unit>
+      <trans-unit id="profile.days.active" datatype="html">
+        <source>Days Active</source>
+        <target>Days Active</target>
+      </trans-unit>
+      <trans-unit id="profile.save.changes" datatype="html">
+        <source>Save Changes</source>
+        <target>Save Changes</target>
+      </trans-unit>
+      <trans-unit id="profile.saving" datatype="html">
+        <source>Saving...</source>
+        <target>Saving...</target>
+      </trans-unit>
+      <trans-unit id="profile.reset.changes" datatype="html">
+        <source>Reset Changes</source>
+        <target>Reset Changes</target>
+      </trans-unit>
+      <trans-unit id="profile.danger.zone" datatype="html">
+        <source>Danger Zone</source>
+        <target>Danger Zone</target>
+      </trans-unit>
+      <trans-unit id="profile.delete.warning" datatype="html">
+        <source>Once you delete your account, there is no going back. Please be certain.</source>
+        <target>Once you delete your account, there is no going back. Please be certain.</target>
+      </trans-unit>
+      <trans-unit id="profile.delete.account" datatype="html">
+        <source>Delete Account</source>
+        <target>Delete Account</target>
+      </trans-unit>
+
+      <!-- Common Actions -->
+      <trans-unit id="common.cancel" datatype="html">
+        <source>Cancel</source>
+        <target>Cancel</target>
+      </trans-unit>
+      <trans-unit id="common.close" datatype="html">
+        <source>Close</source>
+        <target>Close</target>
+      </trans-unit>
+      <trans-unit id="common.save" datatype="html">
+        <source>Save</source>
+        <target>Save</target>
+      </trans-unit>
+      <trans-unit id="common.delete" datatype="html">
+        <source>Delete</source>
+        <target>Delete</target>
+      </trans-unit>
+      <trans-unit id="common.back" datatype="html">
+        <source>Back</source>
+        <target>Back</target>
+      </trans-unit>
+
+      <!-- Validation Messages -->
+      <trans-unit id="validation.email.required" datatype="html">
+        <source>Please enter a valid email address</source>
+        <target>Please enter a valid email address</target>
+      </trans-unit>
+      <trans-unit id="validation.password.required" datatype="html">
+        <source>Password is required</source>
+        <target>Password is required</target>
+      </trans-unit>
+      <trans-unit id="validation.password.minlength" datatype="html">
+        <source>Password must be at least 6 characters</source>
+        <target>Password must be at least 6 characters</target>
+      </trans-unit>
+      <trans-unit id="validation.passwords.mismatch" datatype="html">
+        <source>Passwords do not match</source>
+        <target>Passwords do not match</target>
+      </trans-unit>
+      <trans-unit id="validation.display.name.minlength" datatype="html">
+        <source>Display name must be at least 2 characters</source>
+        <target>Display name must be at least 2 characters</target>
+      </trans-unit>
+      <trans-unit id="validation.terms.required" datatype="html">
+        <source>You must agree to the terms to continue</source>
+        <target>You must agree to the terms to continue</target>
+      </trans-unit>
+
+      <!-- Notification Messages -->
+      <trans-unit id="error.no.user.logged.in" datatype="html">
+        <source>No user logged in</source>
+        <target>No user logged in</target>
+      </trans-unit>
+      <trans-unit id="error.activity.not.available" datatype="html">
+        <source>Activity or tracking data is not available</source>
+        <target>Activity or tracking data is not available</target>
+      </trans-unit>
+      <trans-unit id="error.tracking.not.available" datatype="html">
+        <source>No active tracking to stop</source>
+        <target>No active tracking to stop</target>
+      </trans-unit>
+      <trans-unit id="success.tracking.stopped" datatype="html">
+        <source>Tracking stopped successfully</source>
+        <target>Tracking stopped successfully</target>
+      </trans-unit>
+      <trans-unit id="success.user.registered" datatype="html">
+        <source>User registered successfully</source>
+        <target>User registered successfully</target>
+      </trans-unit>
+      <trans-unit id="error.user.registration" datatype="html">
+        <source>Error registering user</source>
+        <target>Error registering user</target>
+      </trans-unit>
+      <trans-unit id="success.password.changed" datatype="html">
+        <source>Password changed successfully</source>
+        <target>Password changed successfully</target>
+      </trans-unit>
+      <trans-unit id="error.password.change" datatype="html">
+        <source>Error changing password</source>
+        <target>Error changing password</target>
+      </trans-unit>
+      <trans-unit id="success.profile.updated" datatype="html">
+        <source>Profile updated successfully</source>
+        <target>Profile updated successfully</target>
+      </trans-unit>
+      <trans-unit id="error.profile.update" datatype="html">
+        <source>Error updating profile</source>
+        <target>Error updating profile</target>
+      </trans-unit>
+      <trans-unit id="success.logged.out" datatype="html">
+        <source>Logged out successfully</source>
+        <target>Logged out successfully</target>
+      </trans-unit>
+      <trans-unit id="error.logout" datatype="html">
+        <source>Error logging out</source>
+        <target>Error logging out</target>
+      </trans-unit>
+      <trans-unit id="error.no.user.to.logout" datatype="html">
+        <source>No user logged in to log out</source>
+        <target>No user logged in to log out</target>
+      </trans-unit>
+      <trans-unit id="success.login" datatype="html">
+        <source>Login successful</source>
+        <target>Login successful</target>
+      </trans-unit>
+      <trans-unit id="error.login" datatype="html">
+        <source>Login failed</source>
+        <target>Login failed</target>
+      </trans-unit>
+      <trans-unit id="success.anonymous.login" datatype="html">
+        <source>Signed in as guest</source>
+        <target>Signed in as guest</target>
+      </trans-unit>
+      <trans-unit id="error.anonymous.login" datatype="html">
+        <source>Anonymous login failed</source>
+        <target>Anonymous login failed</target>
+      </trans-unit>
+      <trans-unit id="success.password.reset.sent" datatype="html">
+        <source>Password reset email sent</source>
+        <target>Password reset email sent</target>
+      </trans-unit>
+      <trans-unit id="error.password.reset" datatype="html">
+        <source>Failed to send password reset</source>
+        <target>Failed to send password reset</target>
+      </trans-unit>
+      <trans-unit id="success.account.created" datatype="html">
+        <source>Account created successfully</source>
+        <target>Account created successfully</target>
+      </trans-unit>
+      <trans-unit id="error.account.creation" datatype="html">
+        <source>Account creation failed</source>
+        <target>Account creation failed</target>
+      </trans-unit>
+
+      <!-- Tracking specific translations -->
+      <trans-unit id="tracking.success.dataSaved" datatype="html">
+        <source>tracking.success.dataSaved</source>
+        <target>Tracking data saved successfully</target>
+      </trans-unit>
+      <trans-unit id="tracking.error.userRefRequired" datatype="html">
+        <source>tracking.error.userRefRequired</source>
+        <target>User reference is required to save tracking data</target>
+      </trans-unit>
+      <trans-unit id="tracking.error.activityRefRequired" datatype="html">
+        <source>tracking.error.activityRefRequired</source>
+        <target>Activity reference is required to save tracking data</target>
+      </trans-unit>
+      <trans-unit id="tracking.error.saveFailed" datatype="html">
+        <source>tracking.error.saveFailed</source>
+        <target>Error saving tracking data: </target>
+      </trans-unit>
+      <trans-unit id="tracking.error.referencesRequired" datatype="html">
+        <source>tracking.error.referencesRequired</source>
+        <target>User and activity references are required to upload an image</target>
+      </trans-unit>
+
+      <!-- Activity specific translations -->
+      <trans-unit id="activity.success.created" datatype="html">
+        <source>activity.success.created</source>
+        <target>Activity successfully created</target>
+      </trans-unit>
+      <trans-unit id="activity.success.updated" datatype="html">
+        <source>activity.success.updated</source>
+        <target>Activity successfully updated</target>
+      </trans-unit>
+      <trans-unit id="activity.error.creationFailed" datatype="html">
+        <source>activity.error.creationFailed</source>
+        <target>Error creating activity: </target>
+      </trans-unit>
+      <trans-unit id="activity.error.updateFailed" datatype="html">
+        <source>activity.error.updateFailed</source>
+        <target>Error updating activity</target>
+      </trans-unit>
+
+      <!-- Ranking specific translations -->
+      <trans-unit id="ranking.title" datatype="html">
+        <source>ranking.title</source>
+        <target>Ranking</target>
+      </trans-unit>
+      <trans-unit id="ranking.leaderboard" datatype="html">
+        <source>ranking.leaderboard</source>
+        <target>Leaderboard</target>
+      </trans-unit>
+      <trans-unit id="ranking.description" datatype="html">
+        <source>ranking.description</source>
+        <target>See how you compare with other users based on activity time and sessions.</target>
+      </trans-unit>
+      <trans-unit id="ranking.totalTime" datatype="html">
+        <source>ranking.totalTime</source>
+        <target>Total Time</target>
+      </trans-unit>
+      <trans-unit id="ranking.totalTrackings" datatype="html">
+        <source>ranking.totalTrackings</source>
+        <target>Total Sessions</target>
+      </trans-unit>
+      <trans-unit id="ranking.daysActive" datatype="html">
+        <source>ranking.daysActive</source>
+        <target>Days Active</target>
+      </trans-unit>
+      <trans-unit id="ranking.sessions" datatype="html">
+        <source>ranking.sessions</source>
+        <target>sessions</target>
+      </trans-unit>
+      <trans-unit id="ranking.noUsers" datatype="html">
+        <source>ranking.noUsers</source>
+        <target>No Users Found</target>
+      </trans-unit>
+      <trans-unit id="ranking.noUsersDescription" datatype="html">
+        <source>ranking.noUsersDescription</source>
+        <target>There are currently no users to display in the ranking.</target>
+      </trans-unit>
+      <trans-unit id="ranking.userDetails" datatype="html">
+        <source>ranking.userDetails</source>
+        <target>User Details</target>
+      </trans-unit>
+      <trans-unit id="ranking.statistics" datatype="html">
+        <source>ranking.statistics</source>
+        <target>Statistics</target>
+      </trans-unit>
+      <trans-unit id="ranking.activityBreakdown" datatype="html">
+        <source>ranking.activityBreakdown</source>
+        <target>Activity Breakdown</target>
+      </trans-unit>
+      <trans-unit id="ranking.noActivities" datatype="html">
+        <source>ranking.noActivities</source>
+        <target>No activities found for this user.</target>
+      </trans-unit>
+      <trans-unit id="user.status.active" datatype="html">
+        <source>user.status.active</source>
+        <target>Active</target>
+      </trans-unit>
+
+      <!-- Profile picture upload translations -->
+      <trans-unit id="profile.error.fileTooLarge" datatype="html">
+        <source>profile.error.fileTooLarge</source>
+        <target>File size too large. Please select a file smaller than 5MB.</target>
+      </trans-unit>
+      <trans-unit id="profile.error.invalidFileType" datatype="html">
+        <source>profile.error.invalidFileType</source>
+        <target>Invalid file type. Please select an image file.</target>
+      </trans-unit>
+      <trans-unit id="profile.error.uploadFailed" datatype="html">
+        <source>profile.error.uploadFailed</source>
+        <target>Failed to upload image. Please try again.</target>
+      </trans-unit>
+      <trans-unit id="profile.success.pictureUploaded" datatype="html">
+        <source>profile.success.pictureUploaded</source>
+        <target>Profile picture uploaded successfully!</target>
+      </trans-unit>
+      <trans-unit id="profile.changePicture" datatype="html">
+        <source>profile.changePicture</source>
+        <target>Change Profile Picture</target>
+      </trans-unit>
+      <trans-unit id="profile.takePhoto" datatype="html">
+        <source>profile.takePhoto</source>
+        <target>Take Photo</target>
+      </trans-unit>
+      <trans-unit id="profile.chooseFromGallery" datatype="html">
+        <source>profile.chooseFromGallery</source>
+        <target>Choose from Gallery</target>
+      </trans-unit>
+      <trans-unit id="profile.uploadPhoto" datatype="html">
+        <source>profile.uploadPhoto</source>
+        <target>Upload Photo</target>
+      </trans-unit>
+      <trans-unit id="profile.removePhoto" datatype="html">
+        <source>profile.removePhoto</source>
+        <target>Remove Photo</target>
+      </trans-unit>
+      <trans-unit id="profile.cancel" datatype="html">
+        <source>profile.cancel</source>
+        <target>Cancel</target>
+      </trans-unit>
+
+      <!-- Language selector -->
+      <trans-unit id="language.selector" datatype="html">
+        <source>Language Selector</source>
+        <target>Language Selector</target>
+      </trans-unit>
+
+      <!-- Admin specific translations -->
+      <trans-unit id="admin.title" datatype="html">
+        <source>Admin Dashboard</source>
+        <target>Admin Dashboard</target>
+      </trans-unit>
+      <trans-unit id="admin.accessDenied" datatype="html">
+        <source>Access Denied - Admin Role Required</source>
+        <target>Access Denied - Admin Role Required</target>
+      </trans-unit>
+      <trans-unit id="admin.accessDenied.title" datatype="html">
+        <source>Access Denied</source>
+        <target>Access Denied</target>
+      </trans-unit>
+      <trans-unit id="admin.accessDenied.message" datatype="html">
+        <source>You need administrator privileges to access this page.</source>
+        <target>You need administrator privileges to access this page.</target>
+      </trans-unit>
+      <trans-unit id="admin.stats.totalActivities" datatype="html">
+        <source>Total Activities</source>
+        <target>Total Activities</target>
+      </trans-unit>
+      <trans-unit id="admin.stats.totalUsers" datatype="html">
+        <source>Total Users</source>
+        <target>Total Users</target>
+      </trans-unit>
+      <trans-unit id="admin.stats.totalTrackingTime" datatype="html">
+        <source>Total Tracking Time</source>
+        <target>Total Tracking Time</target>
+      </trans-unit>
+      <trans-unit id="admin.stats.activeTrackings" datatype="html">
+        <source>Active Trackings</source>
+        <target>Active Trackings</target>
+      </trans-unit>
+      <trans-unit id="admin.createActivity.title" datatype="html">
+        <source>Create New Activity</source>
+        <target>Create New Activity</target>
+      </trans-unit>
+      <trans-unit id="admin.createActivity.subtitle" datatype="html">
+        <source>Add a new activity for users to track</source>
+        <target>Add a new activity for users to track</target>
+      </trans-unit>
+      <trans-unit id="admin.form.title" datatype="html">
+        <source>Activity Title</source>
+        <target>Activity Title</target>
+      </trans-unit>
+      <trans-unit id="admin.form.titlePlaceholder" datatype="html">
+        <source>Enter activity title</source>
+        <target>Enter activity title</target>
+      </trans-unit>
+      <trans-unit id="admin.form.titleError" datatype="html">
+        <source>Activity title is required</source>
+        <target>Activity title is required</target>
+      </trans-unit>
+      <trans-unit id="admin.form.description" datatype="html">
+        <source>Description</source>
+        <target>Description</target>
+      </trans-unit>
+      <trans-unit id="admin.form.descriptionPlaceholder" datatype="html">
+        <source>Enter activity description</source>
+        <target>Enter activity description</target>
+      </trans-unit>
+      <trans-unit id="admin.form.icon" datatype="html">
+        <source>Icon</source>
+        <target>Icon</target>
+      </trans-unit>
+      <trans-unit id="admin.form.selectIcon" datatype="html">
+        <source>Select Icon</source>
+        <target>Select Icon</target>
+      </trans-unit>
+      <trans-unit id="admin.form.image" datatype="html">
+        <source>Image</source>
+        <target>Image</target>
+      </trans-unit>
+      <trans-unit id="admin.form.selectImage" datatype="html">
+        <source>Select Image</source>
+        <target>Select Image</target>
+      </trans-unit>
+      <trans-unit id="admin.form.createActivity" datatype="html">
+        <source>Create Activity</source>
+        <target>Create Activity</target>
+      </trans-unit>
+      <trans-unit id="admin.manageActivities.title" datatype="html">
+        <source>Manage Activities</source>
+        <target>Manage Activities</target>
+      </trans-unit>
+      <trans-unit id="admin.manageActivities.subtitle" datatype="html">
+        <source>Edit or delete existing activities</source>
+        <target>Edit or delete existing activities</target>
+      </trans-unit>
+      <trans-unit id="admin.search.placeholder" datatype="html">
+        <source>Search activities...</source>
+        <target>Search activities...</target>
+      </trans-unit>
+      <trans-unit id="admin.status.inactive" datatype="html">
+        <source>Inactive</source>
+        <target>Inactive</target>
+      </trans-unit>
+      <trans-unit id="admin.iconPicker.title" datatype="html">
+        <source>Select Icon</source>
+        <target>Select Icon</target>
+      </trans-unit>
+      <trans-unit id="admin.activityManagement" datatype="html">
+        <source>Activity Management</source>
+        <target>Activity Management</target>
+      </trans-unit>
+      <trans-unit id="admin.createActivity" datatype="html">
+        <source>Create New Activity</source>
+        <target>Create New Activity</target>
+      </trans-unit>
+      <trans-unit id="admin.editActivity" datatype="html">
+        <source>Edit Activity</source>
+        <target>Edit Activity</target>
+      </trans-unit>
+      <trans-unit id="admin.activityName" datatype="html">
+        <source>Activity Name</source>
+        <target>Activity Name</target>
+      </trans-unit>
+      <trans-unit id="admin.enterActivityName" datatype="html">
+        <source>Enter activity name</source>
+        <target>Enter activity name</target>
+      </trans-unit>
+      <trans-unit id="admin.description" datatype="html">
+        <source>Description</source>
+        <target>Description</target>
+      </trans-unit>
+      <trans-unit id="admin.enterDescription" datatype="html">
+        <source>Enter description</source>
+        <target>Enter description</target>
+      </trans-unit>
+      <trans-unit id="admin.selectIcon" datatype="html">
+        <source>Select Icon</source>
+        <target>Select Icon</target>
+      </trans-unit>
+      <trans-unit id="admin.chooseIcon" datatype="html">
+        <source>Choose an icon for this activity</source>
+        <target>Choose an icon for this activity</target>
+      </trans-unit>
+      <trans-unit id="admin.activityImage" datatype="html">
+        <source>Activity Image</source>
+        <target>Activity Image</target>
+      </trans-unit>
+      <trans-unit id="admin.selectImage" datatype="html">
+        <source>Select Image</source>
+        <target>Select Image</target>
+      </trans-unit>
+      <trans-unit id="admin.removeImage" datatype="html">
+        <source>Remove Image</source>
+        <target>Remove Image</target>
+      </trans-unit>
+      <trans-unit id="admin.existingActivities" datatype="html">
+        <source>Existing Activities</source>
+        <target>Existing Activities</target>
+      </trans-unit>
+      <trans-unit id="admin.noActivities" datatype="html">
+        <source>No activities found</source>
+        <target>No activities found</target>
+      </trans-unit>
+      <trans-unit id="admin.createFirstActivity" datatype="html">
+        <source>Create your first activity to get started</source>
+        <target>Create your first activity to get started</target>
+      </trans-unit>
+      <trans-unit id="admin.confirmDelete" datatype="html">
+        <source>Are you sure you want to delete this activity?</source>
+        <target>Are you sure you want to delete this activity?</target>
+      </trans-unit>
+      <trans-unit id="admin.deleteWarning" datatype="html">
+        <source>This action cannot be undone</source>
+        <target>This action cannot be undone</target>
+      </trans-unit>
+
+      <!-- Activity error/success messages for admin -->
+      <trans-unit id="activity.error.notFound" datatype="html">
+        <source>Activity not found</source>
+        <target>Activity not found</target>
+      </trans-unit>
+      <trans-unit id="activity.success.deleted" datatype="html">
+        <source>Activity deleted successfully</source>
+        <target>Activity deleted successfully</target>
+      </trans-unit>
+      <trans-unit id="activity.error.deleteFailed" datatype="html">
+        <source>Failed to delete activity: </source>
+        <target>Failed to delete activity: </target>
+      </trans-unit>
+
+      <!-- Profile picture error messages -->
+      <trans-unit id="error.profile.picture.delete" datatype="html">
+        <source>Error deleting profile picture</source>
+        <target>Error deleting profile picture</target>
+      </trans-unit>
+
+    </body>
+  </file>
+</xliff>

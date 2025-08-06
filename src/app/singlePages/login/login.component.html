@@ -1,0 +1,140 @@
+
+
+<ion-content [fullscreen]="true" class="login-content">
+  <div class="login-container">
+    <!-- Logo/Brand Section -->
+    <div class="brand-section">
+      <ion-icon name="trophy-outline" class="brand-icon"></ion-icon>
+      <h1 class="brand-title">BetterGS</h1>
+      <p class="brand-subtitle" i18n="@@login.brand.subtitle">Track your activities and improve your performance</p>
+    </div>
+
+    <!-- Login Form -->
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="login-form">
+      <ion-card class="login-card">
+        <ion-card-content>
+          <div class="form-section">
+            <h2 i18n="@@login.welcome.title">Welcome Back</h2>
+            <p class="form-subtitle" i18n="@@login.welcome.subtitle">Sign in to your account</p>
+
+            <!-- Email Input -->
+            <ion-item class="form-item" [class.error]="isFieldInvalid('email')">
+              <ion-input
+                formControlName="email"
+                type="email"
+                placeholder="Email address"
+                i18n-placeholder="@@login.email.placeholder"
+                autocomplete="email"
+                [clearInput]="true"
+              >
+                <ion-icon name="mail-outline" slot="start"></ion-icon>
+              </ion-input>
+            </ion-item>
+            <div class="error-message" *ngIf="isFieldInvalid('email')">
+              <ion-text color="danger">
+                <small i18n="@@validation.email.required">Please enter a valid email address</small>
+              </ion-text>
+            </div>
+
+            <!-- Password Input -->
+            <ion-item class="form-item" [class.error]="isFieldInvalid('password')">
+              <ion-input
+                formControlName="password"
+                [type]="showPassword ? 'text' : 'password'"
+                placeholder="Password"
+                i18n-placeholder="@@login.password.placeholder"
+                autocomplete="current-password"
+              >
+                <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+                <ion-button
+                  slot="end"
+                  fill="clear"
+                  size="small"
+                  (click)="togglePasswordVisibility()"
+                  type="button"
+                >
+                  <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+                </ion-button>
+              </ion-input>
+            </ion-item>
+            <div class="error-message" *ngIf="isFieldInvalid('password')">
+              <ion-text color="danger">
+                <small i18n="@@validation.password.required">Password is required</small>
+              </ion-text>
+            </div>
+
+            <!-- Remember Me & Forgot Password -->
+            <div class="form-options">
+              <ion-checkbox formControlName="rememberMe"></ion-checkbox>
+              <ion-label class="remember-label" i18n="@@login.remember.me">Remember me</ion-label>
+              
+              <ion-button 
+                fill="clear" 
+                size="small" 
+                class="forgot-password-btn"
+                (click)="onForgotPassword()"
+                type="button"
+                i18n="@@login.forgot.password"
+              >
+                Forgot Password?
+              </ion-button>
+            </div>
+
+            <!-- Error Message -->
+            <div class="error-message global-error" *ngIf="errorMessage">
+              <ion-text color="danger">
+                <ion-icon name="warning-outline"></ion-icon>
+                {{ errorMessage }}
+              </ion-text>
+            </div>
+
+            <!-- Login Button -->
+            <ion-button
+              type="submit"
+              expand="block"
+              class="login-button"
+              [disabled]="loginForm.invalid || isLoading"
+            >
+              <ion-spinner name="crescent" *ngIf="isLoading"></ion-spinner>
+              <span *ngIf="!isLoading" i18n="@@login.sign.in">Sign In</span>
+              <span *ngIf="isLoading" i18n="@@login.signing.in">Signing In...</span>
+            </ion-button>
+
+            <!-- Divider -->
+            <div class="divider">
+              <span>or</span>
+            </div>
+
+            <!-- Anonymous Login -->
+            <ion-button
+              fill="outline"
+              expand="block"
+              class="anonymous-button"
+              (click)="onAnonymousLogin()"
+              [disabled]="isLoading"
+              type="button"
+            >
+              <ion-icon name="person-outline" slot="start"></ion-icon>
+              <span i18n="@@login.continue.guest">Try Out without Login</span>
+            </ion-button>
+
+            <!-- Sign Up Link -->
+            <div class="signup-section">
+              <p>
+                <span i18n="@@login.no.account">Don't have an account?</span>
+                <ion-button fill="clear" size="small" (click)="onSignUp()" type="button" i18n="@@signup.title">
+                  Sign Up
+                </ion-button>
+              </p>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </form>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>&copy; 2025 BetterGS. All rights reserved.</p>
+    </div>
+  </div>
+</ion-content>

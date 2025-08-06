@@ -4,6 +4,15 @@
   "newProjectRoot": "projects",
   "projects": {
     "app": {
+      "i18n": {
+        "sourceLocale": "en",
+        "locales": {
+          "de": {
+            "translation": "src/locale/messages.de.xlf",
+            "baseHref": "/de/"
+          }
+        }
+      },
       "projectType": "application",
       "schematics": {
         "@ionic/angular-toolkit:page": {
@@ -17,15 +26,16 @@
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:application",
-          "options": {
+          
+          "options": {            
+                  "localize": true,
+
             "outputPath": {
               "base": "www",
               "browser": ""
             },
             "index": "src/index.html",
-            "polyfills": [
-              "src/polyfills.ts"
-            ],
+            "polyfills": ["src/polyfills.ts", "@angular/localize/init"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -37,9 +47,18 @@
             ],
             "styles": ["src/global.scss", "src/theme/variables.scss"],
             "scripts": [],
-            "browser": "src/main.ts"
+            "browser": "src/main.ts",
+            "aot": true
           },
           "configurations": {
+            "de": {
+              "aot": true,
+              "outputPath": "www/de/"
+            },
+            "en": {
+              "aot": true,
+              "outputPath": "www/"
+            },
             "production": {
               "budgets": [
                 {
@@ -49,8 +68,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "20kb",
+                  "maximumError": "40kb"
                 }
               ],
               "fileReplacements": [
@@ -76,6 +95,14 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
+            "configurations": {
+              "de": {
+                "buildTarget": "app:build:de"
+              },
+              "en": {
+                "buildTarget": "app:build:en"
+              }
+            },
             "production": {
               "buildTarget": "app:build:production"
             },

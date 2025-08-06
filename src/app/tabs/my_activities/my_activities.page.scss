@@ -1,0 +1,26 @@
+.header-card {
+  margin: 16px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-secondary) 100%);
+  color: white;
+  
+  ion-card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    
+    ion-icon {
+      font-size: 1.5rem;
+    }
+  }
+  
+  ion-card-content p {
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+  }
+  .loading-container,
+.activity-container {
+  padding: 0 8px 8px;
+}
+}

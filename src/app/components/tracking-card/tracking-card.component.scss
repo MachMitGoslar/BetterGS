@@ -1,0 +1,240 @@
+.tracking-card {
+  margin: 12px 0;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.card-header {
+  padding: 0;
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.image-header {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  .header-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px 12px 0 0;
+  }
+  
+  .placeholder-image {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--ion-color-light), var(--ion-color-medium-tint));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px 12px 0 0;
+    
+    .placeholder-icon {
+      font-size: 3rem;
+      color: var(--ion-color-medium);
+      margin-bottom: 8px;
+      opacity: 0.6;
+    }
+    
+    .placeholder-text {
+      font-size: 0.9rem;
+      color: var(--ion-color-medium);
+      font-weight: 500;
+    }
+  }
+}
+
+.image-overlay-div {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+}
+
+.duration-badge-overlay {
+
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 20px;
+  padding: 6px 12px;
+  backdrop-filter: blur(10px);
+  
+  .duration-text {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.activity-header {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--ion-color-light);
+  
+  .activity-title {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+    
+    .activity-icon {
+      font-size: 1.3rem;
+      margin-right: 8px;
+      color: var(--ion-color-primary);
+    }
+    
+    .activity-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--ion-color-dark);
+      margin: 0;
+    }
+  }
+  
+  .tracking-date {
+    font-size: 0.9rem;
+    color: var(--ion-color-medium);
+    margin: 0;
+    margin-left: 32px; // Align with title text
+  }
+}
+
+.card-content {
+  padding: 16px;
+}
+
+.time-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+
+  .time-item {
+    display: flex;
+    align-items: center;
+    flex: 1;
+
+    .time-icon {
+      font-size: 1.5rem;
+      margin-right: 8px;
+      
+      &.start-icon {
+        color: var(--ion-color-success);
+      }
+      
+      &.end-icon {
+        color: var(--ion-color-danger);
+      }
+    }
+
+    .time-info {
+      display: flex;
+      flex-direction: column;
+
+      .time-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--ion-color-medium);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .time-value {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--ion-color-dark);
+        font-family: 'Courier New', monospace;
+      }
+    }
+  }
+
+  .time-separator {
+    flex: 0 0 auto;
+    margin: 0 16px;
+
+    ion-icon {
+      font-size: 1rem;
+      color: var(--ion-color-medium);
+    }
+  }
+}
+
+.tracking-summary {
+  display: flex;
+  align-items: flex-start;
+  padding: 12px;
+  background: var(--ion-color-light);
+  border-radius: 8px;
+  margin-top: 8px;
+
+  .notes-icon {
+    font-size: 1.2rem;
+    color: var(--ion-color-medium);
+    margin-right: 8px;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .notes-text {
+    font-size: 0.9rem;
+    color: var(--ion-color-dark);
+    line-height: 1.4;
+    word-break: break-word;
+  }
+}
+
+// Responsive design
+@media (max-width: 480px) {
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .duration-badge {
+    align-self: flex-end;
+  }
+
+  .time-details {
+    flex-direction: column;
+    gap: 16px;
+
+    .time-separator {
+      transform: rotate(90deg);
+      margin: 8px 0;
+    }
+  }
+
+  .time-item {
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+// Animation for new cards
+.tracking-card {
+  animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

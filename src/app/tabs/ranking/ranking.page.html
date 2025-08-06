@@ -1,0 +1,106 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>{{ i18nService.getTranslation('ranking.title') }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar background="primary">
+      <ion-title size="large">{{ i18nService.getTranslation('ranking.title') }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-refresher slot="fixed" (ionRefresh)="onRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Header Card -->
+  <ion-card class="header-card">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="trophy-outline"></ion-icon>
+        {{ i18nService.getTranslation('ranking.leaderboard') }}
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>{{ i18nService.getTranslation('ranking.description') }}</p>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Loading Skeletons -->
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-card *ngFor="let item of [1,2,3,4,5]">
+      <ion-item>
+        <ion-avatar slot="start">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-avatar>
+        <ion-label>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+        </ion-label>
+        <div slot="end">
+          <ion-skeleton-text animated style="width: 60px"></ion-skeleton-text>
+        </div>
+      </ion-item>
+    </ion-card>
+  </div>
+
+  <!-- User Ranking List -->
+  <div *ngIf="!isLoading" class="ranking-container">
+    <ion-card *ngFor="let user of users$ | async; let i = index" 
+              class="user-card" 
+              [class.top-three]="i < 3"
+              (click)="openModal(user)">
+      <ion-item>
+        <!-- Rank Badge -->
+        <div slot="start" class="rank-badge" [class]="'rank-' + (i + 1)">
+          <span class="rank-number">{{ getRankIcon(i) }}</span>
+        </div>
+
+        <!-- User Avatar -->
+        <ion-avatar slot="start">
+          <img *ngIf="user.pictureUrl" [src]="user.pictureUrl" [alt]="user.name" />
+          <div *ngIf="!user.pictureUrl" class="avatar-placeholder">
+            {{ getInitials(user.name) }}
+          </div>
+        </ion-avatar>
+
+        <!-- User Info -->
+        <ion-label>
+          <h2 class="user-name">{{ user.name }}</h2>
+          <div class="user-stats">
+            <span class="stat">
+              <ion-icon name="time-outline"></ion-icon>
+              {{ formatDuration(user.activity_duration) }}
+            </span>
+            <span class="stat">
+              <ion-icon name="medal-outline"></ion-icon>
+              {{ user.total_trackings }} {{ i18nService.getTranslation('ranking.sessions') }}
+            </span>
+          </div>
+        </ion-label>
+
+        <!-- Activity Status -->
+        <div slot="end" class="user-status">
+          <ion-badge [color]="getRankColor(i)" class="rank-badge-end">
+            #{{ i + 1 }}
+          </ion-badge>
+          <ion-badge color="success" *ngIf="user.isActive" class="activity-badge">
+            {{ i18nService.getTranslation('user.status.active') }}
+          </ion-badge>
+        </div>
+      </ion-item>
+    </ion-card>
+
+    <!-- Empty State -->
+    <div *ngIf="(users$ | async)?.length === 0" class="empty-state">
+      <ion-icon name="person-outline" class="empty-icon"></ion-icon>
+      <h2>{{ i18nService.getTranslation('ranking.noUsers') }}</h2>
+      <p>{{ i18nService.getTranslation('ranking.noUsersDescription') }}</p>
+    </div>
+  </div>
+
+
+
+</ion-content>

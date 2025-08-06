@@ -1,0 +1,163 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Tracking bearbeiten</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="modal-content">
+  <form [formGroup]="trackingForm" (ngSubmit)="saveTracking()">
+    
+    <!-- Tracking Summary -->
+    <ion-card class="tracking-summary">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="time" class="summary-icon"></ion-icon>
+          Tracking Details
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="summary-grid">
+          <div class="summary-item">
+            <span class="label">Datum:</span>
+            <span class="value">{{ tracking?.startDate | date:'dd.MM.yyyy' }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="label">Start:</span>
+            <span class="value">{{ tracking?.startDate | date:'HH:mm' }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="label">Ende:</span>
+            <span class="value">{{ tracking?.endDate | date:'HH:mm' }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="label">Dauer:</span>
+            <span class="value">{{ formatDuration() }}</span>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Notes Section -->
+    <ion-card class="notes-section">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="document-text" class="section-icon"></ion-icon>
+          Notizen
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item lines="none" class="notes-input">
+          <ion-textarea
+            formControlName="notes"
+            placeholder="Füge Notizen zu diesem Tracking hinzu..."
+            rows="4"
+            autoGrow="true"
+            maxlength="500"
+            counter="true"
+            class="notes-textarea">
+          </ion-textarea>
+        </ion-item>
+        <div class="character-count">
+          {{ trackingForm.get('notes')?.value?.length || 0 }}/500 Zeichen
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Image Upload Section -->
+    <ion-card class="image-section">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="image" class="section-icon"></ion-icon>
+          Bild anhängen
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        
+        <!-- Upload Area -->
+        <div class="upload-area" 
+             [class.has-image]="selectedImage || tracking?.imageUrl"
+             (click)="triggerFileUpload()">
+          
+          <!-- No Image State -->
+          <div *ngIf="!selectedImage && !tracking?.imageUrl" class="upload-placeholder">
+            <ion-icon name="cloud-upload-outline" class="upload-icon"></ion-icon>
+            <p class="upload-text">Tippe zum Hochladen eines Bildes</p>
+            <p class="upload-hint">JPG, PNG bis 5MB</p>
+          </div>
+
+          <!-- Image Preview -->
+          <div *ngIf="selectedImage || tracking?.imageUrl" class="image-preview">
+            <img [src]="selectedImage || tracking?.imageUrl" 
+                 alt="Tracking Bild"
+                 class="preview-image">
+            <div class="image-overlay">
+              <ion-button 
+                fill="clear" 
+                color="light"
+                (click)="removeImage($event)"
+                class="remove-button">
+                <ion-icon name="trash" slot="icon-only"></ion-icon>
+              </ion-button>
+              <ion-button 
+                fill="clear" 
+                color="light"
+                (click)="triggerFileUpload($event)"
+                class="change-button">
+                <ion-icon name="refresh" slot="icon-only"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hidden File Input -->
+        <input 
+          #fileInput
+          type="file" 
+          accept="image/*" 
+          (change)="onFileSelected($event)"
+          style="display: none;">
+
+        <!-- Upload Progress -->
+        <div *ngIf="uploadProgress > 0 && uploadProgress < 100" class="upload-progress">
+          <ion-progress-bar [value]="uploadProgress / 100"></ion-progress-bar>
+          <span class="progress-text">{{ uploadProgress }}% hochgeladen</span>
+        </div>
+
+        <!-- Upload Error -->
+        <ion-item *ngIf="uploadError" lines="none" class="error-message">
+          <ion-icon name="alert-circle" color="danger" slot="start"></ion-icon>
+          <ion-label color="danger">{{ uploadError }}</ion-label>
+        </ion-item>
+
+      </ion-card-content>
+    </ion-card>
+
+  </form>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <div class="footer-buttons">
+      <ion-button 
+        fill="clear" 
+        color="medium"
+        (click)="dismiss()">
+        Abbrechen
+      </ion-button>
+      <ion-button 
+        fill="solid" 
+        color="primary"
+        (click)="saveTracking()"
+        [disabled]="isLoading">
+        <ion-icon name="checkmark" slot="start" *ngIf="!isLoading"></ion-icon>
+        <ion-spinner name="crescent" *ngIf="isLoading"></ion-spinner>
+        {{ isLoading ? 'Speichern...' : 'Speichern' }}
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

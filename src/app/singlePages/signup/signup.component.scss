@@ -1,0 +1,248 @@
+.signup-content {
+  --background: linear-gradient(135deg, var(--ion-color-secondary), var(--ion-color-primary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.signup-container {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+// Brand Section
+.brand-section {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: white;
+
+  .brand-icon {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    opacity: 0.9;
+  }
+
+  .brand-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0 0 0.5rem 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .brand-subtitle {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin: 0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+}
+
+// Sign Up Card
+.signup-card {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border-radius: 1rem;
+  overflow: hidden;
+  margin: 0;
+
+  ion-card-content {
+    padding: 1.5rem;
+  }
+}
+
+// Form Section
+.form-section {
+  h2 {
+    text-align: center;
+    color: var(--ion-color-dark);
+    margin: 0 0 0.5rem 0;
+    font-size: 1.6rem;
+    font-weight: 600;
+  }
+
+  .form-subtitle {
+    text-align: center;
+    color: var(--ion-color-medium);
+    margin: 0 0 1.5rem 0;
+    font-size: 0.85rem;
+  }
+}
+
+// Form Items
+.form-item {
+  margin-bottom: 0.5rem;
+  border-radius: 0.5rem;
+  --background: var(--ion-color-light);
+  --border-color: transparent;
+  --highlight-color-focused: var(--ion-color-primary);
+
+  &.error {
+    --border-color: var(--ion-color-danger);
+    --highlight-color-focused: var(--ion-color-danger);
+  }
+
+  ion-input {
+    --padding-start: 1rem;
+    --padding-end: 1rem;
+  }
+
+  ion-icon {
+    color: var(--ion-color-medium);
+    margin-right: 0.5rem;
+  }
+}
+
+// Error Messages
+.error-message {
+  margin-bottom: 1rem;
+  padding: 0 0.5rem;
+
+  &.global-error {
+    background: rgba(var(--ion-color-danger-rgb), 0.1);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    margin: 1rem 0;
+
+    ion-text {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  }
+
+  small {
+    font-size: 0.75rem;
+  }
+}
+
+// Terms Section
+.terms-section {
+  display: flex;
+  align-items: flex-start;
+  margin: 1rem 0;
+  padding: 0 0.5rem;
+
+  .terms-label {
+    margin-left: 0.75rem;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: var(--ion-color-medium-shade);
+
+    ion-button {
+      --color: var(--ion-color-primary);
+      --padding-start: 0.25rem;
+      --padding-end: 0.25rem;
+      margin: 0;
+      height: auto;
+      min-height: auto;
+      font-size: 0.85rem;
+      text-decoration: underline;
+    }
+  }
+}
+
+// Buttons
+.signup-button {
+  margin: 1.5rem 0 1rem 0;
+  --border-radius: 0.75rem;
+  height: 3rem;
+  font-weight: 600;
+
+  ion-spinner {
+    margin-right: 0.5rem;
+  }
+}
+
+// Login Section
+.login-section {
+  text-align: center;
+  margin-top: 1rem;
+
+  p {
+    color: var(--ion-color-medium);
+    margin: 0;
+    font-size: 0.9rem;
+  }
+
+  ion-button {
+    --color: var(--ion-color-primary);
+    font-weight: 600;
+  }
+}
+
+// Responsive Design
+@media (max-width: 480px) {
+  .signup-content {
+    padding: 0.5rem;
+  }
+
+  .signup-container {
+    max-width: 100%;
+  }
+
+  .signup-card {
+    ion-card-content {
+      padding: 1.25rem 1rem;
+    }
+  }
+
+  .brand-section {
+    margin-bottom: 1rem;
+
+    .brand-title {
+      font-size: 1.8rem;
+    }
+
+    .brand-subtitle {
+      font-size: 0.85rem;
+    }
+  }
+
+  .terms-section {
+    .terms-label {
+      font-size: 0.8rem;
+    }
+  }
+}
+
+// Dark Theme Support
+@media (prefers-color-scheme: dark) {
+  .signup-content {
+    --background: linear-gradient(135deg, var(--ion-color-secondary-shade), var(--ion-color-primary-shade));
+  }
+
+  .form-item {
+    --background: var(--ion-color-dark);
+  }
+}
+
+// Animation
+.signup-card {
+  animation: slideInUp 0.6s ease-out;
+}
+
+.brand-section {
+  animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

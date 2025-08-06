@@ -1,0 +1,63 @@
+<ion-header [translucent]="true">
+
+    <ion-toolbar>
+      <ion-title i18n="@@activities.title">
+        Activities
+      </ion-title>
+    </ion-toolbar>
+
+</ion-header>
+<!-- Header Card -->
+  
+
+<ion-content [fullscreen]="true">
+  
+  <ion-header collapse="condense">
+
+    <ion-toolbar>
+      <ion-title size="large" i18n="@@activities.title">Activities</ion-title>
+
+    </ion-toolbar>
+  </ion-header>
+    <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+        @if(activeTracking | async; as activeTracking) {
+    <app-active-tracking-bar></app-active-tracking-bar>
+  } 
+
+<ion-card class="header-card">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon size="large" name="stopwatch"></ion-icon>
+        {{ i18nService.getTranslation('myActivities.onboarding.title') }}
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>{{ i18nService.getTranslation('myActivities.onboarding.description') }}</p>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Loading Skeletons -->
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-card *ngFor="let item of [1,2,3,4,5]">
+      <ion-item>
+        <ion-icon slot="start">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-icon>
+        <ion-label>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+        </ion-label>
+        <div slot="end">
+          <ion-skeleton-text animated style="width: 60px"></ion-skeleton-text>
+        </div>
+      </ion-item>
+    </ion-card>
+  </div>
+
+  @if(($activities | async); as activities) {
+          <app-activity-list class="activity-container" *ngIf="!isLoading" [activities]="activities"></app-activity-list>
+  }
+
+</ion-content>

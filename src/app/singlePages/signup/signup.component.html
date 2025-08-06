@@ -1,0 +1,167 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Sign Up</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="signup-content">
+  <div class="signup-container">
+    <!-- Brand Section -->
+    <div class="brand-section">
+      <ion-icon name="trophy-outline" class="brand-icon"></ion-icon>
+      <h1 class="brand-title">Join BetterGS</h1>
+      <p class="brand-subtitle">Start tracking your activities today</p>
+    </div>
+
+    <!-- Sign Up Form -->
+    <form [formGroup]="signupForm" (ngSubmit)="onSignUp()" class="signup-form">
+      <ion-card class="signup-card">
+        <ion-card-content>
+          <div class="form-section">
+            <h2>Create Account</h2>
+            <p class="form-subtitle">Fill in your details to get started</p>
+
+            <!-- Display Name Input -->
+            <ion-item class="form-item" [class.error]="isFieldInvalid('displayName')">
+              <ion-input
+                formControlName="displayName"
+                type="text"
+                placeholder="Display Name"
+                autocomplete="name"
+                [clearInput]="true"
+              >
+                <ion-icon name="person-outline" slot="start"></ion-icon>
+              </ion-input>
+            </ion-item>
+            <div class="error-message" *ngIf="isFieldInvalid('displayName')">
+              <ion-text color="danger">
+                <small>Display name must be at least 2 characters</small>
+              </ion-text>
+            </div>
+
+            <!-- Email Input -->
+            <ion-item class="form-item" [class.error]="isFieldInvalid('email')">
+              <ion-input
+                formControlName="email"
+                type="email"
+                placeholder="Email address"
+                autocomplete="email"
+                [clearInput]="true"
+              >
+                <ion-icon name="mail-outline" slot="start"></ion-icon>
+              </ion-input>
+            </ion-item>
+            <div class="error-message" *ngIf="isFieldInvalid('email')">
+              <ion-text color="danger">
+                <small>Please enter a valid email address</small>
+              </ion-text>
+            </div>
+
+            <!-- Password Input -->
+            <ion-item class="form-item" [class.error]="isFieldInvalid('password')">
+              <ion-input
+                formControlName="password"
+                [type]="showPassword ? 'text' : 'password'"
+                placeholder="Password (min. 6 characters)"
+                autocomplete="new-password"
+              >
+                <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+                <ion-button
+                  slot="end"
+                  fill="clear"
+                  size="small"
+                  (click)="togglePasswordVisibility()"
+                  type="button"
+                >
+                  <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+                </ion-button>
+              </ion-input>
+            </ion-item>
+            <div class="error-message" *ngIf="isFieldInvalid('password')">
+              <ion-text color="danger">
+                <small>Password must be at least 6 characters</small>
+              </ion-text>
+            </div>
+
+            <!-- Confirm Password Input -->
+            <ion-item class="form-item" [class.error]="isFieldInvalid('confirmPassword') || passwordMismatch">
+              <ion-input
+                formControlName="confirmPassword"
+                [type]="showConfirmPassword ? 'text' : 'password'"
+                placeholder="Confirm Password"
+                autocomplete="new-password"
+              >
+                <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+                <ion-button
+                  slot="end"
+                  fill="clear"
+                  size="small"
+                  (click)="toggleConfirmPasswordVisibility()"
+                  type="button"
+                >
+                  <ion-icon [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+                </ion-button>
+              </ion-input>
+            </ion-item>
+            <div class="error-message" *ngIf="isFieldInvalid('confirmPassword') || passwordMismatch">
+              <ion-text color="danger">
+                <small>Passwords do not match</small>
+              </ion-text>
+            </div>
+
+            <!-- Terms Agreement -->
+            <div class="terms-section">
+              <ion-checkbox formControlName="agreeToTerms"></ion-checkbox>
+              <ion-label class="terms-label">
+                I agree to the 
+                <ion-button fill="clear" size="small" (click)="showTerms()">Terms of Service</ion-button>
+                and 
+                <ion-button fill="clear" size="small" (click)="showPrivacy()">Privacy Policy</ion-button>
+              </ion-label>
+            </div>
+            <div class="error-message" *ngIf="isFieldInvalid('agreeToTerms')">
+              <ion-text color="danger">
+                <small>You must agree to the terms to continue</small>
+              </ion-text>
+            </div>
+
+            <!-- Error Message -->
+            <div class="error-message global-error" *ngIf="errorMessage">
+              <ion-text color="danger">
+                <ion-icon name="warning-outline"></ion-icon>
+                {{ errorMessage }}
+              </ion-text>
+            </div>
+
+            <!-- Sign Up Button -->
+            <ion-button
+              type="submit"
+              expand="block"
+              class="signup-button"
+              [disabled]="signupForm.invalid || passwordMismatch || isLoading"
+            >
+              <ion-spinner name="crescent" *ngIf="isLoading"></ion-spinner>
+              <span *ngIf="!isLoading">Create Account</span>
+              <span *ngIf="isLoading">Creating Account...</span>
+            </ion-button>
+
+            <!-- Login Link -->
+            <div class="login-section">
+              <p>
+                Already have an account?
+                <ion-button fill="clear" size="small" (click)="onLogin()" type="button">
+                  Sign In
+                </ion-button>
+              </p>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </form>
+  </div>
+</ion-content>

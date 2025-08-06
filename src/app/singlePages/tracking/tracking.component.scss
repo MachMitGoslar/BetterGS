@@ -1,0 +1,131 @@
+.tracking-container {
+  
+  max-width: 800px;
+  margin: -60px auto 10px;
+}
+
+.current-activity-card {
+  margin-bottom: 20px;
+  text-align: center;
+  
+  .activity-icon {
+    font-size: 2rem;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+}
+.activity-image {
+  width: 100%;
+  object-fit: cover;
+  aspect-ratio: 24/9;
+}
+ion-card-title {
+    
+    font-size: 1.5rem;
+    font-weight: bold;   
+
+}
+
+.timer-display {
+  text-align: center;
+  padding: 20px 0;
+  
+  .elapsed-time {
+    font-size: min(2.5rem, 20vw);
+    font-weight: bold;
+    color: var(--ion-color-primary);
+    margin: 0;
+    font-family: 'Courier New', monospace;
+  }
+  
+  .timer-status {
+    font-size: 1rem;
+    color: var(--ion-color-medium);
+    margin-top: 8px;
+  }
+}
+
+.control-buttons {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  
+  .control-button {
+    height: 60px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    
+    ion-icon {
+      font-size: 1.5rem;
+    }
+  }
+  
+  .start-button {
+    --background: var(--ion-color-success);
+    --color: white;
+  }
+  
+  .stop-button {
+    --background: var(--ion-color-danger);
+    --color: white;
+  }
+  
+  .pause-button {
+    --background: var(--ion-color-warning);
+    --color: white;
+  }
+}
+
+.session-info {
+  margin-top: 20px;
+  
+  ion-item {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+  }
+  
+  h3 {
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  
+  p {
+    color: var(--ion-color-medium);
+    margin: 0;
+  }
+}
+
+// Responsive design
+@media (min-width: 768px) {
+  .control-buttons {
+    flex-direction: row;
+    justify-content: center;
+    
+    .control-button {
+      width: 200px;
+      margin: 0 8px;
+    }
+  }
+}
+
+// Animation for the timer
+.elapsed-time {
+  transition: color 0.3s ease;
+}
+
+.tracking-container[data-tracking="true"] .elapsed-time {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}

@@ -1,9 +1,9 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'de.goslar.machmit.betterGS',
   appName: 'betterGS',
-  webDir: 'www'
+  webDir: 'www/de'
 };
 
 export default config;

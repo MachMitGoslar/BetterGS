@@ -1,0 +1,116 @@
+
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>{{ i18nService.getTranslation('ranking.userDetails') }}</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeModal()">
+            <ion-icon name="close-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="ion-padding">
+      <!-- User Profile Header -->
+      <ion-card>
+        <ion-card-header>
+          <div class="user-header">
+            <ion-avatar size="large">
+              <img *ngIf="user.pictureUrl" [src]="user.pictureUrl" [alt]="user.name" />
+              <div *ngIf="!user.pictureUrl" class="avatar-placeholder">
+                {{ getInitials(user.name) }}
+              </div>
+            </ion-avatar>
+            <div class="user-info">
+              <ion-card-title>{{ user.name }}</ion-card-title>
+              <p class="user-email" *ngIf="user.email">{{ user.email }}</p>
+              <ion-badge color="success" *ngIf="user.isActive">
+                {{ i18nService.getTranslation('user.status.active') }}
+              </ion-badge>
+            </div>
+          </div>
+        </ion-card-header>
+      </ion-card>
+
+      <!-- User Statistics -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="stats-chart-outline"></ion-icon>
+            {{ i18nService.getTranslation('ranking.statistics') }}
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col size="6">
+                <div class="stat-item">
+                  <ion-icon name="time-outline" color="primary"></ion-icon>
+                  <div class="stat-content">
+                    <h3>{{ formatDuration(user.activity_duration) }}</h3>
+                    <p>{{ i18nService.getTranslation('ranking.totalTime') }}</p>
+                  </div>
+                </div>
+              </ion-col>
+              <ion-col size="6">
+                <div class="stat-item">
+                  <ion-icon name="trophy-outline" color="warning"></ion-icon>
+                  <div class="stat-content">
+                    <h3>{{ user.total_trackings }}</h3>
+                    <p>{{ i18nService.getTranslation('ranking.totalTrackings') }}</p>
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12">
+                <div class="stat-item">
+                  <ion-icon name="person-outline" color="secondary"></ion-icon>
+                  <div class="stat-content">
+                    <h3>{{ user.days_active }}</h3>
+                    <p>{{ i18nService.getTranslation('ranking.daysActive') }}</p>
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Activity Breakdown -->
+      <!-- <ion-card>
+        <ion-card-header>
+          <ion-card-title>{{ i18nService.getTranslation('ranking.activityBreakdown') }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div *ngIf="userActivityStats$ | async as stats">
+            <div *ngIf="stats.length === 0" class="no-activities">
+              <p>{{ i18nService.getTranslation('ranking.noActivities') }}</p>
+            </div>
+            
+            <ion-item *ngFor="let stat of stats" lines="full">
+              <div class="activity-stats">
+                <div class="activity-header">
+                  <h3>{{ stat.activity.title }}</h3>
+                  <ion-badge color="primary">{{ stat.trackingCount }} {{ i18nService.getTranslation('ranking.sessions') }}</ion-badge>
+                </div>
+                <div class="activity-details">
+                  <p class="activity-description" *ngIf="stat.activity.description">
+                    {{ stat.activity.description }}
+                  </p>
+                  <div class="activity-meta">
+                    <span class="duration">
+                      <ion-icon name="time-outline"></ion-icon>
+                      {{ formatDuration(stat.totalDuration) }}
+                    </span>
+                    <span class="icon" *ngIf="stat.activity.icon">
+                      {{ stat.activity.icon }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </ion-item>
+          </div>
+        </ion-card-content>
+      </ion-card> -->
+    </ion-content>

@@ -1,0 +1,26 @@
+.language-button {
+  --color: var(--ion-color-medium);
+  --padding-start: 0.5rem;
+  --padding-end: 0.5rem;
+  
+  .language-text {
+    font-size: 0.9rem;
+    margin-left: 0.5rem;
+  }
+
+  &:hover {
+    --color: var(--ion-color-primary);
+  }
+}
+
+// Mobile responsive
+@media (max-width: 768px) {
+  .language-text {
+    display: none;
+  }
+  
+  .language-button {
+    --padding-start: 0.25rem;
+    --padding-end: 0.25rem;
+  }
+}
