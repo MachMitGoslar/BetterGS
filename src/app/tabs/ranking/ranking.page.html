@@ -60,23 +60,23 @@
 
         <!-- User Avatar -->
         <ion-avatar slot="start">
-          <img *ngIf="user.pictureUrl" [src]="user.pictureUrl" [alt]="user.name" />
-          <div *ngIf="!user.pictureUrl" class="avatar-placeholder">
-            {{ getInitials(user.name) }}
+          <img *ngIf="user.publicProfile?.profilePictureUrl" [src]="user.publicProfile.profilePictureUrl" [alt]="user.publicProfile.name" />
+          <div *ngIf="!user.publicProfile?.profilePictureUrl" class="avatar-placeholder">
+            {{ getInitials(user.publicProfile.name || "unknown") }}
           </div>
         </ion-avatar>
 
         <!-- User Info -->
         <ion-label>
-          <h2 class="user-name">{{ user.name }}</h2>
+          <h2 class="user-name">{{ user.publicProfile.name }}</h2>
           <div class="user-stats">
             <span class="stat">
               <ion-icon name="time-outline"></ion-icon>
-              {{ formatDuration(user.activity_duration) }}
+              {{ formatDuration(user.publicProfile.trackedActivities) }}
             </span>
             <span class="stat">
               <ion-icon name="medal-outline"></ion-icon>
-              {{ user.total_trackings }} {{ i18nService.getTranslation('ranking.sessions') }}
+              {{ user.publicProfile.trackedActivities }} {{ i18nService.getTranslation('ranking.sessions') }}
             </span>
           </div>
         </ion-label>
@@ -86,7 +86,7 @@
           <ion-badge [color]="getRankColor(i)" class="rank-badge-end">
             #{{ i + 1 }}
           </ion-badge>
-          <ion-badge color="success" *ngIf="user.isActive" class="activity-badge">
+          <ion-badge color="success" *ngIf="user.publicProfile?.isActive" class="activity-badge">
             {{ i18nService.getTranslation('user.status.active') }}
           </ion-badge>
         </div>

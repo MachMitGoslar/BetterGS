@@ -6,7 +6,6 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { AlertController, ActionSheetController } from '@ionic/angular';
 import {
   IonToolbar,
   IonTitle,
@@ -26,6 +25,8 @@ import {
   IonHeader,
   Platform,
   IonLabel,
+  AlertController,
+  ActionSheetController,
 } from '@ionic/angular/standalone';
 import { User } from 'src/app/core/models/user.model';
 import { Observable, Subscription } from 'rxjs';
@@ -104,7 +105,6 @@ export class ProfilePage implements OnInit, OnDestroy {
   profileForm!: FormGroup;
   isLoading: boolean = false;
   passwordMismatch: boolean = false;
-  totalActivities: Observable<number> | undefined;
 
   private subscriptions: Subscription[] = [];
 
@@ -192,7 +192,6 @@ export class ProfilePage implements OnInit, OnDestroy {
       console.log('Current user:', this.user);
       this.populateForm();
     });
-    this.totalActivities = this.applicationService.active_activities;
   }
 
   /**
@@ -201,10 +200,11 @@ export class ProfilePage implements OnInit, OnDestroy {
   private populateForm() {
     if (this.user) {
       this.profileForm.patchValue({
-        displayName: this.user.name,
-        email: this.user.email,
+        displayName: this.user.publicProfile?.name || "",
+        email: this.user.privateProfile?.email || "",
       });
     }
+  
   }
 
   /**
@@ -238,10 +238,12 @@ export class ProfilePage implements OnInit, OnDestroy {
 
         // Update user object
 
-        this.user.email = formData.email;
 
-        if (formData.displayName != this.user.name) {
-          this.user.name = formData.displayName;
+          this.user.privateProfile.email = formData.email;
+        
+
+        if (formData.displayName != this.user.publicProfile.name) {
+          this.user.publicProfile.name = formData.displayName;
           console.log('Display name changed:', formData.displayName);
           this.applicationService.updateUserProfile(formData.displayName);
         }
@@ -500,7 +502,7 @@ export class ProfilePage implements OnInit, OnDestroy {
   private async removeProfilePicture() {
     if (this.user) {
       this.applicationService.updateUserProfile(
-        this.user.name,
+        this.user.publicProfile.name,
         ""
       );
       this.notificationService.addNotification(
@@ -610,9 +612,9 @@ export class ProfilePage implements OnInit, OnDestroy {
       );
       
       // Update user profile
-      this.user.pictureUrl = imageUrl;
-      await this.applicationService.updateUserProfile(this.user.name, imageUrl);
-      
+      this.user.publicProfile.profilePictureUrl = imageUrl;
+      await this.applicationService.updateUserProfile(this.user.publicProfile.name, imageUrl);
+
       this.notificationService.addNotification(
         this.i18nService.getTranslation('profile.success.pictureUploaded'),
         'success'
@@ -731,30 +733,42 @@ export class ProfilePage implements OnInit, OnDestroy {
    * Logs out the user
    */
   async logout() {
-    const alert = await this.alertController.create({
-      header: 'Logout',
-      message: 'Are you sure you want to logout?',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-        },
-        {
-          text: 'Logout',
-          handler: () => {
-            this.performLogout();
-          },
-        },
-      ],
-    });
+    console.log('Logging out user...', this.alertController);
 
-    await alert.present();
+    try {
+      const  alert = await this.alertController.create({
+        header: 'Logout',
+        message: 'Are you sure you want to logout?',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+          },
+          {
+            text: 'Logout',
+            handler: () => {
+              this.performLogout();
+            },
+          },
+        ],
+      });
+      try {
+        await alert.present();
+        console.log('Logout alert presented');
+      } catch (error) {
+        console.error('Error presenting logout alert:', error);
+      }
+    } catch (error) {
+      console.error('Error creating logout alert:', error);
+    }
   }
 
   /**
    * Performs logout
    */
   private async performLogout() {
+          console.log('Logging out user...');
+
     try {
       // TODO: Implement logout logic
       await this.applicationService.logout();
@@ -765,7 +779,7 @@ export class ProfilePage implements OnInit, OnDestroy {
       );
 
       // Redirect to login page
-      this.router.navigate(['/login']);
+      window.location.reload(); // Reload to reset state
     } catch (error) {
       console.error('Error logging out:', error);
       this.notificationService.addNotification(
@@ -779,10 +793,10 @@ export class ProfilePage implements OnInit, OnDestroy {
    * Gets days since member
    */
   getDaysSinceMember(): number {
-    if (!this.user?.createdAt) return 0;
+    if (!this.user?.publicProfile.createdAt) return 0;
 
     const now = new Date();
-    const createdDate = this.user.createdAt;
+    const createdDate = this.user.publicProfile.createdAt;
     const diffTime = Math.abs(now.getTime() - createdDate.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 

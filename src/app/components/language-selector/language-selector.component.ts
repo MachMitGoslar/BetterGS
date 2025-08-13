@@ -1,11 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { 
-  ActionSheetController,
-} from '@ionic/angular';
 import {
   IonButton,
   IonIcon,
+  ActionSheetController,
 } from '@ionic/angular/standalone';
 import { Subscription } from 'rxjs';
 import { I18nService, Language } from 'src/app/core/services/i18n.service';

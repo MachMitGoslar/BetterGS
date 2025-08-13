@@ -64,20 +64,23 @@ export class MyActivitiesPage implements OnInit {
     public i18nService: I18nService
   ) {
     this.$activities = this.appService.$user_activities; // Assuming getActivities() returns an Observable<Activity[]>
-    this.$activities.subscribe((activities) => {
-      this.isLoading = false;
-      console.log('Activities loaded', activities);
-    });
+
     addIcons({
       stopwatch
     });
   }
 
   ngOnInit(): void {
-    setTimeout(() => {
-      this.isLoading = false;
-      console.log('Activities loaded');
-    }, 500); // Simulate loading delay
+    this.$activities.subscribe({
+      next: (activities) => {
+        this.isLoading = false;
+        console.log('Activities loaded:', activities);
+      },
+      error: (error) => {
+        this.isLoading = false;
+        console.error('Error loading activities:', error);
+      },
+    });
   }
 
   handleRefresh(event: RefresherCustomEvent) {

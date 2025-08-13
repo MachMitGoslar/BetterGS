@@ -4,7 +4,7 @@ import { loginGuard } from '../core/guards/login.guard';
 
 export const routes: Routes = [
   {
-    path: 'tabs',
+    path: '',
     component: TabsPage,
     canActivateChild: [loginGuard],
     children: [
@@ -27,6 +27,7 @@ export const routes: Routes = [
         path: 'admin',
         loadComponent: () =>
           import('./admin-page/admin-page.page').then((m) => m.AdminPagePage),
+          canActivate: [() => import('../core/guards/admin.guard').then(m => m.adminGuard)],
       },
       {
         path: '',
@@ -43,17 +44,6 @@ export const routes: Routes = [
     redirectTo: '/tabs/my_activities',
     pathMatch: 'full',
   },
-        {
-        path: 'tracking/:activityId',
-        loadComponent: () =>
-          import('../singlePages/tracking/tracking.component').then((m) => m.TrackingComponent),
-      },
-  {
-    path: 'ranking',
-    loadComponent: () => import('./ranking/ranking.page').then( m => m.RankingPage)
-  },
-  {
-    path: 'admin-page',
-    loadComponent: () => import('./admin-page/admin-page.page').then( m => m.AdminPagePage)
-  },
+
+
 ];

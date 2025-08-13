@@ -3,5 +3,8 @@
   "integrations": {
     "capacitor": {}
   },
-  "type": "angular-standalone"
+  "type": "angular-standalone",
+  "hooks": {
+    "build:after": "src/scripts/after-angular-build-hook.js"
+  }
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { 
   IonModal, 
@@ -69,12 +69,12 @@ export class UserDetailModalComponent implements OnInit {
   @Input() user!: User;
 
   userActivityStats$: Observable<UserActivityStats[]> = of([]);
+  public firestore: Firestore = inject(Firestore);
 
   constructor(
     public i18nService: I18nService,
     private activityService: ActivityService,
     private trackingService: TrackingService,
-    private firestore: Firestore,
     private modalController: ModalController
   ) {
     addIcons({ closeOutline, trophyOutline, timeOutline, statsChartOutline, personOutline });
@@ -133,8 +133,9 @@ export class UserDetailModalComponent implements OnInit {
 
 
   formatDuration(milliseconds: number): string {
+
     if (milliseconds === 0) return '0 min';
-    
+
     const hours = Math.floor(milliseconds / (1000 * 60 * 60));
     const minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
     

@@ -8,10 +8,6 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
-  AlertController,
-  LoadingController,
-} from '@ionic/angular';
-import {
   IonHeader,
   IonToolbar,
   IonTitle,
@@ -27,8 +23,10 @@ import {
   IonLabel,
   IonText,
   IonSpinner,
+  AlertController,
+  LoadingController,
 } from '@ionic/angular/standalone';
-import { Subscription } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 import { ApplicationService } from 'src/app/core/services/application.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { LanguageSelectorComponent } from 'src/app/components/language-selector/language-selector.component';
@@ -165,49 +163,56 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     const { email, password, rememberMe } = this.loginForm.value;
 
-    try {
-      // Show loading
-      const loading = await this.loadingController.create({
-        message: 'Signing in...',
-        duration: 30000, // 30 seconds timeout
-      });
-      await loading.present();
+    // Show loading
+    const loading = await this.loadingController.create({
+      message: 'Signing in...',
+      duration: 30000, // 30 seconds timeout
+    });
+    await loading.present();
 
-      // Attempt login
-      await this.applicationService.loginWithEmail(email, password);
+    this.applicationService.loginWithEmail(email, password).then(
+      () => {
+        this.isLoading = false;
+        // Attempt login
 
-      // Handle remember me functionality
-      if (rememberMe) {
-        localStorage.setItem('rememberMe', 'true');
-        localStorage.setItem('userEmail', email);
-      } else {
-        localStorage.removeItem('rememberMe');
-        localStorage.removeItem('userEmail');
+        // Handle remember me functionality
+        if (rememberMe) {
+          localStorage.setItem('rememberMe', 'true');
+          localStorage.setItem('userEmail', email);
+        } else {
+          localStorage.removeItem('rememberMe');
+          localStorage.removeItem('userEmail');
+        }
+
+        loading.dismiss();
+
+        // Show success message
+        this.notificationService.addNotification(
+          'Login successful! Welcome back.',
+          'success'
+        );
+
+        this.applicationService.$currentUser.pipe(
+          take(1)
+        ).subscribe((user) => {
+          if (user) {
+            // Redirect to home
+            console.log('User logged in:', user);
+            this.router.navigate(['/tabs']);
+          } else {
+            // If anonymous, redirect to signup
+            console.log('Anonymous user, redirecting to signup');
+            this.router.navigate(['/signup']);
+          }
+        });
+      },
+      (error) => {
+        this.isLoading = false;
+        this.loadingController.dismiss();
+        console.error('Login error:', error);
+        this.handleLoginError(error);
       }
-
-      await loading.dismiss();
-
-      // Show success message
-      this.notificationService.addNotification(
-        'Login successful! Welcome back.',
-        'success'
-      );
-
-      // Redirect to home
-      this.router.navigate(['/tabs']);
-    } catch (error: any) {
-      this.isLoading = false;
-      
-      // Dismiss loading if still present
-      this.loadingController.dismiss();
-
-      console.error('Login error:', error);
-
-      // Handle specific error messages
-      this.handleLoginError(error);
-    }
-
-    this.isLoading = false;
+    );
   }
 
   /**

@@ -15,8 +15,8 @@ export class ElapsedTimePipe implements PipeTransform {
    * The format is HH:mm:ss for seconds precision, HH:mm for minutes precision,
    * HH for hours precision, and HH:mm:ss:SSS for milliseconds precision.
    */
-  transform(value: number | null, precision: "ms" | "s" | "m" | "h" = "s"): string {
-    if (value === null || value < 0) {
+  transform(value: number | null | undefined, precision: "ms" | "s" | "m" | "h" = "s"): string {
+    if (value === null || value === undefined || value < 0) {
       value = 0; // Ensure non-negative value
     }
     const totalSeconds = Math.floor(value / 1000);

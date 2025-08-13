@@ -13,7 +13,7 @@ export const environment = {
     appId: "1:1098985577792:web:49fafbc833453a6aa22ea5"
   },
   emulatorConfig: {
-    host: "192.168.45.190"
+    host: "127.0.0.1"
   }
 };
 

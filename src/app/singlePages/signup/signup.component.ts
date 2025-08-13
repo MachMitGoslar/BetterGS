@@ -8,10 +8,6 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
-  AlertController,
-  LoadingController,
-} from '@ionic/angular';
-import {
   IonHeader,
   IonToolbar,
   IonTitle,
@@ -27,6 +23,8 @@ import {
   IonLabel,
   IonText,
   IonSpinner,
+  AlertController,
+  LoadingController,
 } from '@ionic/angular/standalone';
 import { Subscription } from 'rxjs';
 import { ApplicationService } from 'src/app/core/services/application.service';

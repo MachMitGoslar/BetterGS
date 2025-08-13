@@ -29,7 +29,6 @@ import { TrackingEditModalComponent } from 'src/app/components/tracking-edit-mod
     IonTitle,
     IonCard,
     IonCardHeader,
-    IonCardTitle,
     IonCardContent,
     IonItem,
     IonLabel,

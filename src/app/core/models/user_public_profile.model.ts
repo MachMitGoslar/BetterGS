@@ -1,30 +1,47 @@
-import { DocumentData } from "@angular/fire/firestore";
-import { Activity } from "./activity.model";
+import { DocumentData, serverTimestamp, Timestamp } from "@angular/fire/firestore";
+import { server } from "ionicons/icons";
 import { adjectives, animals, Config, uniqueNamesGenerator } from "unique-names-generator";
 
 export class UserPublicProfile {
-    public id: string;
-    public name: string;
+    public name: string ="";
     public createdAt?: Date;
-    public trackedTime?: number;
+    public trackedTime: number = 0;
+    public trackedActivities: number = 0; // Assuming this field exists in the database
+    public total_trackings: number =  0; // Assuming this field exists in the database
     public profilePictureUrl?: string;
-    public trackedActivities?: Activity[]
+    public updatedAt?: Date;
+    public isActive: boolean = true; // Indicates if the user is currently active
     
-    constructor(id: string, name: string) {
-        this.id = id;
-        this.name = name;    
+    constructor( ) {
+    
     }
     
     static fromDB(data: DocumentData): UserPublicProfile {
-        let profile = new UserPublicProfile(
-            data["id"],
-            data["name"] ?? generateRandomProfileName() // Generate a random name if not provided
-        );
-        profile.createdAt = data["createdAt"];
+        console.log("Converting UserPublicProfile from DB format:", data);
+        let profile = new UserPublicProfile();
+        profile.name = data["name"];
+        profile.createdAt = data["createdAt"].toDate() || new Date();
         profile.trackedTime = data["trackedTime"];
+        profile.trackedActivities = data["trackedActivities"] || 0;
+        profile.total_trackings = data["total_trackings"] || 0; // Assuming this field exists
         profile.profilePictureUrl = data["profilePictureUrl"];
-        profile.trackedActivities = data["trackedActivities"];
+        profile.updatedAt = data["updatedAt"].toDate() || new Date();
+        profile.isActive = data["isActive"];
+
         return profile;
+    }
+
+    toDB(): DocumentData {
+        let data = {
+            name: this.name || generateRandomProfileName(),
+            createdAt: Timestamp.fromDate(this.createdAt || new Date()),
+            trackedTime: this.trackedTime || 0,
+            profilePictureUrl: this.profilePictureUrl || "",
+            updatedAt: serverTimestamp(),
+            isActive: this.isActive
+        };
+        console.log("Converting UserPublicProfile to DB format:", data);
+        return data;
     }
 
 

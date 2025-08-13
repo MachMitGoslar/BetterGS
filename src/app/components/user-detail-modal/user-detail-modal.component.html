@@ -16,15 +16,15 @@
         <ion-card-header>
           <div class="user-header">
             <ion-avatar size="large">
-              <img *ngIf="user.pictureUrl" [src]="user.pictureUrl" [alt]="user.name" />
-              <div *ngIf="!user.pictureUrl" class="avatar-placeholder">
-                {{ getInitials(user.name) }}
+              <img *ngIf="user.publicProfile.profilePictureUrl" [src]="user.publicProfile.profilePictureUrl" [alt]="user.publicProfile.name" />
+              <div *ngIf="!user.publicProfile.profilePictureUrl" class="avatar-placeholder">
+                {{ getInitials(user.publicProfile.name) }}
               </div>
             </ion-avatar>
             <div class="user-info">
-              <ion-card-title>{{ user.name }}</ion-card-title>
-              <p class="user-email" *ngIf="user.email">{{ user.email }}</p>
-              <ion-badge color="success" *ngIf="user.isActive">
+              <ion-card-title>{{ user.publicProfile.name }}</ion-card-title>
+              <p class="user-email" *ngIf="user.privateProfile.email">{{ user.privateProfile.email }}</p>
+              <ion-badge color="success" *ngIf="user.publicProfile.isActive">
                 {{ i18nService.getTranslation('user.status.active') }}
               </ion-badge>
             </div>
@@ -47,7 +47,7 @@
                 <div class="stat-item">
                   <ion-icon name="time-outline" color="primary"></ion-icon>
                   <div class="stat-content">
-                    <h3>{{ formatDuration(user.activity_duration) }}</h3>
+                    <h3>{{ formatDuration(user.publicProfile.trackedTime) }}</h3>
                     <p>{{ i18nService.getTranslation('ranking.totalTime') }}</p>
                   </div>
                 </div>
@@ -56,7 +56,7 @@
                 <div class="stat-item">
                   <ion-icon name="trophy-outline" color="warning"></ion-icon>
                   <div class="stat-content">
-                    <h3>{{ user.total_trackings }}</h3>
+                    <h3>{{ user.publicProfile.total_trackings }}</h3>
                     <p>{{ i18nService.getTranslation('ranking.totalTrackings') }}</p>
                   </div>
                 </div>

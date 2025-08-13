@@ -1,4 +1,4 @@
-import { DocumentData, documentId, DocumentReference, getDoc, Timestamp } from 'firebase/firestore';
+import { DocumentData, documentId, DocumentReference, getDoc, Timestamp } from '@angular/fire/firestore';
 import { v4 as uuidv4, v4 } from 'uuid';
 
 

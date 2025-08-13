@@ -90,9 +90,9 @@ export class RankingPage implements OnInit {
 
 
 
-  formatDuration(milliseconds: number): string {
-    if (milliseconds === 0) return '0 min';
-    
+  formatDuration(milliseconds: number | undefined): string {
+    if (milliseconds === 0 || milliseconds === undefined) return '0 min';
+
     const hours = Math.floor(milliseconds / (1000 * 60 * 60));
     const minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
     

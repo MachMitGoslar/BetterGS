@@ -1,43 +1,65 @@
 import { Injectable } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
-import { LocalNotificationDescriptor, LocalNotifications, LocalNotificationSchema, ScheduleResult } from "@capacitor/local-notifications"
+import {
+  LocalNotificationDescriptor,
+  LocalNotifications,
+  LocalNotificationSchema,
+  ScheduleResult,
+} from '@capacitor/local-notifications';
 
 export interface Notification {
   id: number;
   message: string;
   timestamp: Date;
-  type: 'success' | 'info' | 'warning' | 'danger';
+  type: 'success' | 'info' | 'warning' | 'danger';
+  displayed?: boolean; // Track if notification has been displayed
 }
+
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class NotificationService {
-
   private _notifications: Notification[] = [];
   public $notifications = new ReplaySubject<Notification[]>(1);
+  private notificationIdCounter = 0;
 
-  private active_local_notifications: ScheduleResult[] = [];
-  ;
+  private active_local_notifications: ScheduleResult[] = [];
+  constructor() {}
 
-  constructor() { }
-
-
-  addNotification(msg: string, type: 'success' | 'info' | 'warning' | 'danger' = 'success'): void {
+  addNotification(
+    msg: string,
+    type: 'success' | 'info' | 'warning' | 'danger' = 'success'
+  ): void {
+    this.notificationIdCounter++;
     this._notifications.push({
-      id: this._notifications.length,
+      id: this.notificationIdCounter,
       message: msg,
       timestamp: new Date(),
-      type: type
+      type: type,
+      displayed: false
     });
     this.$notifications.next(this._notifications);
   }
 
+  markNotificationAsDisplayed(id: number): void {
+    const notification = this._notifications.find(n => n.id === id);
+    if (notification) {
+      notification.displayed = true;
+    }
+  }
+
+  getUndisplayedNotifications(): Notification[] {
+    return this._notifications.filter(n => !n.displayed);
+  }
+
   removeNotification(id: number): void {
-    this._notifications = this._notifications.filter(n => n.id !== id);
+    this._notifications = this._notifications.filter((n) => n.id !== id);
     this.$notifications.next(this._notifications);
   }
 
-  async scheduleLocalNotifications(notification: LocalNotificationSchema[]): Promise<void> {
+  async scheduleLocalNotifications(
+    notification: LocalNotificationSchema[]
+  ): Promise<void> {
     let sheduler = await LocalNotifications.schedule({
       notifications: notification.map((n) => {
         return {
@@ -48,15 +70,17 @@ export class NotificationService {
           sound: n.sound || 'default',
           attachments: n.attachments || [],
           actionTypeId: n.actionTypeId || '',
-          extra: n.extra || {}
+          extra: n.extra || {},
         } as LocalNotificationSchema;
-      })
+      }),
     });
     this.active_local_notifications.push(sheduler);
   }
 
   async cancelLocalNotifications(notificationId: number): Promise<void> {
-    let notifications = this.active_local_notifications.map(n => n.notifications)
+    let notifications = this.active_local_notifications.map(
+      (n) => n.notifications
+    );
     let notifitication_array: LocalNotificationDescriptor[] = [];
     notifications.forEach((n) => {
       n.forEach((nn) => {
@@ -66,4 +90,3 @@ export class NotificationService {
     await LocalNotifications.cancel({ notifications: notifitication_array });
   }
 }
-

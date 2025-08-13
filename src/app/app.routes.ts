@@ -5,6 +5,11 @@ import { loginGuard } from './core/guards/login.guard';
 export const routes: Routes = [
   {
     path: '',
+    redirectTo: '/tabs',
+    pathMatch: 'full'
+  },
+  {
+    path: 'tabs',
     loadChildren: () => import('./tabs/tabs.routes').then((m) => m.routes),
     canActivate: [loginGuard]
   },
@@ -14,5 +19,11 @@ export const routes: Routes = [
   },
   {
     path: 'signup',
-    loadComponent: () => import('./singlePages/signup/signup.component').then((m) => m.SignupComponent),},
+    loadComponent: () => import('./singlePages/signup/signup.component').then((m) => m.SignupComponent),
+  },
+          {
+        path: 'tracking/:activityId',
+        loadComponent: () =>
+          import('./singlePages/tracking/tracking.component').then((m) => m.TrackingComponent),
+      },
 ];

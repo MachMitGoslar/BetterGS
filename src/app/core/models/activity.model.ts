@@ -1,6 +1,5 @@
 import { inject } from '@angular/core';
-import { docData, Firestore } from '@angular/fire/firestore';
-import { doc, DocumentData, documentId, DocumentReference, getDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
+import { docData, Firestore, doc, DocumentData, documentId, DocumentReference, getDoc, serverTimestamp, Timestamp } from '@angular/fire/firestore';
 import { server } from 'ionicons/icons';
 import { Subscription } from 'rxjs';
 import { v4 } from 'uuid';

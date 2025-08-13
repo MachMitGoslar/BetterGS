@@ -4,18 +4,14 @@ import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalo
 
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
-import { getAuth, provideAuth } from '@angular/fire/auth';
-import { browserPopupRedirectResolver, browserSessionPersistence, connectAuthEmulator, indexedDBLocalPersistence, initializeAuth } from '@firebase/auth';
+import { getFirestore, provideFirestore, initializeFirestore, connectFirestoreEmulator, } from '@angular/fire/firestore';
+import { getAuth, provideAuth, connectAuthEmulator, initializeAuth, browserSessionPersistence, indexedDBLocalPersistence, browserPopupRedirectResolver } from '@angular/fire/auth';
 import { getApp, initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { connectFirestoreEmulator, initializeFirestore } from '@firebase/firestore';
-import { connectStorageEmulator, getStorage } from "@firebase/storage";
-import { provideStorage } from "@angular/fire/storage";
+import { provideStorage, getStorage,connectStorageEmulator } from "@angular/fire/storage";
 import { environment } from './environments/environment';
-import { setLogLevel, LogLevel } from "@angular/fire";
-import { defineCustomElements } from '@ionic/pwa-elements/loader';
+//import { defineCustomElements } from '@ionic/pwa-elements/loader';
 // Call the element loader before the bootstrapModule/bootstrapApplication call
-defineCustomElements(window);
+//defineCustomElements(window);
 
 
 bootstrapApplication(AppComponent, {
@@ -23,15 +19,20 @@ bootstrapApplication(AppComponent, {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),
     provideRouter(routes, withPreloading(PreloadAllModules)), 
-    provideFirebaseApp(() =>  initializeApp(environment.firebaseConfig)),
+    provideFirebaseApp(() =>  {
+      return initializeApp(environment.firebaseConfig);
+      
+    }),
 
     provideAuth(() => {
-      let auth = initializeAuth(getApp(), {
-                    persistence: !environment.production
-                        ? browserSessionPersistence
-                        : indexedDBLocalPersistence,
-                    popupRedirectResolver: browserPopupRedirectResolver
-                });
+      let auth = initializeAuth(getApp(), 
+      // {
+      //               persistence: !environment.production
+      //                   ? browserSessionPersistence
+      //                   : indexedDBLocalPersistence,
+      //               popupRedirectResolver: browserPopupRedirectResolver
+      //           }
+            );
         if(!environment.production) {
           connectAuthEmulator(auth, `http://${environment.emulatorConfig.host}:9100`)
         }
@@ -40,7 +41,7 @@ bootstrapApplication(AppComponent, {
     ), 
     provideFirestore(() => {
       let firestore = initializeFirestore(getApp(), {
-        experimentalForceLongPolling: !environment.production ? true : false,
+        // experimentalForceLongPolling: !environment.production ? true : false,
       });
       if(!environment.production) {
        connectFirestoreEmulator(firestore, environment.emulatorConfig.host, 8112);

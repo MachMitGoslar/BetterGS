@@ -26,12 +26,10 @@
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:application",
-          
-          "options": {            
-                  "localize": true,
-
+          "options": {
+            "localize": true,
             "outputPath": {
-              "base": "www",
+              "base": "www/",
               "browser": ""
             },
             "index": "src/index.html",
@@ -51,20 +49,12 @@
             "aot": true
           },
           "configurations": {
-            "de": {
-              "aot": true,
-              "outputPath": "www/de/"
-            },
-            "en": {
-              "aot": true,
-              "outputPath": "www/"
-            },
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "10mb",
+                  "maximumError": "50mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -78,7 +68,10 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "optimization": {
+                "scripts": false
+              }
             },
             "development": {
               "optimization": false,

@@ -1,19 +1,15 @@
-import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
 import { ApplicationService } from '../services/application.service';
 import { map } from 'rxjs';
 
-
-
-
-export const loginGuard: CanActivateFn = (route, state) => {
-  const applicationService = inject(ApplicationService);
+export const adminGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
-  console.log('Login Guard: Checking user authentication status');
+  const applicationService = inject(ApplicationService);
 
   return applicationService.$currentUser.pipe(
     map((user) => {
-      if (user && user !== null && user !== undefined) {
+      if (user && user !== null && user.privateProfile.role === 'admin') {
         return true; // User is logged in, allow access
       } else {
         console.log("ROUTING");
@@ -22,4 +18,5 @@ export const loginGuard: CanActivateFn = (route, state) => {
       }
     })
   );
+
 };
