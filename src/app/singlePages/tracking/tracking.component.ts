@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Tracking } from 'src/app/core/models/tracking.model';
@@ -54,11 +54,13 @@ export class TrackingComponent implements OnInit, OnDestroy {
   // Available activities
   activities: Activity[] = [];
 
+      private applicationService = inject(ApplicationService)
+    private activityService = inject(ActivityService)
+    public modalCtrl = inject(ModalController)
+    public route = inject(ActivatedRoute)
+
   constructor(
-    private applicationService: ApplicationService,
-    private activityService: ActivityService,
-    public modalCtrl: ModalController,
-    public route: ActivatedRoute
+
   ) { }
 
   ngOnInit() {

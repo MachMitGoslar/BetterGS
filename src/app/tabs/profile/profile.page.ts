@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule,
@@ -230,17 +230,18 @@ export class ProfilePage implements OnInit, OnDestroy {
    * @param platform - Ionic platform detection service
    * @param userService - User profile management service
    */
-  constructor(
-    private formBuilder: FormBuilder,
-    private alertController: AlertController,
-    private actionSheetController: ActionSheetController,
-    private notificationService: NotificationService,
-    public applicationService: ApplicationService,
-    public router: Router,
-    private i18nService: I18nService,
-    private platform: Platform,
-    private userService: UserService
-  ) {
+
+      private formBuilder = inject(FormBuilder)
+    private alertController = inject(AlertController)
+    private actionSheetController = inject(ActionSheetController)
+    private notificationService = inject(NotificationService)
+    public applicationService = inject(ApplicationService)
+    public router = inject(Router)
+    private i18nService = inject(I18nService)
+    private platform = inject(Platform)
+    private userService = inject(UserService)
+
+  constructor() {
     this.initializeForm();
     this.registerIcons();
   }

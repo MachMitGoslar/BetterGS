@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { Camera } from '@capacitor/camera';
@@ -69,13 +69,14 @@ export class OnboardingComponent implements OnInit {
 
   // Current user
   currentUser: User | null = null;
+      private router = inject(Router)
+    private platform = inject(Platform)
+    public i18nService = inject(I18nService)
+    private applicationService = inject(ApplicationService)
+    private userService = inject(UserService)
 
   constructor(
-    private router: Router,
-    private platform: Platform,
-    public i18nService: I18nService,
-    private applicationService: ApplicationService,
-    private userService: UserService
+
   ) {}
 
   async ngOnInit() {

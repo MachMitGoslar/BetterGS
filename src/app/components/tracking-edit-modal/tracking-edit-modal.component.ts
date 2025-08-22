@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { 
@@ -68,13 +68,13 @@ export class TrackingEditModalComponent implements OnInit {
 
   private readonly maxFileSize = 5 * 1024 * 1024; // 5MB
   private readonly allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-
+  private modalController: ModalController = inject(ModalController);
+  private toastController: ToastController = inject(ToastController);
+  private formBuilder: FormBuilder = inject(FormBuilder);
+  private trackingService: TrackingService = inject(TrackingService);
+  public notificationService: NotificationService = inject(NotificationService);  
   constructor(
-    private modalController: ModalController,
-    private toastController: ToastController,
-    private formBuilder: FormBuilder,
-    private trackingService: TrackingService,
-    public notificationService: NotificationService
+
   ) {
     this.initializeForm();
   }

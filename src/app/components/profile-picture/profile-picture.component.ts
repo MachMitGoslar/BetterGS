@@ -14,7 +14,7 @@ import { IonIcon } from '@ionic/angular/standalone';
 })
   
 
-export class ProfilePictureComponent  implements OnInit {
+export class ProfilePictureComponent  {
 
   @Input() pictureUrl: string | undefined;
   @Input() size: 'small' | 'medium' | 'large' = 'medium';
@@ -24,6 +24,5 @@ export class ProfilePictureComponent  implements OnInit {
 
 
 
-  ngOnInit() {}
 
 }

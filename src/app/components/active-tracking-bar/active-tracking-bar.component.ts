@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild, TemplateRef} from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, inject} from '@angular/core';
 import { IonButton, IonItem, IonIcon, IonToolbar, IonTitle, ModalController } from "@ionic/angular/standalone";
 import { defaultIfEmpty, interval, map, Observable } from 'rxjs';
 import { Activity } from 'src/app/core/models/activity.model';
@@ -20,15 +20,18 @@ import { TrackingEditModalComponent } from '../tracking-edit-modal/tracking-edit
 })
 export class ActiveTrackingBarComponent  implements OnInit {
 
-  $activeTracking = this.applicationService.$activeTracking as Observable<Tracking | void>;
+  $activeTracking: Observable<Tracking | void>;
   public _activeTracking: Tracking | void = undefined;
   public elapsedTime: number = 0;
 
+      public applicationService: ApplicationService = inject(ApplicationService);
+    public modalController: ModalController = inject(ModalController);
   constructor(
-    public applicationService: ApplicationService,
-    public modalController: ModalController
 
-  ) { }
+
+  ) { 
+    this.$activeTracking = this.applicationService.$activeTracking as Observable<Tracking | void>;
+  }
 
   ngOnInit() {
     this.$activeTracking.subscribe(tracking => {

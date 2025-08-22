@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { NotificationComponent } from "./components/notification/notification.component";
 import { ApplicationService } from './core/services/application.service';
@@ -9,6 +9,9 @@ import { ActiveTrackingBarComponent } from "./components/active-tracking-bar/act
   templateUrl: 'app.component.html',
   imports: [IonApp, IonRouterOutlet, NotificationComponent],
 })
+
 export class AppComponent {
-  constructor(public appService: ApplicationService) {}
+  public appService = inject(ApplicationService);
+
+  constructor() {}
 }

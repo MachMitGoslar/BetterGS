@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import {
   IonHeader,
   IonToolbar,
@@ -125,9 +125,12 @@ export class MyActivitiesPage implements OnInit, OnDestroy {
    * @param appService - Application service for data operations
    * @param i18nService - Internationalization service
    */
+
+      public appService = inject(ApplicationService)
+    public i18nService = inject(I18nService)
+
   constructor(
-    public appService: ApplicationService,
-    public i18nService: I18nService
+
   ) {
     // Initialize observables
     this.$activities = this.appService.$user_activities;

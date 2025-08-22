@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { 
@@ -146,10 +146,13 @@ export class RankingPage implements OnInit, OnDestroy {
    * @param {ModalController} modalController - Controller for modal dialogs
    * @since 1.0.0
    */
+
+    private userService = inject(UserService)
+    public i18nService = inject(I18nService)
+    public modalController = inject(ModalController)
+
   constructor(
-    private userService: UserService,
-    public i18nService: I18nService,
-    public modalController: ModalController
+
   ) {
     this.registerIcons();
     this.initializeObservables();

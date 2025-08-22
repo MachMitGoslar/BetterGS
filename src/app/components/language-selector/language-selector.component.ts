@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   IonButton,
@@ -26,9 +26,10 @@ export class LanguageSelectorComponent implements OnInit, OnDestroy {
   
   private subscriptions: Subscription[] = [];
 
+      private i18nService = inject(I18nService);
+    private actionSheetController = inject(ActionSheetController);
   constructor(
-    private i18nService: I18nService,
-    private actionSheetController: ActionSheetController
+
   ) {
     this.setupIcons();
   }

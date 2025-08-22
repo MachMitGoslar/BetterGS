@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnChanges, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { 
   IonModal, 
@@ -67,17 +67,18 @@ interface UserActivityStats {
     
   ]
 })
-export class UserDetailModalComponent implements OnInit {
+export class UserDetailModalComponent implements OnInit, OnChanges {
   @Input() user!: UserPublicProfile;
 
   userActivityStats$: Observable<UserActivityStats[]> = of([]);
   public firestore: Firestore = inject(Firestore);
+  public i18nService: I18nService = inject(I18nService);
+  private activityService: ActivityService = inject(ActivityService);
+  private trackingService: TrackingService = inject(TrackingService);
+  private modalController: ModalController = inject(ModalController);
 
   constructor(
-    public i18nService: I18nService,
-    private activityService: ActivityService,
-    private trackingService: TrackingService,
-    private modalController: ModalController
+
   ) {
     addIcons({ closeOutline, trophyOutline, timeOutline, statsChartOutline, personOutline });
   }

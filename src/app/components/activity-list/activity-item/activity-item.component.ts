@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { Activity } from 'src/app/core/models/activity.model';
 import {
   IonItem,
@@ -35,10 +35,11 @@ export class ActivityItemComponent implements OnInit {
   @Input() activity?: Activity;
   public currentUser: User | undefined;
 
+      public applicationService: ApplicationService = inject(ApplicationService);
+    public trackingSrv: TrackingService = inject(TrackingService);
+    public router: Router = inject(Router);
   constructor(
-    public applicationService: ApplicationService,
-    public trackingSrv: TrackingService,
-    public router: Router
+
   ) {
     // Ensure the icons are loaded
     addIcons(icons);

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule,
@@ -71,13 +71,15 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
+    private formBuilder = inject(FormBuilder)
+    private router = inject(Router)
+    private alertController = inject(AlertController)
+    private loadingController = inject(LoadingController)
+    private applicationService = inject(ApplicationService)
+    private notificationService = inject(NotificationService)
+
   constructor(
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private alertController: AlertController,
-    private loadingController: LoadingController,
-    private applicationService: ApplicationService,
-    private notificationService: NotificationService
+
   ) {
     this.initializeForm();
     this.setupIcons();

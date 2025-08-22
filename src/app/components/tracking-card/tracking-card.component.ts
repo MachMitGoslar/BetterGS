@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { 
@@ -36,8 +36,10 @@ export class TrackingCardComponent implements OnInit {
 
   @Input() tracking: Tracking | undefined;
   activity?: Activity;
+  public activityService: ActivityService = inject(ActivityService);
+  public modalController: ModalController = inject(ModalController);
 
-  constructor( public activityService: ActivityService, public modalController: ModalController) { 
+  constructor( ) { 
     addIcons({imageOutline,pencil,timeOutline,playCircleOutline,arrowForwardOutline,stopCircleOutline,documentTextOutline});
   }
 

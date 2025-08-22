@@ -1,4 +1,4 @@
-import { Injectable, LOCALE_ID, Inject } from '@angular/core';
+import { Injectable, LOCALE_ID, Inject, inject } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { translations } from '../../../locale/translations';
@@ -97,7 +97,10 @@ export class I18nService {
    * 
    * @param localeId - Angular's injected LOCALE_ID token
    */
-  constructor(@Inject(LOCALE_ID) private localeId: string) {
+
+  private localeId = inject(LOCALE_ID);
+
+  constructor() {
     // Set initial language from locale or localStorage
     const savedLanguage = this.getSavedLanguage();
     const initialLanguage = savedLanguage || this.localeId || 'de';

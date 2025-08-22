@@ -6,7 +6,7 @@ const ICON_LIST = {
   // TODO: Move to proper icon configuration service
 }
 
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { 
@@ -322,14 +322,16 @@ export class AdminPagePage implements OnInit, OnDestroy {
    * @param actionSheetController - Ionic action sheet controller for action menus
    */
 
+    private formBuilder = inject(FormBuilder);
+    private applicationService = inject(ApplicationService);
+    private activityService = inject(ActivityService);
+    private userService = inject(UserService);
+    private notificationService = inject(NotificationService);
+    private i18nService = inject(I18nService);
+    private alertController = inject(AlertController);
+
   constructor(
-    private formBuilder: FormBuilder,
-    private applicationService: ApplicationService,
-    private activityService: ActivityService,
-    private userService: UserService,
-    private notificationService: NotificationService,
-    private i18nService: I18nService,
-    private alertController: AlertController,
+
   ) {
     this.initializeForm();
     this.setupIcons();

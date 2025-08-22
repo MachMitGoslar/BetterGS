@@ -35,10 +35,11 @@ export class TabsPage {
   public environmentInjector = inject(EnvironmentInjector);
   public currentUser: User | null = null;
   public role: 'user' | 'admin' = 'user';
+  public applicationService = inject(ApplicationService);
+  public userService = inject(UserService);
 
   constructor(
-    public applicationService: ApplicationService,
-    public userService: UserService
+
   ) {
     this.applicationService.$currentUser.subscribe(user => {
       this.currentUser = user;

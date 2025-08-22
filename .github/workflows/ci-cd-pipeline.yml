@@ -207,7 +207,7 @@ jobs:
 
       - name: 🏗️ Build Web App
         run: |
-          npm run build:i18n
+          ionic build --configuration=en
 
       - name: 📱 Capacitor Sync
         run: |
@@ -260,8 +260,8 @@ jobs:
 
       - name: 🏗️ Test Localized Builds
         run: |
-          npm run build:de
-          npm run build:en
+          ionic build --configuration=de
+          ionic build --configuration=en
 
   # ==========================================
   # Job 7: Performance Audit
@@ -288,7 +288,7 @@ jobs:
 
       - name: 🏗️ Build for Performance Test
         run: |
-          npm run build:en
+          ionic build --configuration=en
 
       - name: 🚀 Start Test Server
         run: |
@@ -327,7 +327,8 @@ jobs:
 
       - name: 🏗️ Production Build
         run: |
-          npm run build:i18n
+          ionic build --configuration=production,en
+          ionic build --configuration=production,de
 
       - name: 🔍 Validate Build Output
         run: |

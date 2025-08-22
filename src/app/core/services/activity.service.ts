@@ -98,7 +98,8 @@ export class ActivityService {
    * 
    * @param i18nService - Internationalization service for error messages
    */
-  constructor(private i18nService: I18nService) {
+  private i18nService: I18nService = inject(I18nService);
+  constructor() {
   }
 
   // ========================================

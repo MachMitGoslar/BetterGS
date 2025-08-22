@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Notification, NotificationService } from 'src/app/core/services/notification.service';
 import { ToastController } from '@ionic/angular/standalone';
@@ -13,10 +13,10 @@ import { CommonModule } from '@angular/common';
 export class NotificationComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription = new Subscription();
-
+  private notificationService = inject(NotificationService);
+  private toastController = inject(ToastController);
   constructor(
-    private notificationService: NotificationService,
-    private toastController: ToastController
+
   ) {}
 
   ngOnInit() {

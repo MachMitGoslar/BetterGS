@@ -84,7 +84,7 @@ export class ApplicationService {
    * Observable stream of current user
    * @description Provides real-time access to authentication state
    */
-  $currentUser: Observable<User | null> = this.usrSrv.$currentUser as Observable<User | null>;
+  $currentUser: Observable<User | null>;
 
   /**
    * Observable stream of active tracking session
@@ -173,15 +173,19 @@ export class ApplicationService {
    * @param auth Auth - Firebase authentication instance
    * @param storage Storage - Firebase storage instance
    */
+
+  public usrSrv = inject(UserService);
+  public activityService = inject(ActivityService);
+  public trackingService = inject(TrackingService);
+  public notificationService = inject(NotificationService);
+  public i18nService = inject(I18nService);
+  public auth = inject(Auth);
+  public storage = inject(Storage);
+
   constructor(
-    public usrSrv: UserService,
-    public activityService: ActivityService,
-    public trackingService: TrackingService,
-    public notificationService: NotificationService,
-    public i18nService: I18nService,
-    public auth: Auth,
-    public storage: Storage
+
   ) {
+    this.$currentUser = this.usrSrv.$currentUser as Observable<User | null>;
     this.initializeService();
   }
 
