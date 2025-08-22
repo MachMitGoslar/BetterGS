@@ -292,6 +292,9 @@ jobs:
       - name: 📦 Install Dependencies
         run: |
           npm ci --no-audit --prefer-offline
+      - name: 📦 Install Ionic CLI
+        run: |
+          npm install @ionic/cli --no-audit --prefer-offline
 
       - name: 🏗️ Build for Performance Test
         run: |
