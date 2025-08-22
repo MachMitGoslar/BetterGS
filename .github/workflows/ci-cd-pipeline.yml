@@ -205,6 +205,10 @@ jobs:
         run: |
           npm ci --no-audit --prefer-offline
 
+      - name: 📦 Install Ionic CLI
+        run: |
+          npm install @ionic/cli --no-audit --prefer-offline
+
       - name: 🏗️ Build Web App
         run: |
           ionic build --configuration=en
@@ -240,8 +244,8 @@ jobs:
           npm ci --no-audit --prefer-offline
       - name: 📦 Install Ionic
         run: |
-          npm install @ionic/angular --no-audit --prefer-offline
-          
+          npm install @ionic/cli --no-audit --prefer-offline
+
       - name: 🔍 Extract i18n Messages
         run: |
           npm run extract-i18n
