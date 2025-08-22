@@ -71,16 +71,14 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-    private formBuilder = inject(FormBuilder)
-    private router = inject(Router)
-    private alertController = inject(AlertController)
-    private loadingController = inject(LoadingController)
-    private applicationService = inject(ApplicationService)
-    private notificationService = inject(NotificationService)
+  private formBuilder = inject(FormBuilder);
+  private router = inject(Router);
+  private alertController = inject(AlertController);
+  private loadingController = inject(LoadingController);
+  private applicationService = inject(ApplicationService);
+  private notificationService = inject(NotificationService);
 
-  constructor(
-
-  ) {
+  constructor() {
     this.initializeForm();
     this.setupIcons();
   }
@@ -194,9 +192,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           'success'
         );
 
-        this.applicationService.$currentUser.pipe(
-          take(1)
-        ).subscribe((user) => {
+        this.applicationService.$currentUser.pipe(take(1)).subscribe((user) => {
           if (user) {
             // Redirect to home
             console.log('User logged in:', user);

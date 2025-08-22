@@ -2,18 +2,20 @@
   <ion-card-header class="card-header">
     <!-- Image Header -->
     <div class="image-header">
-      <img 
+      <img
         *ngIf="tracking?.imageUrl; else activityImage"
-        [src]="tracking?.imageUrl" 
+        [src]="tracking?.imageUrl"
         alt="Tracking Bild"
-        class="header-image">
-      
+        class="header-image"
+      />
+
       <ng-template #activityImage>
-        <img 
+        <img
           *ngIf="activity?.imageUrl; else placeholderImage"
           [src]="activity?.imageUrl"
           alt="Activity Bild"
-          class="header-image">
+          class="header-image"
+        />
       </ng-template>
 
       <ng-template #placeholderImage>
@@ -22,58 +24,66 @@
           <span class="placeholder-text">Kein Bild</span>
         </div>
       </ng-template>
-      
+
       <!-- Duration Badge Overlay -->
-       <div class="image-overlay-div">
-      <div class="duration-badge-overlay">
-        <span class="duration-text">{{ tracking?.duration ?? 0 | elapsedTime }}</span>
-      </div>
-      <div class="duration-badge-overlay" (click)="editTracking()">
-        <ion-icon 
-          name="pencil" 
-          class="duration-icon">
-        </ion-icon>
+      <div class="image-overlay-div">
+        <div class="duration-badge-overlay">
+          <span class="duration-text">{{
+            tracking?.duration ?? 0 | elapsedTime
+          }}</span>
         </div>
-       </div>
+        <div class="duration-badge-overlay" (click)="editTracking()">
+          <ion-icon name="pencil" class="duration-icon"> </ion-icon>
+        </div>
+      </div>
     </div>
   </ion-card-header>
-  
+
   <ion-card-content class="card-content">
     <!-- Activity Info as Title -->
     <div class="activity-header">
       <div class="activity-title">
-        <ion-icon 
-          name="time-outline" 
-          class="activity-icon">
-        </ion-icon>
+        <ion-icon name="time-outline" class="activity-icon"> </ion-icon>
         <h2 class="activity-name">{{ getActivityName() }}</h2>
       </div>
-      <p class="tracking-date">{{ tracking?.startDate | date:'dd.MM.yyyy' }}</p>
+      <p class="tracking-date">
+        {{ tracking?.startDate | date : "dd.MM.yyyy" }}
+      </p>
     </div>
 
     <!-- Time Details -->
     <div class="time-details">
       <div class="time-item">
-        <ion-icon name="play-circle-outline" class="time-icon start-icon"></ion-icon>
+        <ion-icon
+          name="play-circle-outline"
+          class="time-icon start-icon"
+        ></ion-icon>
         <div class="time-info">
           <span class="time-label">Start</span>
-          <span class="time-value">{{ tracking?.startDate | date:'HH:mm' }}</span>
+          <span class="time-value">{{
+            tracking?.startDate | date : "HH:mm"
+          }}</span>
         </div>
       </div>
-      
+
       <div class="time-separator">
         <ion-icon name="arrow-forward-outline"></ion-icon>
       </div>
-      
+
       <div class="time-item">
-        <ion-icon name="stop-circle-outline" class="time-icon end-icon"></ion-icon>
+        <ion-icon
+          name="stop-circle-outline"
+          class="time-icon end-icon"
+        ></ion-icon>
         <div class="time-info">
           <span class="time-label">Ende</span>
-          <span class="time-value">{{ tracking?.endDate | date:'HH:mm' }}</span>
+          <span class="time-value">{{
+            tracking?.endDate | date : "HH:mm"
+          }}</span>
         </div>
       </div>
     </div>
-    
+
     <!-- Notes Section -->
     <div class="tracking-summary" *ngIf="tracking?.notes">
       <ion-icon name="document-text-outline" class="notes-icon"></ion-icon>

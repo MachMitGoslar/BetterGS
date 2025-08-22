@@ -1,12 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-
-
 @Pipe({
-  name: 'elapsedTime'
+  name: 'elapsedTime',
 })
 export class ElapsedTimePipe implements PipeTransform {
-
   /**
    * Formats elapsed time depending on the specified precision. Default is seconds.
    * @param value The elapsed time in milliseconds.
@@ -15,7 +12,10 @@ export class ElapsedTimePipe implements PipeTransform {
    * The format is HH:mm:ss for seconds precision, HH:mm for minutes precision,
    * HH for hours precision, and HH:mm:ss:SSS for milliseconds precision.
    */
-  transform(value: number | null | undefined, precision: "ms" | "s" | "m" | "h" = "s"): string {
+  transform(
+    value: number | null | undefined,
+    precision: 'ms' | 's' | 'm' | 'h' = 's'
+  ): string {
     if (value === null || value === undefined || value < 0) {
       value = 0; // Ensure non-negative value
     }
@@ -26,20 +26,27 @@ export class ElapsedTimePipe implements PipeTransform {
     const milliseconds = value % 1000;
 
     switch (precision) {
-      case "ms":
-        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}:${milliseconds.toString().padStart(3, '0')}`;
-      case "s":
-        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-      case "m":
-        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-      case "h":
+      case 'ms':
+        return `${hours.toString().padStart(2, '0')}:${minutes
+          .toString()
+          .padStart(2, '0')}:${seconds
+          .toString()
+          .padStart(2, '0')}:${milliseconds.toString().padStart(3, '0')}`;
+      case 's':
+        return `${hours.toString().padStart(2, '0')}:${minutes
+          .toString()
+          .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      case 'm':
+        return `${hours.toString().padStart(2, '0')}:${minutes
+          .toString()
+          .padStart(2, '0')}`;
+      case 'h':
         return `${hours.toString().padStart(2, '0')}`;
       default:
         // Fallback to default precision (seconds)
-        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        return `${hours.toString().padStart(2, '0')}:${minutes
+          .toString()
+          .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     }
-
-
   }
-
 }

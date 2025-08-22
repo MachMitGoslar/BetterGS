@@ -9,8 +9,8 @@ describe('TrackingEditModalComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ TrackingEditModalComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [TrackingEditModalComponent],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TrackingEditModalComponent);

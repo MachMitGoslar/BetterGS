@@ -13,16 +13,12 @@
 </ion-header>
 
 <ion-content [fullscreen]="false">
-
-
   <div class="profile-container" *ngIf="user">
-
     <!-- Profile Header -->
     <ion-card class="profile-header">
       <ion-card-content>
         <div class="avatar-section">
           <div class="avatar-container">
-
             <app-profile-picture
               [pictureUrl]="_publicUserData?.profilePictureUrl"
               [size]="'large'"
@@ -31,77 +27,100 @@
             <ion-button
               fill="clear"
               class="change-avatar-btn"
-              (click)="changeProfilePicture()">
+              (click)="changeProfilePicture()"
+            >
               <ion-icon name="camera" slot="icon-only"></ion-icon>
             </ion-button>
           </div>
-          
+
           <div class="user-basic-info">
             @if(user.isAnonymous) {
-              <h2 class="display-name" i18n="@@profile.anonymous.user">Anonymous User</h2>
-              <p i18n="@@profile.not.registered">Your profile has not been registered yet. Your data is temporary. Enter your email address and password to create a profile</p>
+            <h2 class="display-name" i18n="@@profile.anonymous.user">
+              Anonymous User
+            </h2>
+            <p i18n="@@profile.not.registered">
+              Your profile has not been registered yet. Your data is temporary.
+              Enter your email address and password to create a profile
+            </p>
 
             } @else {
-              <h2 class="display-name">{{ _publicUserData?.name || ('Unknown User' | i18n) }}</h2>
-              <p class="user-email">{{ _privateUserData?.email || ('No email' | i18n) }}</p>
-              <p class="member-since" i18n="@@profile.member.since">Member since {{ _publicUserData?.createdAt | date:'MMMM yyyy' }}</p>
+            <h2 class="display-name">
+              {{ _publicUserData?.name || ('Unknown User' | i18n) }}
+            </h2>
+            <p class="user-email">
+              {{ _privateUserData?.email || ('No email' | i18n) }}
+            </p>
+            <p class="member-since" i18n="@@profile.member.since">
+              Member since {{ _publicUserData?.createdAt | date:'MMMM yyyy' }}
+            </p>
             }
-
           </div>
         </div>
       </ion-card-content>
     </ion-card>
 
     <!-- Profile Form -->
-    
 
-      <!-- Account Statistics -->
-      <ion-card class="stats-section">
-        <ion-card-header>
-          <ion-card-title>
-            <ion-icon name="stats-chart-outline" class="section-icon"></ion-icon>
-            <span i18n="@@profile.account.statistics">Account Statistics</span>
-          </ion-card-title>
-        </ion-card-header>
-        
-        <ion-card-content *ngIf=" ($user | async) as user">
-          <div class="stats-grid">
-            <div class="stat-item">
-              <ion-icon name="time-outline" class="stat-icon"></ion-icon>
-              <div class="stat-info">
-                <span class="stat-value">{{ _publicUserData?.total_trackings }}</span>
-                <span class="stat-label" i18n="@@profile.total.trackings">Total Trackings</span>
-              </div>
-            </div>
-            
-            <div class="stat-item">
-              <ion-icon name="hourglass-outline" class="stat-icon"></ion-icon>
-              <div class="stat-info">
-                <span class="stat-value">{{ _publicUserData?.trackedTime | elapsedTime }}</span>
-                <span class="stat-label" i18n="@@profile.total.time">Total Time</span>
-              </div>
-            </div>
-            
-            <div class="stat-item">
-              <ion-icon name="trophy-outline" class="stat-icon"></ion-icon>
-              <div class="stat-info">
-                <span class="stat-value">{{ _publicUserData?.trackedActivities }}</span>
-                <span class="stat-label" i18n="@@profile.activities">Activities</span>
-              </div>
-            </div>
-            
-            <div class="stat-item">
-              <ion-icon name="calendar-outline" class="stat-icon"></ion-icon>
-              <div class="stat-info">
-                <span class="stat-value">{{ days_active }}</span>
-                <span class="stat-label" i18n="@@profile.days.active">Days Active</span>
-              </div>
+    <!-- Account Statistics -->
+    <ion-card class="stats-section">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="stats-chart-outline" class="section-icon"></ion-icon>
+          <span i18n="@@profile.account.statistics">Account Statistics</span>
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content *ngIf=" ($user | async) as user">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <ion-icon name="time-outline" class="stat-icon"></ion-icon>
+            <div class="stat-info">
+              <span class="stat-value"
+                >{{ _publicUserData?.total_trackings }}</span
+              >
+              <span class="stat-label" i18n="@@profile.total.trackings"
+                >Total Trackings</span
+              >
             </div>
           </div>
-        </ion-card-content>
-      </ion-card>
-<form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
-      
+
+          <div class="stat-item">
+            <ion-icon name="hourglass-outline" class="stat-icon"></ion-icon>
+            <div class="stat-info">
+              <span class="stat-value"
+                >{{ _publicUserData?.trackedTime | elapsedTime }}</span
+              >
+              <span class="stat-label" i18n="@@profile.total.time"
+                >Total Time</span
+              >
+            </div>
+          </div>
+
+          <div class="stat-item">
+            <ion-icon name="trophy-outline" class="stat-icon"></ion-icon>
+            <div class="stat-info">
+              <span class="stat-value"
+                >{{ _publicUserData?.trackedActivities }}</span
+              >
+              <span class="stat-label" i18n="@@profile.activities"
+                >Activities</span
+              >
+            </div>
+          </div>
+
+          <div class="stat-item">
+            <ion-icon name="calendar-outline" class="stat-icon"></ion-icon>
+            <div class="stat-info">
+              <span class="stat-value">{{ days_active }}</span>
+              <span class="stat-label" i18n="@@profile.days.active"
+                >Days Active</span
+              >
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+    <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
       <!-- Personal Information -->
       <ion-card class="form-section">
         <ion-card-header>
@@ -110,7 +129,7 @@
             <span i18n="@@profile.your.information">Your Information</span>
           </ion-card-title>
         </ion-card-header>
-        
+
         <ion-card-content>
           <ion-item>
             <ion-input
@@ -121,10 +140,11 @@
               labelPlacement="floating"
               placeholder="Enter your username"
               i18n-placeholder="@@profile.enter.username"
-              [clearOnEdit]="false">
+              [clearOnEdit]="false"
+            >
             </ion-input>
           </ion-item>
-          
+
           <ion-item *ngIf="user.isAnonymous">
             <ion-input
               formControlName="email"
@@ -134,13 +154,19 @@
               type="email"
               placeholder="Enter your email address"
               i18n-placeholder="@@profile.enter.email"
-              [clearOnEdit]="false" >
+              [clearOnEdit]="false"
+            >
             </ion-input>
           </ion-item>
-          
-          <div class="form-errors" *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched">
+
+          <div
+            class="form-errors"
+            *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched"
+          >
             <ion-text color="danger">
-              <small i18n="@@validation.email.required">Please enter a valid email address</small>
+              <small i18n="@@validation.email.required"
+                >Please enter a valid email address</small
+              >
             </ion-text>
           </div>
         </ion-card-content>
@@ -150,11 +176,16 @@
       <ion-card class="form-section">
         <ion-card-header>
           <ion-card-title>
-            <ion-icon name="lock-closed-outline" class="section-icon"></ion-icon>
-            <span i18n="@@profile.password.security">Password &amp; Security</span>
+            <ion-icon
+              name="lock-closed-outline"
+              class="section-icon"
+            ></ion-icon>
+            <span i18n="@@profile.password.security"
+              >Password &amp; Security</span
+            >
           </ion-card-title>
         </ion-card-header>
-        
+
         <ion-card-content>
           <ion-item *ngIf="!user.isAnonymous">
             <ion-input
@@ -164,10 +195,11 @@
               labelPlacement="floating"
               type="password"
               placeholder="Enter current password"
-              [clearOnEdit]="false">
+              [clearOnEdit]="false"
+            >
             </ion-input>
           </ion-item>
-          
+
           <ion-item>
             <ion-input
               label="New Password"
@@ -175,10 +207,11 @@
               labelPlacement="floating"
               formControlName="newPassword"
               type="password"
-              [clearOnEdit]="false">
+              [clearOnEdit]="false"
+            >
             </ion-input>
           </ion-item>
-          
+
           <ion-item>
             <ion-input
               formControlName="confirmPassword"
@@ -187,53 +220,73 @@
               i18n-label="@@profile.confirm.new.password"
               labelPlacement="floating"
               i18n-placeholder="@@profile.confirm.new.password"
-              [clearOnEdit]="false">
+              [clearOnEdit]="false"
+            >
             </ion-input>
           </ion-item>
-          
-          <div class="form-errors" *ngIf="profileForm.get('newPassword')?.invalid && profileForm.get('newPassword')?.touched">
+
+          <div
+            class="form-errors"
+            *ngIf="profileForm.get('newPassword')?.invalid && profileForm.get('newPassword')?.touched"
+          >
             <ion-text color="danger">
-              <small i18n="@@validation.password.minlength">Password must be at least 6 characters long</small>
+              <small i18n="@@validation.password.minlength"
+                >Password must be at least 6 characters long</small
+              >
             </ion-text>
           </div>
-          
+
           <div class="form-errors" *ngIf="passwordMismatch">
             <ion-text color="danger">
-              <small i18n="@@validation.passwords.mismatch">Passwords do not match</small>
+              <small i18n="@@validation.passwords.mismatch"
+                >Passwords do not match</small
+              >
             </ion-text>
           </div>
-          
-          <ion-note class="password-hint" *ngIf="!user.isAnonymous" i18n="@@profile.password.hint">
-            Leave password fields empty if you don't want to change your password
+
+          <ion-note
+            class="password-hint"
+            *ngIf="!user.isAnonymous"
+            i18n="@@profile.password.hint"
+          >
+            Leave password fields empty if you don't want to change your
+            password
           </ion-note>
         </ion-card-content>
       </ion-card>
       <!-- Action Buttons -->
       <div class="action-buttons">
-        <ion-button 
-          expand="block" 
+        <ion-button
+          expand="block"
           type="submit"
           [disabled]="profileForm.invalid || isLoading"
-          class="save-button">
-          <ion-icon name="checkmark-circle" slot="start" *ngIf="!isLoading"></ion-icon>
+          class="save-button"
+        >
+          <ion-icon
+            name="checkmark-circle"
+            slot="start"
+            *ngIf="!isLoading"
+          ></ion-icon>
           <ion-spinner name="crescent" *ngIf="isLoading"></ion-spinner>
           <span *ngIf="isLoading" i18n="@@profile.saving">Saving...</span>
-          <span *ngIf="!isLoading" i18n="@@profile.save.changes">Save Changes</span>
+          <span *ngIf="!isLoading" i18n="@@profile.save.changes"
+            >Save Changes</span
+          >
         </ion-button>
-        
-        <ion-button 
-          expand="block" 
+
+        <ion-button
+          expand="block"
           fill="clear"
           color="medium"
           (click)="resetForm()"
           [disabled]="isLoading"
-          i18n="@@profile.reset.changes">
+          i18n="@@profile.reset.changes"
+        >
           Reset Changes
         </ion-button>
       </div>
-
     </form>
-    
+
     <!-- Danger Zone -->
     <ion-card class="danger-zone">
       <ion-card-header>
@@ -242,20 +295,21 @@
           <span i18n="@@profile.danger.zone">Danger Zone</span>
         </ion-card-title>
       </ion-card-header>
-      
+
       <ion-card-content>
         <p class="danger-text" i18n="@@profile.delete.warning">
-          Once you delete your account, there is no going back. Please be certain.
+          Once you delete your account, there is no going back. Please be
+          certain.
         </p>
-        <ion-button 
-          color="danger" 
+        <ion-button
+          color="danger"
           fill="outline"
-          (click)="confirmDeleteAccount()">
+          (click)="confirmDeleteAccount()"
+        >
           <ion-icon name="trash-outline" slot="start"></ion-icon>
           <span i18n="@@profile.delete.account">Delete Account</span>
         </ion-button>
       </ion-card-content>
     </ion-card>
-
   </div>
 </ion-content>

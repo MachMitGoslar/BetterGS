@@ -1,54 +1,54 @@
-  <ion-header [translucent]="true">
-    <ion-toolbar>
-      <ion-title> Tracking</ion-title>
-      <ion-buttons slot="start">
-        <ion-back-button defaultHref="/tabs/my_activities"></ion-back-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title> Tracking</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/my_activities"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 <ion-content [fullscreen]="true">
-
-  <img [src]="currentActivity?.imageUrl" class="activity-image" *ngIf="currentActivity?.imageUrl">
+  <img
+    [src]="currentActivity?.imageUrl"
+    class="activity-image"
+    *ngIf="currentActivity?.imageUrl"
+  />
   <div class="tracking-container" [attr.data-tracking]="isTracking">
     <!-- Current Activity Display -->
     <ion-card class="current-activity-card">
-
-      
       <ion-card-content>
         <!-- Timer Display -->
         <div class="timer-display">
-          <h1 class="elapsed-time">{{ elapsedTime | elapsedTime: "ms" }}</h1>
+          <h1 class="elapsed-time">{{ elapsedTime | elapsedTime : "ms" }}</h1>
         </div>
-            <!-- Control Buttons -->
-    <div class="control-buttons">
-      <ion-button 
-        *ngIf="!isTracking"
-        expand="block" 
-        size="large" 
-        color="success"
-        class="control-button start-button"
-        (click)="startTracking()"
-        [disabled]="!currentActivity">
-        <ion-icon name="play" slot="start"></ion-icon>
-        Starten
-      </ion-button>
+        <!-- Control Buttons -->
+        <div class="control-buttons">
+          <ion-button
+            *ngIf="!isTracking"
+            expand="block"
+            size="large"
+            color="success"
+            class="control-button start-button"
+            (click)="startTracking()"
+            [disabled]="!currentActivity"
+          >
+            <ion-icon name="play" slot="start"></ion-icon>
+            Starten
+          </ion-button>
 
-      <ion-button 
-        *ngIf="isTracking"
-        expand="block" 
-        size="large" 
-        color="danger"
-        class="control-button stop-button"
-        (click)="stopTracking()">
-        <ion-icon name="stop" slot="start"></ion-icon>
-        Stoppen
-      </ion-button>
-    </div>
+          <ion-button
+            *ngIf="isTracking"
+            expand="block"
+            size="large"
+            color="danger"
+            class="control-button stop-button"
+            (click)="stopTracking()"
+          >
+            <ion-icon name="stop" slot="start"></ion-icon>
+            Stoppen
+          </ion-button>
+        </div>
       </ion-card-content>
-      
     </ion-card>
-
-
 
     <!-- Activity Selection -->
     <!-- <ion-card class="activity-selection" *ngIf="!isTracking">
@@ -78,15 +78,15 @@
       <ion-card-header>
         <ion-card-subtitle>Aktuelle Session</ion-card-subtitle>
       </ion-card-header>
-      
+
       <ion-card-content>
         <ion-item lines="none">
           <ion-label>
             <h3>Gestartet um</h3>
-            <p>{{ currentTracking.startDate | date:'dd.MM.yyyy HH:mm' }}</p>
+            <p>{{ currentTracking.startDate | date : "dd.MM.yyyy HH:mm" }}</p>
           </ion-label>
         </ion-item>
-        
+
         <ion-item lines="none" *ngIf="currentTracking.notes">
           <ion-label>
             <h3>Notizen</h3>
@@ -98,21 +98,22 @@
   </div>
 
   <!-- Recent Trackings List -->
-   <ion-grid>
+  <ion-grid>
     <ion-row>
-        <ion-item-divider>
-          <ion-label>Letzte Sessions</ion-label>
-        </ion-item-divider>
-        <ng-container *ngIf="recentTrackings | async as trackings">
-              <ion-col size-xs="12" size-sm="12" size-md="4" class="recent-trackings-list" *ngFor="let tracking of trackings">
-
-        <app-tracking-card
-          
-      [tracking]="tracking">
-    </app-tracking-card>
-      </ion-col>
-        </ng-container>
+      <ion-item-divider>
+        <ion-label>Letzte Sessions</ion-label>
+      </ion-item-divider>
+      <ng-container *ngIf="recentTrackings | async as trackings">
+        <ion-col
+          size-xs="12"
+          size-sm="12"
+          size-md="4"
+          class="recent-trackings-list"
+          *ngFor="let tracking of trackings"
+        >
+          <app-tracking-card [tracking]="tracking"> </app-tracking-card>
+        </ion-col>
+      </ng-container>
     </ion-row>
-   </ion-grid>
-
+  </ion-grid>
 </ion-content>

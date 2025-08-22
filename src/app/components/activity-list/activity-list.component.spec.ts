@@ -9,8 +9,8 @@ describe('ActivityListComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ActivityListComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [ActivityListComponent],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ActivityListComponent);

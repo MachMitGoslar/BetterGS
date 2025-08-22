@@ -7,7 +7,7 @@
 // Profile Header
 .profile-header {
   margin-bottom: 24px;
-  
+
   ion-card-content {
     padding: 24px;
   }
@@ -17,7 +17,7 @@
   display: flex;
   align-items: center;
   gap: 20px;
-  
+
   @media (max-width: 768px) {
     flex-direction: column;
     text-align: center;
@@ -28,9 +28,7 @@
 .avatar-container {
   position: relative;
   flex-shrink: 0;
-  
 
-  
   .change-avatar-btn {
     position: absolute;
     bottom: 5px;
@@ -40,7 +38,7 @@
     border-radius: 50%;
     --background: var(--ion-color-primary);
     --color: white;
-    
+
     ion-icon {
       font-size: 1.2rem;
     }
@@ -49,20 +47,20 @@
 
 .user-basic-info {
   flex: 1;
-  
+
   .display-name {
     font-size: 1.8rem;
     font-weight: 700;
     color: var(--ion-color-dark);
     margin: 0 0 8px 0;
   }
-  
+
   .user-email {
     font-size: 1.1rem;
     color: var(--ion-color-medium);
     margin: 0 0 4px 0;
   }
-  
+
   .member-since {
     font-size: 0.9rem;
     color: var(--ion-color-medium);
@@ -74,16 +72,16 @@
 // Form Sections
 .form-section {
   margin-bottom: 20px;
-  
+
   ion-card-header {
     padding-bottom: 12px;
-    
+
     ion-card-title {
       display: flex;
       align-items: center;
       font-size: 1.3rem;
       font-weight: 600;
-      
+
       .section-icon {
         font-size: 1.4rem;
         margin-right: 10px;
@@ -91,18 +89,16 @@
       }
     }
   }
-  
+
   ion-item {
     --padding-start: 0;
     --inner-padding-end: 0;
     margin-bottom: 16px;
-    
+
     ion-label {
       font-weight: 600;
       color: var(--ion-color-dark);
     }
-    
-
   }
 }
 
@@ -139,28 +135,28 @@
   background: var(--ion-color-light);
   border-radius: 12px;
   transition: transform 0.2s ease;
-  
+
   &:hover {
     transform: translateY(-2px);
   }
-  
+
   .stat-icon {
     font-size: 2rem;
     color: var(--ion-color-primary);
     flex-shrink: 0;
   }
-  
+
   .stat-info {
     display: flex;
     flex-direction: column;
-    
+
     .stat-value {
       font-size: 1.4rem;
       font-weight: 700;
       color: var(--ion-color-dark);
       line-height: 1.2;
     }
-    
+
     .stat-label {
       font-size: 0.8rem;
       color: var(--ion-color-medium);
@@ -176,13 +172,13 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  
+
   .save-button {
     --background: var(--ion-color-primary);
     --color: white;
     font-weight: 600;
     height: 48px;
-    
+
     &[disabled] {
       opacity: 0.6;
     }
@@ -193,29 +189,29 @@
 .danger-zone {
   border: 2px solid var(--ion-color-danger);
   background: rgba(var(--ion-color-danger-rgb), 0.05);
-  
+
   ion-card-header {
     border-bottom: 1px solid var(--ion-color-danger-tint);
-    
+
     ion-card-title {
       color: var(--ion-color-danger);
-      
+
       .section-icon {
         color: var(--ion-color-danger);
       }
     }
   }
-  
+
   .danger-text {
     color: var(--ion-color-medium);
     margin-bottom: 16px;
     line-height: 1.5;
   }
-  
+
   ion-button {
     --border-color: var(--ion-color-danger);
     --color: var(--ion-color-danger);
-    
+
     &:hover {
       --background: var(--ion-color-danger);
       --color: white;
@@ -223,37 +219,35 @@
   }
 }
 
-
-
 // Responsive Design
 @media (max-width: 768px) {
   .profile-container {
     padding: 12px;
   }
-  
+
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
   }
-  
+
   .stat-item {
     flex-direction: column;
     text-align: center;
     gap: 8px;
-    
+
     .stat-icon {
       font-size: 1.5rem;
     }
-    
+
     .stat-info {
       align-items: center;
-      
+
       .stat-value {
         font-size: 1.2rem;
       }
     }
   }
-  
+
   .user-basic-info {
     .display-name {
       font-size: 1.5rem;

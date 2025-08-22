@@ -2,30 +2,33 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { Camera } from '@capacitor/camera';
-import { LocalNotifications, PermissionStatus } from '@capacitor/local-notifications';
+import {
+  LocalNotifications,
+  PermissionStatus,
+} from '@capacitor/local-notifications';
 import { I18nService } from '../../core/services/i18n.service';
 import { ApplicationService } from '../../core/services/application.service';
-import { User } from "@angular/fire/auth";
+import { User } from '@angular/fire/auth';
 import { take } from 'rxjs';
-import { 
-  IonHeader, 
-  IonToolbar, 
-  IonTitle, 
-  IonContent, 
-  IonIcon, 
-  IonSegment, 
-  IonSegmentButton, 
-  IonLabel, 
-  IonCard, 
-  IonCardHeader, 
-  IonCardTitle, 
-  IonCardSubtitle, 
-  IonCardContent, 
-  IonButton, 
-  IonSpinner, 
-  IonChip, 
-  IonNote 
-} from "@ionic/angular/standalone";
+import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonIcon,
+  IonSegment,
+  IonSegmentButton,
+  IonLabel,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardSubtitle,
+  IonCardContent,
+  IonButton,
+  IonSpinner,
+  IonChip,
+  IonNote,
+} from '@ionic/angular/standalone';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UserService } from 'src/app/core/services/user.service';
@@ -54,8 +57,8 @@ import { UserService } from 'src/app/core/services/user.service';
     IonButton,
     IonSpinner,
     IonChip,
-    IonNote
-  ]
+    IonNote,
+  ],
 })
 export class OnboardingComponent implements OnInit {
   currentStep = 'introduction';
@@ -69,24 +72,24 @@ export class OnboardingComponent implements OnInit {
 
   // Current user
   currentUser: User | null = null;
-      private router = inject(Router)
-    private platform = inject(Platform)
-    public i18nService = inject(I18nService)
-    private applicationService = inject(ApplicationService)
-    private userService = inject(UserService)
+  private router = inject(Router);
+  private platform = inject(Platform);
+  public i18nService = inject(I18nService);
+  private applicationService = inject(ApplicationService);
+  private userService = inject(UserService);
 
-  constructor(
-
-  ) {}
+  constructor() {}
 
   async ngOnInit() {
     // Check if device is mobile
     this.isMobile = this.platform.is('capacitor');
-    
+
     // Get current user
-    this.applicationService.$currentUser.pipe(take(1)).subscribe((user: User | null) => {
-      this.currentUser = user;
-    });
+    this.applicationService.$currentUser
+      .pipe(take(1))
+      .subscribe((user: User | null) => {
+        this.currentUser = user;
+      });
 
     // Check existing permissions
     if (this.isMobile) {
@@ -103,7 +106,8 @@ export class OnboardingComponent implements OnInit {
 
       // Check notification permissions
       const notificationStatus = await LocalNotifications.checkPermissions();
-      this.notificationPermissionGranted = notificationStatus.display === 'granted';
+      this.notificationPermissionGranted =
+        notificationStatus.display === 'granted';
     } catch (error) {
       console.error('Error checking permissions:', error);
     }
@@ -119,9 +123,10 @@ export class OnboardingComponent implements OnInit {
     this.isLoading = true;
     try {
       const result = await Camera.requestPermissions({
-        permissions: ['camera']
+        permissions: ['camera'],
       });
-      this.applicationService.cameraPermissionGranted = result.camera === 'granted';
+      this.applicationService.cameraPermissionGranted =
+        result.camera === 'granted';
     } catch (error) {
       console.error('Error requesting camera permission:', error);
     } finally {
@@ -135,9 +140,10 @@ export class OnboardingComponent implements OnInit {
     this.isLoading = true;
     try {
       const result = await Camera.requestPermissions({
-        permissions: ['photos']
+        permissions: ['photos'],
       });
-      this.applicationService.photoLibraryPermissionGranted = result.photos === 'granted';
+      this.applicationService.photoLibraryPermissionGranted =
+        result.photos === 'granted';
     } catch (error) {
       console.error('Error requesting photo library permission:', error);
     } finally {
@@ -151,7 +157,8 @@ export class OnboardingComponent implements OnInit {
     this.isLoading = true;
     try {
       const result = await LocalNotifications.requestPermissions();
-      this.applicationService.notificationsEnabled = result.display === 'granted';
+      this.applicationService.notificationsEnabled =
+        result.display === 'granted';
     } catch (error) {
       console.error('Error requesting notification permission:', error);
     } finally {
@@ -190,8 +197,10 @@ export class OnboardingComponent implements OnInit {
     this.isLoading = true;
     try {
       // Update user's onboarding status in the database
-      await this.userService.updateUserOnboardingStatus(this.currentUser.uid, true);
-
+      await this.userService.updateUserOnboardingStatus(
+        this.currentUser.uid,
+        true
+      );
     } catch (error) {
       console.error('Error completing onboarding:', error);
     } finally {
@@ -206,7 +215,10 @@ export class OnboardingComponent implements OnInit {
 
   // Helper methods for template
   canProceedFromPermissions(): boolean {
-    return !this.isMobile || (this.cameraPermissionGranted && this.photoLibraryPermissionGranted);
+    return (
+      !this.isMobile ||
+      (this.cameraPermissionGranted && this.photoLibraryPermissionGranted)
+    );
   }
 
   canCompleteOnboarding(): boolean {

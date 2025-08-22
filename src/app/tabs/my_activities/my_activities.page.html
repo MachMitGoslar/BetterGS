@@ -1,32 +1,28 @@
 <ion-header [translucent]="true">
-
-    <ion-toolbar>
-      <ion-title i18n="@@activities.title">
-         {{ i18nService.getTranslation('myActivities.onboarding.title') }}
-      </ion-title>
-    </ion-toolbar>
-
+  <ion-toolbar>
+    <ion-title i18n="@@activities.title">
+      {{ i18nService.getTranslation('myActivities.onboarding.title') }}
+    </ion-title>
+  </ion-toolbar>
 </ion-header>
 <!-- Header Card -->
-  
 
 <ion-content [fullscreen]="true">
-  
   <ion-header collapse="condense">
-
     <ion-toolbar>
-      <ion-title size="large" i18n="@@activities.title"> {{ i18nService.getTranslation('activities.title') }}</ion-title>
-
+      <ion-title size="large" i18n="@@activities.title">
+        {{ i18nService.getTranslation('activities.title') }}</ion-title
+      >
     </ion-toolbar>
   </ion-header>
-    <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-        @if(activeTracking | async; as activeTracking) {
-    <app-active-tracking-bar></app-active-tracking-bar>
-  } 
+  @if(activeTracking | async; as activeTracking) {
+  <app-active-tracking-bar></app-active-tracking-bar>
+  }
 
-<ion-card class="header-card">
+  <ion-card class="header-card">
     <ion-card-header>
       <ion-card-title>
         <ion-icon size="large" name="stopwatch"></ion-icon>
@@ -34,7 +30,9 @@
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <p>{{ i18nService.getTranslation('myActivities.onboarding.description') }}</p>
+      <p>
+        {{ i18nService.getTranslation('myActivities.onboarding.description') }}
+      </p>
     </ion-card-content>
   </ion-card>
 
@@ -57,7 +55,10 @@
   </div>
 
   @if(($activities | async); as activities) {
-          <app-activity-list class="activity-container" *ngIf="!isLoading" [activities]="activities"></app-activity-list>
+  <app-activity-list
+    class="activity-container"
+    *ngIf="!isLoading"
+    [activities]="activities"
+  ></app-activity-list>
   }
-
 </ion-content>

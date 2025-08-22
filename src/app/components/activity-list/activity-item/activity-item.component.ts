@@ -35,12 +35,10 @@ export class ActivityItemComponent implements OnInit {
   @Input() activity?: Activity;
   public currentUser: User | undefined;
 
-      public applicationService: ApplicationService = inject(ApplicationService);
-    public trackingSrv: TrackingService = inject(TrackingService);
-    public router: Router = inject(Router);
-  constructor(
-
-  ) {
+  public applicationService: ApplicationService = inject(ApplicationService);
+  public trackingSrv: TrackingService = inject(TrackingService);
+  public router: Router = inject(Router);
+  constructor() {
     // Ensure the icons are loaded
     addIcons(icons);
     this.applicationService.$currentUser.subscribe((user) => {

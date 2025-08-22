@@ -1,5 +1,9 @@
 .signup-content {
-  --background: linear-gradient(135deg, var(--ion-color-secondary), var(--ion-color-primary));
+  --background: linear-gradient(
+    135deg,
+    var(--ion-color-secondary),
+    var(--ion-color-primary)
+  );
   display: flex;
   align-items: center;
   justify-content: center;
@@ -210,7 +214,11 @@
 // Dark Theme Support
 @media (prefers-color-scheme: dark) {
   .signup-content {
-    --background: linear-gradient(135deg, var(--ion-color-secondary-shade), var(--ion-color-primary-shade));
+    --background: linear-gradient(
+      135deg,
+      var(--ion-color-secondary-shade),
+      var(--ion-color-primary-shade)
+    );
   }
 
   .form-item {

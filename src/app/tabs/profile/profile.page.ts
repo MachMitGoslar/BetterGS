@@ -80,10 +80,10 @@ import { I18nPipe } from 'src/app/core/pipes/i18n.pipe';
 
 /**
  * ProfilePage - User Profile Management Component
- * 
+ *
  * This component provides comprehensive user profile management functionality
  * including profile editing, image management, password changes, and account operations.
- * 
+ *
  * Key Features:
  * - Reactive form-based profile editing
  * - Profile picture upload (camera/gallery/file upload)
@@ -93,7 +93,7 @@ import { I18nPipe } from 'src/app/core/pipes/i18n.pipe';
  * - Form validation and error handling
  * - Multi-platform image handling
  * - Real-time form validation feedback
- * 
+ *
  * Technical Capabilities:
  * - Firebase Authentication integration
  * - Capacitor Camera API integration
@@ -102,7 +102,7 @@ import { I18nPipe } from 'src/app/core/pipes/i18n.pipe';
  * - Responsive design for mobile/desktop
  * - Internationalization support
  * - Memory management with subscription cleanup
- * 
+ *
  * Dependencies:
  * - ApplicationService: Core app operations and user management
  * - UserService: User profile data management
@@ -111,7 +111,7 @@ import { I18nPipe } from 'src/app/core/pipes/i18n.pipe';
  * - Camera: Native camera and gallery access
  * - Router: Navigation management
  * - Platform: Device detection and platform-specific features
- * 
+ *
  * @author BetterGS Development Team
  * @version 1.0.0
  * @since 2025
@@ -204,10 +204,10 @@ export class ProfilePage implements OnInit, OnDestroy {
    */
   private readonly ALLOWED_IMAGE_TYPES = [
     'image/jpeg',
-    'image/jpg', 
+    'image/jpg',
     'image/png',
     'image/gif',
-    'image/webp'
+    'image/webp',
   ];
 
   // ==========================================
@@ -216,10 +216,10 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   /**
    * ProfilePage Constructor
-   * 
+   *
    * Initializes the component with required services and sets up
    * the reactive form, icon library, and observable streams.
-   * 
+   *
    * @param formBuilder - Angular reactive forms builder
    * @param alertController - Ionic alert controller for confirmations
    * @param actionSheetController - Ionic action sheet for image options
@@ -231,15 +231,15 @@ export class ProfilePage implements OnInit, OnDestroy {
    * @param userService - User profile management service
    */
 
-      private formBuilder = inject(FormBuilder)
-    private alertController = inject(AlertController)
-    private actionSheetController = inject(ActionSheetController)
-    private notificationService = inject(NotificationService)
-    public applicationService = inject(ApplicationService)
-    public router = inject(Router)
-    private i18nService = inject(I18nService)
-    private platform = inject(Platform)
-    private userService = inject(UserService)
+  private formBuilder = inject(FormBuilder);
+  private alertController = inject(AlertController);
+  private actionSheetController = inject(ActionSheetController);
+  private notificationService = inject(NotificationService);
+  public applicationService = inject(ApplicationService);
+  public router = inject(Router);
+  private i18nService = inject(I18nService);
+  private platform = inject(Platform);
+  private userService = inject(UserService);
 
   constructor() {
     this.initializeForm();
@@ -252,7 +252,7 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   /**
    * Component initialization lifecycle method
-   * 
+   *
    * Sets up user observables and loads profile data.
    * Subscribes to authentication state and profile data streams.
    */
@@ -263,7 +263,7 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   /**
    * Component destruction lifecycle method
-   * 
+   *
    * Cleans up all subscriptions to prevent memory leaks.
    * Called when component is destroyed.
    */
@@ -277,10 +277,10 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   /**
    * Registers Ionicons for use in the component
-   * 
+   *
    * Adds all required icons to the Ionic icon registry
    * for consistent UI throughout the profile interface.
-   * 
+   *
    * @private
    */
   private registerIcons(): void {
@@ -317,18 +317,18 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   /**
    * Initializes the reactive form with validation rules
-   * 
+   *
    * Creates a FormGroup with validators for all profile fields.
    * Sets up real-time password confirmation validation.
    * Configures form state management and error handling.
-   * 
+   *
    * Form Fields:
    * - displayName: Required, minimum 2 characters
    * - email: Required, valid email format
    * - currentPassword: Optional, for password changes
    * - newPassword: Optional, minimum 6 characters
    * - confirmPassword: Optional, must match newPassword
-   * 
+   *
    * @private
    */
   private initializeForm() {
@@ -345,9 +345,11 @@ export class ProfilePage implements OnInit, OnDestroy {
     const newPasswordControl = this.profileForm.get('newPassword');
 
     if (confirmPasswordControl && newPasswordControl) {
-      const confirmPasswordSub = confirmPasswordControl.valueChanges.subscribe(() => {
-        this.checkPasswordMatch();
-      });
+      const confirmPasswordSub = confirmPasswordControl.valueChanges.subscribe(
+        () => {
+          this.checkPasswordMatch();
+        }
+      );
 
       const newPasswordSub = newPasswordControl.valueChanges.subscribe(() => {
         this.checkPasswordMatch();
@@ -363,11 +365,11 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   /**
    * Loads user profile data from services
-   * 
+   *
    * Subscribes to user authentication state and profile data streams.
    * Updates component state when user data changes.
    * Populates form with current user information.
-   * 
+   *
    * @private
    */
   private loadUserProfile() {
@@ -379,35 +381,38 @@ export class ProfilePage implements OnInit, OnDestroy {
     });
 
     // Subscribe to private profile data
-    const privateProfileSub = this.userService.$currentUserPrivateProfile.subscribe((profile) => {
-      this._privateUserData = profile;
-      this.populateForm();
-    });
+    const privateProfileSub =
+      this.userService.$currentUserPrivateProfile.subscribe((profile) => {
+        this._privateUserData = profile;
+        this.populateForm();
+      });
 
     // Subscribe to public profile data
-    const publicProfileSub = this.userService.$currentUserProfile.subscribe((profile) => {
-      this._publicUserData = profile;
-      console.log('Public user data:', this._publicUserData);
-      this.populateForm();
-    });
+    const publicProfileSub = this.userService.$currentUserProfile.subscribe(
+      (profile) => {
+        this._publicUserData = profile;
+        console.log('Public user data:', this._publicUserData);
+        this.populateForm();
+      }
+    );
 
     this.subscriptions.push(userSub, privateProfileSub, publicProfileSub);
   }
 
   /**
    * Populates the form with current user data
-   * 
+   *
    * Updates form controls with data from user profile.
    * Only updates if user data is available to prevent
    * overwriting user input with empty values.
-   * 
+   *
    * @private
    */
   private populateForm() {
     if (this.user && (this._publicUserData || this._privateUserData)) {
       this.profileForm.patchValue({
-        displayName: this._publicUserData?.name || "",
-        email: this.user.email || this._privateUserData?.email || "",
+        displayName: this._publicUserData?.name || '',
+        email: this.user.email || this._privateUserData?.email || '',
       });
     }
   }
@@ -418,11 +423,11 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   /**
    * Checks if new password and confirmation password match
-   * 
+   *
    * Validates password confirmation in real-time.
    * Updates passwordMismatch flag for UI feedback.
    * Only validates when both password fields have values.
-   * 
+   *
    * @private
    */
   private checkPasswordMatch() {
@@ -439,12 +444,12 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   /**
    * Updates user profile with form data
-   * 
+   *
    * Validates form data and updates user profile information.
    * Handles display name changes, email updates, and password changes.
    * Supports anonymous user registration with email/password.
    * Provides user feedback through notifications.
-   * 
+   *
    * Process:
    * 1. Validate form data and password confirmation
    * 2. Update private profile data (email)
@@ -453,12 +458,12 @@ export class ProfilePage implements OnInit, OnDestroy {
    * 5. Handle password changes for authenticated users
    * 6. Clear sensitive form fields
    * 7. Provide user feedback
-   * 
+   *
    * @returns Promise<void>
    */
   async updateProfile() {
     console.log('Updating profile with data:', this.profileForm.value);
-    
+
     // Validate form before processing
     if (this.profileForm.invalid || this.passwordMismatch) {
       this.notificationService.addNotification(
@@ -469,7 +474,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     }
 
     this.isLoading = true;
-    
+
     if (!this.user || !this._privateUserData || !this._publicUserData) {
       console.error('No user data available to update.');
       this.notificationService.addNotification(
@@ -504,9 +509,13 @@ export class ProfilePage implements OnInit, OnDestroy {
           formData.newPassword
         );
       }
-      
+
       // Handle password change for authenticated users
-      if (formData.newPassword && formData.currentPassword && !this.user.isAnonymous) {
+      if (
+        formData.newPassword &&
+        formData.currentPassword &&
+        !this.user.isAnonymous
+      ) {
         await this.applicationService.changePassword(formData.newPassword);
       }
 
@@ -521,7 +530,6 @@ export class ProfilePage implements OnInit, OnDestroy {
         'Profile updated successfully!',
         'success'
       );
-      
     } catch (error) {
       console.error('Error updating profile:', error);
       this.notificationService.addNotification(
@@ -535,7 +543,7 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   /**
    * Resets form to original values
-   * 
+   *
    * Reloads user profile data from services and repopulates form.
    * Clears any validation errors and resets password mismatch flag.
    * Useful for canceling unsaved changes.
@@ -551,11 +559,11 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   /**
    * Opens action sheet for profile picture change options
-   * 
+   *
    * Displays platform-appropriate options for changing profile picture.
    * Mobile platforms show camera and gallery options.
    * Desktop platforms show file upload option.
-   * 
+   *
    * Options include:
    * - Take photo (mobile only)
    * - Choose from gallery (mobile only)
@@ -565,7 +573,7 @@ export class ProfilePage implements OnInit, OnDestroy {
    */
   async changeProfilePicture() {
     const isMobile = this.platform.is('mobile');
-    
+
     const buttons = [];
 
     if (isMobile) {
@@ -613,26 +621,28 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   /**
    * Takes a photo using device camera
-   * 
+   *
    * Requests camera permissions and captures a photo.
    * Processes the captured image for upload.
    * Handles permission denials and camera errors gracefully.
-   * 
+   *
    * @private
    */
   private async takePhoto() {
     try {
       this.isLoading = true;
-      
+
       // Check and request camera permissions
       const permissions = await Camera.checkPermissions();
       if (permissions.camera !== 'granted') {
         const permissionResult = await Camera.requestPermissions({
-          permissions: ['camera']
+          permissions: ['camera'],
         });
         if (permissionResult.camera !== 'granted') {
           this.notificationService.addNotification(
-            this.i18nService.getTranslation('profile.error.cameraPermissionDenied'),
+            this.i18nService.getTranslation(
+              'profile.error.cameraPermissionDenied'
+            ),
             'danger'
           );
           return;
@@ -644,13 +654,16 @@ export class ProfilePage implements OnInit, OnDestroy {
         quality: 90,
         allowEditing: true,
         resultType: CameraResultType.Base64,
-        source: CameraSource.Camera
+        source: CameraSource.Camera,
       });
 
       if (image?.base64String) {
-        await this.processImageUpload(image.base64String, 'camera-photo.jpg', 'image/jpeg');
+        await this.processImageUpload(
+          image.base64String,
+          'camera-photo.jpg',
+          'image/jpeg'
+        );
       }
-      
     } catch (error) {
       console.error('Error taking photo:', error);
       this.notificationService.addNotification(
@@ -664,26 +677,28 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   /**
    * Chooses photo from device gallery
-   * 
+   *
    * Requests gallery permissions and opens photo picker.
    * Processes the selected image for upload.
    * Handles permission denials and selection errors gracefully.
-   * 
+   *
    * @private
    */
   private async chooseFromGallery() {
     try {
       this.isLoading = true;
-      
+
       // Check and request gallery permissions
       const permissions = await Camera.checkPermissions();
       if (permissions.photos !== 'granted') {
         const permissionResult = await Camera.requestPermissions({
-          permissions: ['photos']
+          permissions: ['photos'],
         });
         if (permissionResult.photos !== 'granted') {
           this.notificationService.addNotification(
-            this.i18nService.getTranslation('profile.error.galleryPermissionDenied'),
+            this.i18nService.getTranslation(
+              'profile.error.galleryPermissionDenied'
+            ),
             'danger'
           );
           return;
@@ -694,21 +709,22 @@ export class ProfilePage implements OnInit, OnDestroy {
       const result = await Camera.pickImages({
         quality: 90,
         limit: 1,
-        correctOrientation: true
+        correctOrientation: true,
       });
 
       if (result.photos && result.photos.length > 0) {
         const photo = result.photos[0];
-        
+
         if (photo.webPath) {
           const base64 = await this.convertWebPathToBase64(photo.webPath);
-          const fileType = photo.format ? `image/${photo.format}` : 'image/jpeg';
+          const fileType = photo.format
+            ? `image/${photo.format}`
+            : 'image/jpeg';
           await this.processImageUpload(base64, 'gallery-photo.jpg', fileType);
         } else {
           throw new Error('No image data available');
         }
       }
-      
     } catch (error) {
       console.error('Error choosing from gallery:', error);
       this.notificationService.addNotification(
@@ -722,11 +738,11 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   /**
    * Uploads an image using file input (desktop)
-   * 
+   *
    * Creates a file input element for desktop image selection.
    * Validates file type and size before processing.
    * Converts selected file to base64 for upload.
-   * 
+   *
    * @private
    */
   private async uploadImage() {
@@ -736,32 +752,35 @@ export class ProfilePage implements OnInit, OnDestroy {
       fileInput.type = 'file';
       fileInput.accept = 'image/*';
       fileInput.style.display = 'none';
-      
+
       // Create promise for file selection
       const fileSelectionPromise = new Promise<File | null>((resolve) => {
         fileInput.onchange = (event: any) => {
           const file = event.target?.files?.[0];
           resolve(file || null);
         };
-        
+
         fileInput.oncancel = () => resolve(null);
       });
-      
+
       // Trigger file selection
       document.body.appendChild(fileInput);
       fileInput.click();
-      
+
       const selectedFile = await fileSelectionPromise;
       document.body.removeChild(fileInput);
-      
+
       if (!selectedFile) return; // User cancelled
-      
+
       this.isLoading = true;
-      
+
       // Convert and process file
       const base64String = await this.fileToBase64(selectedFile);
-      await this.processImageUpload(base64String, selectedFile.name, selectedFile.type);
-      
+      await this.processImageUpload(
+        base64String,
+        selectedFile.name,
+        selectedFile.type
+      );
     } catch (error) {
       console.error('Error in uploadImage:', error);
       this.notificationService.addNotification(
@@ -775,10 +794,10 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   /**
    * Removes the current profile picture
-   * 
+   *
    * Updates user profile to remove profile picture URL.
    * Provides user feedback on successful removal.
-   * 
+   *
    * @private
    */
   private async removeProfilePicture() {
@@ -788,7 +807,7 @@ export class ProfilePage implements OnInit, OnDestroy {
           name: this._publicUserData.name || '',
           profilePictureUrl: undefined,
         });
-        
+
         this.notificationService.addNotification(
           'Profile picture removed',
           'success'
@@ -809,17 +828,21 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   /**
    * Processes image upload with validation and Firebase storage
-   * 
+   *
    * Validates image format and size before uploading.
    * Uploads to Firebase Storage and updates user profile.
    * Provides comprehensive error handling and user feedback.
-   * 
+   *
    * @param base64String - Base64 encoded image data
    * @param fileName - Original filename
    * @param fileType - MIME type of the image
    * @private
    */
-  private async processImageUpload(base64String: string, fileName: string, fileType: string) {
+  private async processImageUpload(
+    base64String: string,
+    fileName: string,
+    fileType: string
+  ) {
     try {
       if (!this.user) {
         this.notificationService.addNotification(
@@ -855,16 +878,16 @@ export class ProfilePage implements OnInit, OnDestroy {
           contentType: fileType,
           customMetadata: {
             uploadedAt: new Date().toISOString(),
-            originalName: fileName
-          }
+            originalName: fileName,
+          },
         }
       );
-      
+
       // Update user profile with new image URL
       if (!this._publicUserData) {
         this._publicUserData = new UserPublicProfile();
       }
-      
+
       this._publicUserData.profilePictureUrl = imageUrl;
       await this.applicationService.updateUserProfile({
         name: this._publicUserData.name,
@@ -875,7 +898,6 @@ export class ProfilePage implements OnInit, OnDestroy {
         this.i18nService.getTranslation('profile.success.pictureUploaded'),
         'success'
       );
-      
     } catch (error) {
       console.error('Error processing image upload:', error);
       this.notificationService.addNotification(
@@ -888,10 +910,10 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   /**
    * Converts web path to base64 string
-   * 
+   *
    * Fetches image from web path and converts to base64.
    * Used for processing images selected from gallery.
-   * 
+   *
    * @param webPath - Web path to the image
    * @returns Promise<string> - Base64 encoded image
    * @private
@@ -919,10 +941,10 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   /**
    * Converts a File object to base64 string
-   * 
+   *
    * Uses FileReader to convert File to base64 encoded string.
    * Used for processing files selected through file input.
-   * 
+   *
    * @param file - File object to convert
    * @returns Promise<string> - Base64 encoded file
    * @private
@@ -948,7 +970,7 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   /**
    * Validates image file type against allowed types
-   * 
+   *
    * @param fileType - MIME type to validate
    * @returns boolean - True if valid image type
    * @private
@@ -959,17 +981,17 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   /**
    * Validates image size from base64 string
-   * 
+   *
    * Estimates file size from base64 length and validates against maximum.
    * Base64 encoding increases size by ~33%, so calculation accounts for this.
-   * 
+   *
    * @param base64String - Base64 encoded image
    * @returns boolean - True if within size limit
    * @private
    */
   private isValidImageSize(base64String: string): boolean {
     // Base64 encoding increases size by ~33%
-    const estimatedSize = (base64String.length * 0.75);
+    const estimatedSize = base64String.length * 0.75;
     return estimatedSize <= this.MAX_FILE_SIZE;
   }
 
@@ -979,7 +1001,7 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   /**
    * Shows confirmation dialog for account deletion
-   * 
+   *
    * Displays alert with warning about permanent data loss.
    * Requires user confirmation before proceeding with deletion.
    */
@@ -1006,11 +1028,11 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   /**
    * Deletes user account and all associated data
-   * 
+   *
    * Performs account deletion through user service.
    * Handles errors and provides user feedback.
    * Redirects to appropriate page after successful deletion.
-   * 
+   *
    * @private
    */
   private async deleteAccount() {
@@ -1040,7 +1062,7 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   /**
    * Shows logout confirmation dialog
-   * 
+   *
    * Displays alert to confirm logout action.
    * Provides cancel option for accidental activation.
    */
@@ -1062,7 +1084,7 @@ export class ProfilePage implements OnInit, OnDestroy {
           },
         ],
       });
-      
+
       await alert.present();
       console.log('Logout alert presented');
     } catch (error) {
@@ -1072,11 +1094,11 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   /**
    * Performs user logout operation
-   * 
+   *
    * Executes logout through application service.
    * Clears user session and redirects appropriately.
    * Handles logout errors with user feedback.
-   * 
+   *
    * @private
    */
   private async performLogout() {
@@ -1107,10 +1129,10 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   /**
    * Calculates days since user became member
-   * 
+   *
    * Computes difference between current date and user creation date.
    * Returns number of days as integer.
-   * 
+   *
    * @returns number - Days since member registration
    */
   getDaysSinceMember(): number {
@@ -1126,7 +1148,7 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   /**
    * Getter for days active (alias for getDaysSinceMember)
-   * 
+   *
    * @returns number - Days since member registration
    */
   get days_active(): number {
@@ -1139,13 +1161,17 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   /**
    * Legacy method for backwards compatibility
-   * 
+   *
    * @deprecated Use processImageUpload instead
    * @param base64String - Base64 image data
    * @param name - Filename
    * @param type - MIME type
    */
-  async uploadFileToProfile(base64String: string, name: string, type: string = 'image/jpeg') {
+  async uploadFileToProfile(
+    base64String: string,
+    name: string,
+    type: string = 'image/jpeg'
+  ) {
     await this.processImageUpload(base64String, name, type);
   }
 }

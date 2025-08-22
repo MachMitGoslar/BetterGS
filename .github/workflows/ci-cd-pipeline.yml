@@ -47,7 +47,7 @@ jobs:
           
       - name: 🎨 Check Code Formatting
         run: |
-          npx prettier --check "src/**/*.{ts,html,scss,json}"
+          npm run format:check
 
   # ==========================================
   # Job 2: Unit Tests
@@ -238,7 +238,10 @@ jobs:
       - name: 📦 Install Dependencies
         run: |
           npm ci --no-audit --prefer-offline
-
+      - name: 📦 Install Ionic
+        run: |
+          npm install @ionic/angular --no-audit --prefer-offline
+          
       - name: 🔍 Extract i18n Messages
         run: |
           npm run extract-i18n

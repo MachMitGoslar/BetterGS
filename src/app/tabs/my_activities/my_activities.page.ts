@@ -29,24 +29,24 @@ import { addIcons } from 'ionicons';
 
 /**
  * MyActivitiesPage - User Activities Dashboard
- * 
+ *
  * This component serves as the main dashboard for displaying user activities.
  * It provides functionality for viewing personal activities, refreshing data,
  * and monitoring active tracking sessions.
- * 
+ *
  * Key Features:
  * - Display list of user activities
  * - Pull-to-refresh functionality
  * - Active tracking session display
  * - Loading state management
  * - Real-time activity updates
- * 
+ *
  * Dependencies:
  * - ApplicationService: Core application data and operations
  * - I18nService: Internationalization support
  * - ActivityListComponent: Displays activity list
  * - ActiveTrackingBarComponent: Shows active tracking status
- * 
+ *
  * @author BetterGS Development Team
  * @version 1.0.0
  * @since 2025
@@ -118,27 +118,25 @@ export class MyActivitiesPage implements OnInit, OnDestroy {
 
   /**
    * MyActivitiesPage Constructor
-   * 
+   *
    * Initializes the component with required services and sets up
    * observable streams for activities and tracking data.
-   * 
+   *
    * @param appService - Application service for data operations
    * @param i18nService - Internationalization service
    */
 
-      public appService = inject(ApplicationService)
-    public i18nService = inject(I18nService)
+  public appService = inject(ApplicationService);
+  public i18nService = inject(I18nService);
 
-  constructor(
-
-  ) {
+  constructor() {
     // Initialize observables
     this.$activities = this.appService.$user_activities;
     this.activeTracking = this.appService.$activeTracking;
 
     // Register required icons
     addIcons({
-      stopwatch
+      stopwatch,
     });
   }
 
@@ -148,7 +146,7 @@ export class MyActivitiesPage implements OnInit, OnDestroy {
 
   /**
    * Component initialization lifecycle method
-   * 
+   *
    * Sets up activity subscription and handles loading states.
    * Subscribes to activities observable to manage loading state
    * and handle errors appropriately.
@@ -159,7 +157,7 @@ export class MyActivitiesPage implements OnInit, OnDestroy {
 
   /**
    * Component destruction lifecycle method
-   * 
+   *
    * Cleans up subscriptions and timeouts to prevent memory leaks.
    * Called when component is destroyed.
    */
@@ -173,10 +171,10 @@ export class MyActivitiesPage implements OnInit, OnDestroy {
 
   /**
    * Sets up subscription to activities observable
-   * 
+   *
    * Manages loading state based on activity data availability
    * and handles subscription errors with appropriate logging.
-   * 
+   *
    * @private
    */
   private setupActivitySubscription(): void {
@@ -195,19 +193,19 @@ export class MyActivitiesPage implements OnInit, OnDestroy {
 
   /**
    * Handles pull-to-refresh functionality
-   * 
+   *
    * Triggers application data refresh and manages loading states.
    * Provides user feedback through loading indicator and completes
    * the refresh gesture after data reload.
-   * 
+   *
    * @param event - Ionic refresher custom event
    */
   handleRefresh(event: RefresherCustomEvent): void {
     this.isLoading = true;
-    
+
     // Trigger application data refresh
     this.appService.setupAppData();
-    
+
     // Simulate refresh delay for better UX
     this.refreshTimeout = setTimeout(() => {
       this.isLoading = false;
@@ -221,10 +219,10 @@ export class MyActivitiesPage implements OnInit, OnDestroy {
 
   /**
    * Performs component cleanup
-   * 
+   *
    * Unsubscribes from observables and clears timeouts
    * to prevent memory leaks and pending operations.
-   * 
+   *
    * @private
    */
   private cleanup(): void {

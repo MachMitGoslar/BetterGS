@@ -76,17 +76,14 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
+  private formBuilder = inject(FormBuilder);
+  private router = inject(Router);
+  private alertController = inject(AlertController);
+  private loadingController = inject(LoadingController);
+  private applicationService = inject(ApplicationService);
+  private notificationService = inject(NotificationService);
 
-      private formBuilder = inject(FormBuilder)
-    private router = inject(Router)
-    private alertController = inject(AlertController)
-    private loadingController = inject(LoadingController)
-    private applicationService = inject(ApplicationService)
-    private notificationService = inject(NotificationService)
-
-  constructor(
-
-  ) {
+  constructor() {
     this.initializeForm();
     this.setupIcons();
   }
@@ -205,33 +202,32 @@ export class SignupComponent implements OnInit, OnDestroy {
         duration: 30000, // 30 seconds timeout
       });
       await loading.present();
-      
+
       console.log('Creating account with:', { email, password, displayName });
-      
+
       // Create the user account
       await this.applicationService.createUserWithEmailAndDisplayName(
         email,
         password,
         displayName
       );
-      
+
       // Show success message
       this.notificationService.addNotification(
         'Account created successfully! Welcome to BetterGS.',
         'success'
       );
-      
+
       await loading.dismiss();
       this.isLoading = false;
-      
+
       // Redirect to tabs after successful signup
       this.router.navigate(['/tabs']);
-      
     } catch (error) {
       this.isLoading = false;
       console.error('Sign up error:', error);
       this.handleSignUpError(error);
-      
+
       // Dismiss loading if still present
       this.loadingController.dismiss();
     }
@@ -252,7 +248,8 @@ export class SignupComponent implements OnInit, OnDestroy {
           errorMessage = 'Invalid email address format.';
           break;
         case 'auth/weak-password':
-          errorMessage = 'Password is too weak. Please choose a stronger password.';
+          errorMessage =
+            'Password is too weak. Please choose a stronger password.';
           break;
         case 'auth/network-request-failed':
           errorMessage = 'Network error. Please check your connection.';

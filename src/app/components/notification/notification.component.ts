@@ -1,6 +1,9 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { Notification, NotificationService } from 'src/app/core/services/notification.service';
+import {
+  Notification,
+  NotificationService,
+} from 'src/app/core/services/notification.service';
 import { ToastController } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 
@@ -8,27 +11,27 @@ import { CommonModule } from '@angular/common';
   selector: 'app-notification',
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.scss'],
-  imports: [CommonModule]
+  imports: [CommonModule],
 })
 export class NotificationComponent implements OnInit, OnDestroy {
-
   private subscription: Subscription = new Subscription();
   private notificationService = inject(NotificationService);
   private toastController = inject(ToastController);
-  constructor(
-
-  ) {}
+  constructor() {}
 
   ngOnInit() {
-    this.subscription = this.notificationService.$notifications.subscribe((notifications) => {
-      console.log('Notifications updated:', notifications);
-      // Show undisplayed notifications
-      const undisplayedNotifications = this.notificationService.getUndisplayedNotifications();
-      undisplayedNotifications.forEach(notification => {
-        this.presentToast(notification);
-        this.notificationService.markNotificationAsDisplayed(notification.id);
-      });
-    });
+    this.subscription = this.notificationService.$notifications.subscribe(
+      (notifications) => {
+        console.log('Notifications updated:', notifications);
+        // Show undisplayed notifications
+        const undisplayedNotifications =
+          this.notificationService.getUndisplayedNotifications();
+        undisplayedNotifications.forEach((notification) => {
+          this.presentToast(notification);
+          this.notificationService.markNotificationAsDisplayed(notification.id);
+        });
+      }
+    );
   }
 
   ngOnDestroy() {
@@ -48,9 +51,9 @@ export class NotificationComponent implements OnInit, OnDestroy {
           role: 'cancel',
           handler: () => {
             this.notificationService.removeNotification(notification.id);
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
 
     await toast.present();
@@ -63,21 +66,31 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
   private getToastHeader(type: string): string {
     switch (type) {
-      case 'success': return 'Success';
-      case 'warning': return 'Warning';
-      case 'danger': return 'Error';
-      case 'info': return 'Info';
-      default: return 'Notification';
+      case 'success':
+        return 'Success';
+      case 'warning':
+        return 'Warning';
+      case 'danger':
+        return 'Error';
+      case 'info':
+        return 'Info';
+      default:
+        return 'Notification';
     }
   }
 
   private getToastColor(type: string): string {
     switch (type) {
-      case 'success': return 'success';
-      case 'warning': return 'warning';
-      case 'danger': return 'danger';
-      case 'info': return 'primary';
-      default: return 'medium';
+      case 'success':
+        return 'success';
+      case 'warning':
+        return 'warning';
+      case 'danger':
+        return 'danger';
+      case 'info':
+        return 'primary';
+      default:
+        return 'medium';
     }
   }
 }

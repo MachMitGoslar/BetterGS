@@ -1,7 +1,16 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick,
+} from '@angular/core/testing';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { of, BehaviorSubject } from 'rxjs';
-import { Platform, AlertController, ActionSheetController } from '@ionic/angular/standalone';
+import {
+  Platform,
+  AlertController,
+  ActionSheetController,
+} from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 
 import { ProfilePage } from './profile.page';
@@ -12,11 +21,16 @@ import { I18nService } from 'src/app/core/services/i18n.service';
 import { UserPublicProfile } from 'src/app/core/models/user_public_profile.model';
 import { UserPrivateProfile } from 'src/app/core/models/user_private_profile.model';
 import { User } from '@angular/fire/auth';
-import { createTestingEnvironment, MOCK_USER, MOCK_PUBLIC_PROFILE, MOCK_PRIVATE_PROFILE } from '../../../testing/shared-testing-config';
+import {
+  createTestingEnvironment,
+  MOCK_USER,
+  MOCK_PUBLIC_PROFILE,
+  MOCK_PRIVATE_PROFILE,
+} from '../../../testing/shared-testing-config';
 
 /**
  * Test Suite for ProfilePage Component
- * 
+ *
  * Comprehensive tests covering:
  * - Component initialization and lifecycle
  * - Form validation and management
@@ -29,7 +43,7 @@ import { createTestingEnvironment, MOCK_USER, MOCK_PUBLIC_PROFILE, MOCK_PRIVATE_
 describe('ProfilePage', () => {
   let component: ProfilePage;
   let fixture: ComponentFixture<ProfilePage>;
-  
+
   // Service mocks
   let mockApplicationService: any;
   let mockUserService: any;
@@ -39,7 +53,7 @@ describe('ProfilePage', () => {
   let mockRouter: any;
   let mockAlertController: any;
   let mockActionSheetController: any;
-  
+
   // Observable subjects
   let userSubject: BehaviorSubject<any>;
   let publicProfileSubject: BehaviorSubject<any>;
@@ -51,7 +65,7 @@ describe('ProfilePage', () => {
     email: 'test@example.com',
     displayName: 'Test User',
     isAnonymous: false,
-    emailVerified: true
+    emailVerified: true,
   } as User;
 
   const mockPublicProfile = {
@@ -65,9 +79,9 @@ describe('ProfilePage', () => {
     isActive: true,
     toDB: () => ({
       name: 'Test User',
-      profilePictureUrl: 'https://example.com/avatar.jpg'
-    }) 
-  } as UserPublicProfile ;
+      profilePictureUrl: 'https://example.com/avatar.jpg',
+    }),
+  } as UserPublicProfile;
 
   const mockPrivateProfile = {
     id: 'private-id',
@@ -78,12 +92,15 @@ describe('ProfilePage', () => {
       id: 'private-id',
       email: 'test@example.com',
       role: 'user',
-      needsOnboarding: false
-    }) 
+      needsOnboarding: false,
+    }),
   } as UserPrivateProfile;
   beforeEach(async () => {
     // Setup $localize for Angular i18n
-    (globalThis as any).$localize = (template: TemplateStringsArray, ...expressions: any[]) => {
+    (globalThis as any).$localize = (
+      template: TemplateStringsArray,
+      ...expressions: any[]
+    ) => {
       let result = template[0];
       for (let i = 0; i < expressions.length; i++) {
         result += expressions[i] + template[i + 1];
@@ -95,15 +112,15 @@ describe('ProfilePage', () => {
     const testEnv = createTestingEnvironment({
       initialData: {
         'users/test-uid-123/public': MOCK_PUBLIC_PROFILE,
-        'users/test-uid-123/private': MOCK_PRIVATE_PROFILE
-      }
+        'users/test-uid-123/private': MOCK_PRIVATE_PROFILE,
+      },
     });
 
     // Get references to the created subjects and mocks
     userSubject = testEnv.mocks.services.userSubject;
     publicProfileSubject = testEnv.mocks.services.publicProfileSubject;
     privateProfileSubject = testEnv.mocks.services.privateProfileSubject;
-    
+
     mockApplicationService = testEnv.mocks.services.mockApplicationService;
     mockUserService = testEnv.mocks.services.mockUserService;
     mockNotificationService = testEnv.mocks.services.mockNotificationService;
@@ -114,10 +131,7 @@ describe('ProfilePage', () => {
     mockActionSheetController = testEnv.mocks.ionic.mockActionSheetController;
 
     await TestBed.configureTestingModule({
-      imports: [
-        ProfilePage,
-        ReactiveFormsModule
-      ],
+      imports: [ProfilePage, ReactiveFormsModule],
       providers: [
         FormBuilder,
         ...testEnv.providers,
@@ -129,8 +143,8 @@ describe('ProfilePage', () => {
         { provide: Platform, useValue: mockPlatform },
         { provide: Router, useValue: mockRouter },
         { provide: AlertController, useValue: mockAlertController },
-        { provide: ActionSheetController, useValue: mockActionSheetController }
-      ]
+        { provide: ActionSheetController, useValue: mockActionSheetController },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ProfilePage);
@@ -169,21 +183,21 @@ describe('ProfilePage', () => {
 
     it('should set up form validators correctly', () => {
       const form = component.profileForm;
-      
+
       // Test displayName validators
       form.get('displayName')?.setValue('a'); // Too short
       expect(form.get('displayName')?.hasError('minlength')).toBeTruthy();
-      
+
       form.get('displayName')?.setValue(''); // Required
       expect(form.get('displayName')?.hasError('required')).toBeTruthy();
-      
+
       // Test email validators
       form.get('email')?.setValue('invalid-email');
       expect(form.get('email')?.hasError('email')).toBeTruthy();
-      
+
       form.get('email')?.setValue('');
       expect(form.get('email')?.hasError('required')).toBeTruthy();
-      
+
       // Test password validators
       form.get('newPassword')?.setValue('12345'); // Too short
       expect(form.get('newPassword')?.hasError('minlength')).toBeTruthy();
@@ -210,13 +224,20 @@ describe('ProfilePage', () => {
 
     describe('ngOnDestroy', () => {
       it('should unsubscribe from all subscriptions', () => {
-        const mockSubscription1 = jasmine.createSpyObj('Subscription', ['unsubscribe']);
-        const mockSubscription2 = jasmine.createSpyObj('Subscription', ['unsubscribe']);
-        
-        (component as any).subscriptions = [mockSubscription1, mockSubscription2];
-        
+        const mockSubscription1 = jasmine.createSpyObj('Subscription', [
+          'unsubscribe',
+        ]);
+        const mockSubscription2 = jasmine.createSpyObj('Subscription', [
+          'unsubscribe',
+        ]);
+
+        (component as any).subscriptions = [
+          mockSubscription1,
+          mockSubscription2,
+        ];
+
         component.ngOnDestroy();
-        
+
         expect(mockSubscription1.unsubscribe).toHaveBeenCalled();
         expect(mockSubscription2.unsubscribe).toHaveBeenCalled();
       });
@@ -236,30 +257,30 @@ describe('ProfilePage', () => {
       it('should subscribe to user authentication state', fakeAsync(() => {
         userSubject.next(mockUser);
         tick();
-        
+
         expect(component.user).toBe(mockUser);
       }));
 
       it('should subscribe to public profile data', fakeAsync(() => {
         publicProfileSubject.next(mockPublicProfile);
         tick();
-        
+
         expect(component._publicUserData).toBe(mockPublicProfile);
       }));
 
       it('should subscribe to private profile data', fakeAsync(() => {
         privateProfileSubject.next(mockPrivateProfile);
         tick();
-        
+
         expect(component._privateUserData).toBe(mockPrivateProfile);
       }));
 
       it('should populate form when user data is loaded', fakeAsync(() => {
         spyOn(component as any, 'populateForm');
-        
+
         userSubject.next(mockUser);
         tick();
-        
+
         expect((component as any).populateForm).toHaveBeenCalled();
       }));
     });
@@ -273,22 +294,26 @@ describe('ProfilePage', () => {
 
       it('should populate form with user data', () => {
         (component as any).populateForm();
-        
-        expect(component.profileForm.get('displayName')?.value).toBe(mockPublicProfile.name);
+
+        expect(component.profileForm.get('displayName')?.value).toBe(
+          mockPublicProfile.name
+        );
         expect(component.profileForm.get('email')?.value).toBe(mockUser.email);
       });
 
       it('should use private profile email if user email is not available', () => {
         component.user = { ...mockUser, email: null };
-        
+
         (component as any).populateForm();
-        
-        expect(component.profileForm.get('email')?.value).toBe(mockPrivateProfile.email);
+
+        expect(component.profileForm.get('email')?.value).toBe(
+          mockPrivateProfile.email
+        );
       });
 
       it('should handle missing user data gracefully', () => {
         component.user = null;
-        
+
         expect(() => (component as any).populateForm()).not.toThrow();
       });
     });
@@ -303,33 +328,33 @@ describe('ProfilePage', () => {
       it('should set passwordMismatch to true when passwords do not match', () => {
         component.profileForm.patchValue({
           newPassword: 'password123',
-          confirmPassword: 'password456'
+          confirmPassword: 'password456',
         });
-        
+
         (component as any).checkPasswordMatch();
-        
+
         expect(component.passwordMismatch).toBeTruthy();
       });
 
       it('should set passwordMismatch to false when passwords match', () => {
         component.profileForm.patchValue({
           newPassword: 'password123',
-          confirmPassword: 'password123'
+          confirmPassword: 'password123',
         });
-        
+
         (component as any).checkPasswordMatch();
-        
+
         expect(component.passwordMismatch).toBeFalsy();
       });
 
       it('should set passwordMismatch to false when either field is empty', () => {
         component.profileForm.patchValue({
           newPassword: 'password123',
-          confirmPassword: ''
+          confirmPassword: '',
         });
-        
+
         (component as any).checkPasswordMatch();
-        
+
         expect(component.passwordMismatch).toBeFalsy();
       });
     });
@@ -344,22 +369,22 @@ describe('ProfilePage', () => {
       component.user = mockUser;
       component._publicUserData = mockPublicProfile as any;
       component._privateUserData = mockPrivateProfile as any;
-      
+
       component.profileForm.patchValue({
         displayName: 'Updated Name',
         email: 'updated@example.com',
         currentPassword: 'oldpass',
         newPassword: 'newpass123',
-        confirmPassword: 'newpass123'
+        confirmPassword: 'newpass123',
       });
     });
 
     describe('updateProfile', () => {
       it('should show error notification for invalid form', async () => {
         component.profileForm.patchValue({ displayName: '' }); // Invalid
-        
+
         await component.updateProfile();
-        
+
         expect(mockNotificationService.addNotification).toHaveBeenCalledWith(
           'Please fix the form errors before saving.',
           'danger'
@@ -368,9 +393,9 @@ describe('ProfilePage', () => {
 
       it('should show error notification for password mismatch', async () => {
         component.passwordMismatch = true;
-        
+
         await component.updateProfile();
-        
+
         expect(mockNotificationService.addNotification).toHaveBeenCalledWith(
           'Please fix the form errors before saving.',
           'danger'
@@ -379,9 +404,9 @@ describe('ProfilePage', () => {
 
       it('should show error notification when user data is missing', async () => {
         component.user = null;
-        
+
         await component.updateProfile();
-        
+
         expect(mockNotificationService.addNotification).toHaveBeenCalledWith(
           'User data not available. Please try again.',
           'danger'
@@ -392,33 +417,34 @@ describe('ProfilePage', () => {
         // Set the initial value to something different than the new value
         component._publicUserData!.name = 'Old Name';
         component.profileForm.patchValue({ displayName: 'New Name' });
-        
+
         await component.updateProfile();
-        
+
         expect(component._publicUserData?.name).toBe('New Name');
         expect(mockApplicationService.updateUserProfile).toHaveBeenCalled();
       });
 
       it('should register anonymous user with email and password', async () => {
         component.user = { ...mockUser, isAnonymous: true };
-        
+
         await component.updateProfile();
-        
-        expect(mockApplicationService.registerUserWithEmail).toHaveBeenCalledWith(
-          'updated@example.com',
-          'newpass123'
-        );
+
+        expect(
+          mockApplicationService.registerUserWithEmail
+        ).toHaveBeenCalledWith('updated@example.com', 'newpass123');
       });
 
       it('should change password for authenticated users', async () => {
         await component.updateProfile();
-        
-        expect(mockApplicationService.changePassword).toHaveBeenCalledWith('newpass123');
+
+        expect(mockApplicationService.changePassword).toHaveBeenCalledWith(
+          'newpass123'
+        );
       });
 
       it('should clear sensitive form fields after successful update', async () => {
         await component.updateProfile();
-        
+
         expect(component.profileForm.get('currentPassword')?.value).toBe('');
         expect(component.profileForm.get('newPassword')?.value).toBe('');
         expect(component.profileForm.get('confirmPassword')?.value).toBe('');
@@ -426,7 +452,7 @@ describe('ProfilePage', () => {
 
       it('should show success notification on successful update', async () => {
         await component.updateProfile();
-        
+
         expect(mockNotificationService.addNotification).toHaveBeenCalledWith(
           'Profile updated successfully!',
           'success'
@@ -437,13 +463,15 @@ describe('ProfilePage', () => {
         // Set up a scenario where updateUserProfile will be called and fail
         component.profileForm.patchValue({
           displayName: 'New Name',
-          email: 'test@example.com'
+          email: 'test@example.com',
         });
-        
-        mockApplicationService.updateUserProfile.and.returnValue(Promise.reject(new Error('Update failed')));
-        
+
+        mockApplicationService.updateUserProfile.and.returnValue(
+          Promise.reject(new Error('Update failed'))
+        );
+
         await component.updateProfile();
-        
+
         expect(mockNotificationService.addNotification).toHaveBeenCalledWith(
           'Failed to update profile. Please try again.',
           'danger'
@@ -455,17 +483,17 @@ describe('ProfilePage', () => {
     describe('resetForm', () => {
       it('should reload user profile data', () => {
         spyOn(component as any, 'loadUserProfile');
-        
+
         component.resetForm();
-        
+
         expect((component as any).loadUserProfile).toHaveBeenCalled();
       });
 
       it('should reset password mismatch flag', () => {
         component.passwordMismatch = true;
-        
+
         component.resetForm();
-        
+
         expect(component.passwordMismatch).toBeFalsy();
       });
     });
@@ -479,37 +507,38 @@ describe('ProfilePage', () => {
     describe('changeProfilePicture', () => {
       it('should show mobile options when on mobile platform', async () => {
         mockPlatform.is.and.returnValue(true);
-        
+
         await component.changeProfilePicture();
-        
+
         expect(mockActionSheetController.create).toHaveBeenCalledWith(
           jasmine.objectContaining({
             header: 'profile.changePicture',
             buttons: jasmine.arrayContaining([
               jasmine.objectContaining({ icon: 'camera' }),
-              jasmine.objectContaining({ icon: 'images' })
-            ])
+              jasmine.objectContaining({ icon: 'images' }),
+            ]),
           })
         );
       });
 
       it('should show desktop options when not on mobile platform', async () => {
         mockPlatform.is.and.returnValue(false);
-        
+
         await component.changeProfilePicture();
-        
+
         expect(mockActionSheetController.create).toHaveBeenCalledWith(
           jasmine.objectContaining({
             buttons: jasmine.arrayContaining([
-              jasmine.objectContaining({ icon: 'images' }) // Upload option
-            ])
+              jasmine.objectContaining({ icon: 'images' }), // Upload option
+            ]),
           })
         );
       });
     });
 
     describe('processImageUpload', () => {
-      const mockBase64 = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD//gA7Q1JFQVRPUjogZ2QtanBlZyB2MS4w';
+      const mockBase64 =
+        'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD//gA7Q1JFQVRPUjogZ2QtanBlZyB2MS4w';
       const mockFileName = 'test.jpg';
       const mockFileType = 'image/jpeg';
 
@@ -520,9 +549,13 @@ describe('ProfilePage', () => {
 
       it('should validate image type before upload', async () => {
         spyOn(component as any, 'isValidImageType').and.returnValue(false);
-        
-        await (component as any).processImageUpload(mockBase64, mockFileName, 'invalid/type');
-        
+
+        await (component as any).processImageUpload(
+          mockBase64,
+          mockFileName,
+          'invalid/type'
+        );
+
         expect(mockNotificationService.addNotification).toHaveBeenCalledWith(
           'profile.error.invalidFileType',
           'danger'
@@ -532,9 +565,13 @@ describe('ProfilePage', () => {
       it('should validate image size before upload', async () => {
         spyOn(component as any, 'isValidImageType').and.returnValue(true);
         spyOn(component as any, 'isValidImageSize').and.returnValue(false);
-        
-        await (component as any).processImageUpload(mockBase64, mockFileName, mockFileType);
-        
+
+        await (component as any).processImageUpload(
+          mockBase64,
+          mockFileName,
+          mockFileType
+        );
+
         expect(mockNotificationService.addNotification).toHaveBeenCalledWith(
           'profile.error.fileTooLarge',
           'danger'
@@ -544,23 +581,31 @@ describe('ProfilePage', () => {
       it('should upload image and update profile on success', async () => {
         spyOn(component as any, 'isValidImageType').and.returnValue(true);
         spyOn(component as any, 'isValidImageSize').and.returnValue(true);
-        
+
         const mockImageUrl = 'https://example.com/uploaded-image.jpg';
-        mockApplicationService.uploadUserProfileImage.and.returnValue(Promise.resolve(mockImageUrl));
-        
-        await (component as any).processImageUpload(mockBase64, mockFileName, mockFileType);
-        
-        expect(mockApplicationService.uploadUserProfileImage).toHaveBeenCalledWith(
+        mockApplicationService.uploadUserProfileImage.and.returnValue(
+          Promise.resolve(mockImageUrl)
+        );
+
+        await (component as any).processImageUpload(
+          mockBase64,
+          mockFileName,
+          mockFileType
+        );
+
+        expect(
+          mockApplicationService.uploadUserProfileImage
+        ).toHaveBeenCalledWith(
           mockBase64,
           mockFileName,
           jasmine.objectContaining({
             contentType: mockFileType,
             customMetadata: jasmine.objectContaining({
-              originalName: mockFileName
-            })
+              originalName: mockFileName,
+            }),
           })
         );
-        
+
         expect(component._publicUserData?.profilePictureUrl).toBe(mockImageUrl);
         expect(mockApplicationService.updateUserProfile).toHaveBeenCalled();
       });
@@ -574,16 +619,16 @@ describe('ProfilePage', () => {
 
       it('should update profile to remove picture URL', async () => {
         await (component as any).removeProfilePicture();
-        
+
         expect(mockApplicationService.updateUserProfile).toHaveBeenCalledWith({
           name: mockPublicProfile.name,
-          profilePictureUrl: undefined
+          profilePictureUrl: undefined,
         });
       });
 
       it('should show success notification on removal', async () => {
         await (component as any).removeProfilePicture();
-        
+
         expect(mockNotificationService.addNotification).toHaveBeenCalledWith(
           'Profile picture removed',
           'success'
@@ -607,7 +652,9 @@ describe('ProfilePage', () => {
 
       it('should return false for invalid image types', () => {
         expect((component as any).isValidImageType('text/plain')).toBeFalsy();
-        expect((component as any).isValidImageType('application/pdf')).toBeFalsy();
+        expect(
+          (component as any).isValidImageType('application/pdf')
+        ).toBeFalsy();
         expect((component as any).isValidImageType('video/mp4')).toBeFalsy();
       });
 
@@ -638,11 +685,11 @@ describe('ProfilePage', () => {
     describe('logout', () => {
       it('should show confirmation alert', async () => {
         await component.logout();
-        
+
         expect(mockAlertController.create).toHaveBeenCalledWith(
           jasmine.objectContaining({
             header: 'Logout',
-            message: 'Are you sure you want to logout?'
+            message: 'Are you sure you want to logout?',
           })
         );
       });
@@ -651,11 +698,11 @@ describe('ProfilePage', () => {
     describe('confirmDeleteAccount', () => {
       it('should show confirmation alert with warning', async () => {
         await component.confirmDeleteAccount();
-        
+
         expect(mockAlertController.create).toHaveBeenCalledWith(
           jasmine.objectContaining({
             header: 'Delete Account',
-            message: jasmine.stringContaining('permanently lost')
+            message: jasmine.stringContaining('permanently lost'),
           })
         );
       });
@@ -670,26 +717,29 @@ describe('ProfilePage', () => {
     describe('getDaysSinceMember', () => {
       it('should return 0 when no public profile data', () => {
         component._publicUserData = undefined;
-        
+
         expect(component.getDaysSinceMember()).toBe(0);
       });
 
       it('should return 0 when no creation date', () => {
-        component._publicUserData = { ...mockPublicProfile, createdAt: undefined } as any;
-        
+        component._publicUserData = {
+          ...mockPublicProfile,
+          createdAt: undefined,
+        } as any;
+
         expect(component.getDaysSinceMember()).toBe(0);
       });
 
       it('should calculate days correctly', () => {
         const pastDate = new Date();
         pastDate.setDate(pastDate.getDate() - 10); // 10 days ago
-        
-        component._publicUserData = { 
-          ...mockPublicProfile, 
+
+        component._publicUserData = {
+          ...mockPublicProfile,
           createdAt: pastDate,
-          toDB: jasmine.createSpy('toDB')
+          toDB: jasmine.createSpy('toDB'),
         } as any;
-        
+
         expect(component.getDaysSinceMember()).toBe(10);
       });
     });
@@ -697,7 +747,7 @@ describe('ProfilePage', () => {
     describe('days_active getter', () => {
       it('should return same value as getDaysSinceMember', () => {
         spyOn(component, 'getDaysSinceMember').and.returnValue(15);
-        
+
         expect(component.days_active).toBe(15);
         expect(component.getDaysSinceMember).toHaveBeenCalled();
       });
@@ -716,24 +766,26 @@ describe('ProfilePage', () => {
       publicProfileSubject.next(mockPublicProfile);
       privateProfileSubject.next(mockPrivateProfile);
       tick();
-      
+
       // Verify form is populated
-      expect(component.profileForm.get('displayName')?.value).toBe(mockPublicProfile.name);
-      
+      expect(component.profileForm.get('displayName')?.value).toBe(
+        mockPublicProfile.name
+      );
+
       // Simulate form changes
       component.profileForm.patchValue({
         displayName: 'Updated Name',
         newPassword: 'newpass123',
-        confirmPassword: 'newpass123'
+        confirmPassword: 'newpass123',
       });
-      
+
       // Verify password validation
       expect(component.passwordMismatch).toBeFalsy();
-      
+
       // Perform update
       component.updateProfile();
       tick();
-      
+
       // Verify success
       expect(mockNotificationService.addNotification).toHaveBeenCalledWith(
         'Profile updated successfully!',
@@ -747,16 +799,16 @@ describe('ProfilePage', () => {
         displayName: '', // Invalid - required
         email: 'invalid-email', // Invalid - email format
         newPassword: '123', // Invalid - too short
-        confirmPassword: '456' // Invalid - doesn't match
+        confirmPassword: '456', // Invalid - doesn't match
       });
-      
+
       // Verify form is invalid
       expect(component.profileForm.invalid).toBeTruthy();
       expect(component.passwordMismatch).toBeTruthy();
-      
+
       // Attempt update
       component.updateProfile();
-      
+
       // Verify error notification
       expect(mockNotificationService.addNotification).toHaveBeenCalledWith(
         'Please fix the form errors before saving.',
@@ -766,18 +818,18 @@ describe('ProfilePage', () => {
 
     it('should handle memory cleanup properly', () => {
       component.ngOnInit();
-      
+
       // Verify subscriptions are created
       expect((component as any).subscriptions.length).toBeGreaterThan(0);
-      
+
       // Add spies to the unsubscribe methods
       (component as any).subscriptions.forEach((sub: any) => {
         spyOn(sub, 'unsubscribe');
       });
-      
+
       // Destroy component
       component.ngOnDestroy();
-      
+
       // Verify all subscriptions are cleaned up
       (component as any).subscriptions.forEach((sub: any) => {
         expect(sub.unsubscribe).toHaveBeenCalled();
