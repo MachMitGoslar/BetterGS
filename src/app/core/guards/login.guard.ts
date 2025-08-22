@@ -13,7 +13,9 @@ export const loginGuard: CanActivateFn = (route, state) => {
 
   return applicationService.$currentUser.pipe(
     map((user) => {
+      console.log('Login Guard Current user:', user);
       if (user && user !== null && user !== undefined) {
+        console.log("User is authenticated:", user);
         return true; // User is logged in, allow access
       } else {
         console.log("ROUTING");
@@ -21,5 +23,5 @@ export const loginGuard: CanActivateFn = (route, state) => {
         return false; // User is not logged in, redirect to login page
       }
     })
-  );
-};
+  )
+}

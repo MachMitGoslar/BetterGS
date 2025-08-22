@@ -1,6 +1,6 @@
 {
-  "name": "betterGS",
-  "version": "0.1.1",
+  "name": "BetterGS",
+  "version": "1.0.0",
   "author": "Stadt Goslar - MachMit!Haus",
   "homepage": "https://machmit.goslar.de",
   "scripts": {
@@ -15,7 +15,29 @@
     "extract-i18n": "ng extract-i18n --output-path=src/locale",
     "watch": "ng build --watch --configuration development,de",
     "test": "ng test",
-    "lint": "ng lint"
+    "test:watch": "ng test --watch",
+    "test:coverage": "ng test --code-coverage --watch=false --browsers=ChromeHeadless",
+    "test:ci": "ng test --watch=false --browsers=ChromeHeadless",
+    "lint": "ng lint",
+    "lint:fix": "ng lint --fix",
+    "format": "prettier --write \"src/**/*.{ts,html,scss,json}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,html,scss,json}\"",
+    "ionic": "ionic",
+    "cap:sync": "ionic capacitor sync",
+    "cap:run:ios": "ionic capacitor run ios",
+    "cap:run:android": "ionic capacitor run android",
+    "cap:build:ios": "ionic capacitor build ios",
+    "cap:build:android": "ionic capacitor build android",
+    "serve:prod": "http-server www/en -p 8080 -o",
+    "audit:security": "npm audit --audit-level=moderate",
+    "audit:licenses": "license-checker --summary",
+    "clean": "rimraf www/ node_modules/.cache",
+    "clean:install": "npm run clean && npm install",
+    "lighthouse": "lighthouse http://localhost:8080 --output html --output-path ./lighthouse-report.html",
+    "bundle:analyze": "ng build --source-map && npx webpack-bundle-analyzer www/en/*.js",
+    "pre-commit": "npm run lint && npm run format:check && npm run test:ci",
+    "pre-push": "npm run build:i18n && npm run test:coverage",
+    "release": "standard-version"
   },
   "private": true,
   "dependencies": {
@@ -56,6 +78,7 @@
     "@angular/cli": "^20.0.0",
     "@angular/compiler-cli": "^20.0.0",
     "@angular/language-service": "^20.0.0",
+    "@capacitor/assets": "^3.0.5",
     "@capacitor/cli": "7.4.1",
     "@ionic/angular-toolkit": "^12.0.0",
     "@types/jasmine": "~5.1.0",
@@ -74,5 +97,5 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.8.0"
   },
-  "description": "betterGS - creating the future"
+  "description": "BetterGS - sustain the future"
 }

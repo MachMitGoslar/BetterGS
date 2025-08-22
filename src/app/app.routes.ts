@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { loginGuard } from './core/guards/login.guard';
+import { requireOnboardingGuard } from './core/guards/require-onboarding.guard';
 
 
 export const routes: Routes = [
@@ -11,7 +12,7 @@ export const routes: Routes = [
   {
     path: 'tabs',
     loadChildren: () => import('./tabs/tabs.routes').then((m) => m.routes),
-    canActivate: [loginGuard]
+    canActivate: [loginGuard, requireOnboardingGuard]
   },
   {
     path: 'login',
@@ -21,9 +22,13 @@ export const routes: Routes = [
     path: 'signup',
     loadComponent: () => import('./singlePages/signup/signup.component').then((m) => m.SignupComponent),
   },
-          {
-        path: 'tracking/:activityId',
-        loadComponent: () =>
-          import('./singlePages/tracking/tracking.component').then((m) => m.TrackingComponent),
-      },
+  {
+    path: 'onboarding',
+    loadComponent: () => import('./singlePages/onboarding/onboarding.component').then((m) => m.OnboardingComponent),
+  },
+  {
+    path: 'tracking/:activityId',
+    loadComponent: () =>
+      import('./singlePages/tracking/tracking.component').then((m) => m.TrackingComponent),
+  },
 ];

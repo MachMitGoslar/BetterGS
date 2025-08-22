@@ -2,7 +2,7 @@
 
     <ion-toolbar>
       <ion-title i18n="@@activities.title">
-        Activities
+         {{ i18nService.getTranslation('myActivities.onboarding.title') }}
       </ion-title>
     </ion-toolbar>
 
@@ -15,7 +15,7 @@
   <ion-header collapse="condense">
 
     <ion-toolbar>
-      <ion-title size="large" i18n="@@activities.title">Activities</ion-title>
+      <ion-title size="large" i18n="@@activities.title"> {{ i18nService.getTranslation('activities.title') }}</ion-title>
 
     </ion-toolbar>
   </ion-header>

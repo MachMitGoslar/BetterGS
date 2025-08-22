@@ -1,8 +1,10 @@
-import { DocumentData, serverTimestamp, Timestamp } from "@angular/fire/firestore";
+import { DocumentData, DocumentReference, serverTimestamp, Timestamp } from "@angular/fire/firestore";
 import { server } from "ionicons/icons";
 import { adjectives, animals, Config, uniqueNamesGenerator } from "unique-names-generator";
 
 export class UserPublicProfile {
+    public id?: string;
+    public userRef?: DocumentReference;
     public name: string ="";
     public createdAt?: Date;
     public trackedTime: number = 0;
@@ -16,16 +18,17 @@ export class UserPublicProfile {
     
     }
     
-    static fromDB(data: DocumentData): UserPublicProfile {
+    static fromDB(id: string, data: DocumentData): UserPublicProfile {
         console.log("Converting UserPublicProfile from DB format:", data);
         let profile = new UserPublicProfile();
+        profile.id = id;
         profile.name = data["name"];
-        profile.createdAt = data["createdAt"].toDate() || new Date();
+        profile.createdAt = data["createdAt"]?.toDate() || new Date();
         profile.trackedTime = data["trackedTime"];
         profile.trackedActivities = data["trackedActivities"] || 0;
         profile.total_trackings = data["total_trackings"] || 0; // Assuming this field exists
         profile.profilePictureUrl = data["profilePictureUrl"];
-        profile.updatedAt = data["updatedAt"].toDate() || new Date();
+        profile.updatedAt = data["updatedAt"]?.toDate() || new Date();
         profile.isActive = data["isActive"];
 
         return profile;

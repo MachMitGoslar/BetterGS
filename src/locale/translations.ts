@@ -48,6 +48,144 @@ const translations: { [key: string]: { [lang: string]: string } } = {
     de: 'Erfolg'
   },
 
+  // Onboarding
+  'onboarding.title': {
+    en: 'Welcome',
+    de: 'Willkommen'
+  },
+  'onboarding.welcome': {
+    en: 'Welcome to BetterGS!',
+    de: 'Willkommen bei BetterGS!'
+  },
+  'onboarding.subtitle': {
+    en: 'Let\'s get you started with a quick setup',
+    de: 'Lass uns mit einer kurzen Einrichtung beginnen'
+  },
+  'onboarding.complete': {
+    en: 'Get Started',
+    de: 'Los geht\'s'
+  },
+  'onboarding.skip': {
+    en: 'Skip for now',
+    de: 'Überspringen'
+  },
+
+  // Onboarding Step 1 - Introduction
+  'onboarding.step1.title': {
+    en: 'Introduction',
+    de: 'Einführung'
+  },
+  'onboarding.step1.feature1.title': {
+    en: 'Track Your Activities',
+    de: 'Aktivitäten verfolgen'
+  },
+  'onboarding.step1.feature1.description': {
+    en: 'Keep track of your sustainable activities and monitor your progress over time',
+    de: 'Verfolge deine nachhaltigen Aktivitäten und sammle Zeit'
+  },
+  'onboarding.step1.feature2.title': {
+    en: 'Compete with Others',
+    de: 'Mit anderen konkurrieren'
+  },
+  'onboarding.step1.feature2.description': {
+    en: 'Compare your achievements with others and climb the leaderboards',
+    de: 'Vergleiche deine Werte mit Anderen und klettere in den Ranglisten'
+  },
+  'onboarding.step1.feature3.title': {
+    en: 'Win Prizes after the end of the sustainability challenge',
+    de: 'Gewinne Preise nach dem Ende der Nachhaltigkeits-Challenge'
+  },
+  'onboarding.step1.feature3.description': {
+    en: 'all your trackings will be summed up and you can win prizes',
+    de: 'Alle deine Aktivitäten werden summiert und du kannst zum Abschluss am 27.09. tolle Preise gewinnen'
+  },
+
+  // Onboarding Step 2 - Permissions
+  'onboarding.step2.title': {
+    en: 'Permissions',
+    de: 'Berechtigungen'
+  },
+  'onboarding.step2.subtitle': {
+    en: 'We need some permissions to provide the best experience',
+    de: 'Wir benötigen einige Berechtigungen für die beste Erfahrung'
+  },
+  'onboarding.step2.camera.title': {
+    en: 'Camera Access',
+    de: 'Kamera-Zugriff'
+  },
+  'onboarding.step2.camera.description': {
+    en: 'Take photos to document your activities and achievements',
+    de: 'Mache Fotos um deine Aktivitäten und Erfolge zu dokumentieren'
+  },
+  'onboarding.step2.camera.button': {
+    en: 'Allow Camera',
+    de: 'Kamera erlauben'
+  },
+  'onboarding.step2.photos.title': {
+    en: 'Photo Library',
+    de: 'Fotobibliothek'
+  },
+  'onboarding.step2.photos.description': {
+    en: 'Select photos from your gallery to enhance your profile',
+    de: 'Wähle Fotos aus deiner Galerie um dein Profil zu verbessern'
+  },
+  'onboarding.step2.photos.button': {
+    en: 'Allow Photos',
+    de: 'Fotos erlauben'
+  },
+
+  // Onboarding Step 3 - Notifications
+  'onboarding.step3.title': {
+    en: 'Notifications',
+    de: 'Benachrichtigungen'
+  },
+  'onboarding.step3.subtitle': {
+    en: 'Stay updated with important information and achievements',
+    de: 'Bleibe über wichtige Informationen und Erfolge informiert'
+  },
+  'onboarding.step3.feature.title': {
+    en: 'Get Notified',
+    de: 'Benachrichtigt werden'
+  },
+  'onboarding.step3.feature.description': {
+    en: 'Receive timely notifications about your progress, achievements, and important updates.',
+    de: 'Erhalte rechtzeitige Benachrichtigungen über deinen Fortschritt, Erfolge und wichtige Updates.'
+  },
+  'onboarding.step3.benefit1': {
+    en: 'Daily activity reminders',
+    de: 'Tägliche Aktivitäts-Erinnerungen'
+  },
+  'onboarding.step3.benefit2': {
+    en: 'Achievement celebrations',
+    de: 'Erfolgs-Feiern'
+  },
+  'onboarding.step3.benefit3': {
+    en: 'Important app updates',
+    de: 'Wichtige App-Updates'
+  },
+  'onboarding.step3.button': {
+    en: 'Enable Notifications',
+    de: 'Benachrichtigungen aktivieren'
+  },
+  'onboarding.step3.webNote': {
+    en: 'Notifications are automatically enabled for web browsers',
+    de: 'Benachrichtigungen sind für Webbrowser automatisch aktiviert'
+  },
+
+  // Onboarding Permissions
+  'onboarding.permissions.granted': {
+    en: 'Granted',
+    de: 'Gewährt'
+  },
+  'onboarding.permissions.denied': {
+    en: 'Permission denied',
+    de: 'Berechtigung verweigert'
+  },
+  'onboarding.permissions.error': {
+    en: 'Error requesting permission',
+    de: 'Fehler beim Anfordern der Berechtigung'
+  },
+
   // Language selector
   'language.selector': {
     en: 'Language',
@@ -208,12 +346,12 @@ const translations: { [key: string]: { [lang: string]: string } } = {
     de: 'Verfolge deine Aktivitäten'
   },
   'myActivities.onboarding.description': {
-    en: 'Start tracking your activities to monitor your progress and improve your performance.',
-    de: 'Beginne damit, deine Aktivitäten zu verfolgen, um deinen Fortschritt zu überwachen und deine Leistung zu verbessern.'
+    en: 'Start tracking your sustainable activities to monitor your progress and improve your environmental handprint',
+    de: 'Beginne damit, deine nachhaltigen Aktivitäten zu verfolgen, um deinen Fortschritt zu überwachen und deinen ökologischen Fußabdruck zu verbessern.'
   },
   'myActivities.noActivities': {
     en: 'No activities found. Start tracking to see your activities here.',
-    de: 'Keine Aktivitäten gefunden. Beginnen Sie mit der Verfolgung, um Ihre Aktivitäten hier zu sehen.'
+    de: 'Keine Aktivitäten gefunden. Beginne mit der Verfolgung, um deine nachhaltigen Aktivitäten hier zu sehen.'
   },
 
   // Ranking page

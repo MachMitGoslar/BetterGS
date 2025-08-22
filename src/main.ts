@@ -42,7 +42,8 @@ bootstrapApplication(AppComponent, {
     provideFirestore(() => {
       let firestore = initializeFirestore(getApp(), {
         // experimentalForceLongPolling: !environment.production ? true : false,
-      });
+  
+      }, "staging");
       if(!environment.production) {
        connectFirestoreEmulator(firestore, environment.emulatorConfig.host, 8112);
       }

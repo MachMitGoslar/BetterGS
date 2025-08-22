@@ -14,8 +14,9 @@ import {
  } from 'ionicons/icons';
 import { ActiveTrackingBarComponent } from '../components/active-tracking-bar/active-tracking-bar.component';
 import { ApplicationService } from '../core/services/application.service';
-import { User } from '../core/models/user.model';
+import { User } from '@angular/fire/auth';
 import { CommonModule } from '@angular/common';
+import { UserService } from '../core/services/user.service';
 
 @Component({
   selector: 'app-tabs',
@@ -33,17 +34,24 @@ import { CommonModule } from '@angular/common';
 export class TabsPage {
   public environmentInjector = inject(EnvironmentInjector);
   public currentUser: User | null = null;
+  public role: 'user' | 'admin' = 'user';
 
   constructor(
     public applicationService: ApplicationService,
+    public userService: UserService
   ) {
     this.applicationService.$currentUser.subscribe(user => {
       this.currentUser = user;
     });
+    this.userService.$currentUserPrivateProfile.subscribe(profile => {
+      this.role = profile?.role || 'user';
+    });
 
-    addIcons({   stopwatch,
-  trophy,
-  person,
-  settings });
+    addIcons({
+      stopwatch,
+      trophy,
+      person,
+      settings
+    });
   }
 }

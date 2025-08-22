@@ -21,7 +21,6 @@ import {
   IonCol,
   ModalController
 } from '@ionic/angular/standalone';
-import { User } from '../../core/models/user.model';
 import { I18nService } from '../../core/services/i18n.service';
 import { ActivityService } from '../../core/services/activity.service';
 import { TrackingService } from '../../core/services/tracking.service';
@@ -32,6 +31,8 @@ import { map, switchMap, catchError } from 'rxjs/operators';
 import { closeOutline, trophyOutline, timeOutline, statsChartOutline, personOutline } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { doc, Firestore } from '@angular/fire/firestore';
+import { UserPublicProfile } from 'src/app/core/models/user_public_profile.model';
+import { ElapsedTimePipe } from 'src/app/core/pipes/elapsed-time.pipe';
 
 interface UserActivityStats {
   activity: Activity;
@@ -46,6 +47,7 @@ interface UserActivityStats {
   standalone: true,
   imports: [
     CommonModule,
+    ElapsedTimePipe,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -66,7 +68,7 @@ interface UserActivityStats {
   ]
 })
 export class UserDetailModalComponent implements OnInit {
-  @Input() user!: User;
+  @Input() user!: UserPublicProfile;
 
   userActivityStats$: Observable<UserActivityStats[]> = of([]);
   public firestore: Firestore = inject(Firestore);
@@ -93,11 +95,9 @@ export class UserDetailModalComponent implements OnInit {
   }
 
   loadUserActivityStats() {
-    // Create user document reference
-    const userRef = doc(this.firestore, 'users', this.user.id);
-    console.log('Loading activity stats for user:', this.user.id);
+    console.log('Loading activity stats for user:', this.user.id!);
     // Get all activities for the user and their tracking statistics
-    this.userActivityStats$ = this.activityService.getActivitiesByUser(userRef).pipe(
+    this.userActivityStats$ = this.activityService.getActivitiesByUser(this.user.id!).pipe(
       switchMap(activities => {
         if (activities.length === 0) {
             console.warn('No activities found for user:', this.user.id);
@@ -105,7 +105,7 @@ export class UserDetailModalComponent implements OnInit {
         }
         // For each activity, get its trackings and calculate stats
         const statsObservables = activities.map(activity => 
-          this.trackingService.getTrackingsByActivity(this.user.id, activity.ref!).pipe(
+          this.trackingService.getTrackingsByActivity(this.user.id!, activity.ref!).pipe(
             map(trackings => ({
               activity,
               trackingCount: trackings.length,
@@ -158,4 +158,12 @@ export class UserDetailModalComponent implements OnInit {
     this.modalController.dismiss();
   }
 
+  get days_active(): number {
+    if (!this.user.createdAt) return 0;
+    const now = new Date();
+    const diffTime = Math.abs(
+      now.getTime() - this.user.createdAt.getTime()
+    );
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
+  }
 }

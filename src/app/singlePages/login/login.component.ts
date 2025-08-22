@@ -126,7 +126,7 @@ export class LoginComponent implements OnInit, OnDestroy {
    */
   private checkAuthState() {
     const userSub = this.applicationService.$currentUser.subscribe((user) => {
-      if (user && !user.firestoreUser?.isAnonymous) {
+      if (user && !user.isAnonymous) {
         // User is logged in, redirect to home
         this.router.navigate(['/tabs']);
       }

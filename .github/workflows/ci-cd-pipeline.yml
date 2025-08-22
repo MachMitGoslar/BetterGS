@@ -1,0 +1,413 @@
+name: CI/CD Pipeline
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+    types: [ opened, synchronize, reopened, ready_for_review ]
+  push:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '20.x'
+  CACHE_KEY_PREFIX: 'bettergs-v1'
+
+jobs:
+  # ==========================================
+  # Job 1: Code Quality & Linting
+  # ==========================================
+  code-quality:
+    name: 🔍 Code Quality & Linting
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: |
+          npm ci --no-audit --prefer-offline
+          
+      - name: 🧹 Run ESLint
+        run: |
+          npm run lint
+          
+      - name: 📝 Check TypeScript Compilation
+        run: |
+          npx tsc --noEmit --project tsconfig.json
+          
+      - name: 🎨 Check Code Formatting
+        run: |
+          npx prettier --check "src/**/*.{ts,html,scss,json}"
+
+  # ==========================================
+  # Job 2: Unit Tests
+  # ==========================================
+  unit-tests:
+    name: 🧪 Unit Tests
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: |
+          npm ci --no-audit --prefer-offline
+
+      - name: 🧪 Run Unit Tests
+        run: |
+          npm test -- --browsers=ChromeHeadless --watch=false --code-coverage
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+
+      - name: 📊 Upload Coverage Reports
+        uses: codecov/codecov-action@v4
+        if: success()
+        with:
+          file: ./coverage/lcov.info
+          flags: unittests
+          name: unit-tests-coverage
+          fail_ci_if_error: false
+
+      - name: 📈 Coverage Report Comment
+        uses: romeovs/lcov-reporter-action@v0.3.1
+        if: github.event_name == 'pull_request'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          lcov-file: ./coverage/lcov.info
+          delete-old-comments: true
+
+  # ==========================================
+  # Job 3: Build Verification
+  # ==========================================
+  build-verification:
+    name: 🏗️ Build Verification
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    strategy:
+      matrix:
+        build-config: ['build:en', 'build:de', 'build:i18n']
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: |
+          npm ci --no-audit --prefer-offline
+
+      - name: 🏗️ Build Application (${{ matrix.build-config }})
+        run: |
+          npm run ${{ matrix.build-config }}
+
+      - name: 📦 Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        if: matrix.build-config == 'build:i18n'
+        with:
+          name: build-artifacts-${{ github.sha }}
+          path: www/
+          retention-days: 7
+
+  # ==========================================
+  # Job 4: Security Scan
+  # ==========================================
+  security-scan:
+    name: 🔒 Security Scan
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: |
+          npm ci --no-audit --prefer-offline
+
+      - name: 🔍 Run Security Audit
+        run: |
+          npm audit --audit-level=moderate
+          
+      - name: 🛡️ Run OWASP Dependency Check
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: 'BetterGS'
+          path: '.'
+          format: 'HTML'
+          args: >
+            --enableRetired
+            --enableExperimental
+            --exclude "**/node_modules/**"
+
+      - name: 📄 Upload Security Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: security-report-${{ github.sha }}
+          path: reports/
+          retention-days: 7
+
+  # ==========================================
+  # Job 5: Mobile Build Verification
+  # ==========================================
+  mobile-build:
+    name: 📱 Mobile Build Verification
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    needs: [build-verification]
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: ☕ Setup Java for Android
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: 📦 Install Dependencies
+        run: |
+          npm ci --no-audit --prefer-offline
+
+      - name: 🏗️ Build Web App
+        run: |
+          npm run build:i18n
+
+      - name: 📱 Capacitor Sync
+        run: |
+          npx cap sync
+
+      - name: 🔍 Validate Capacitor Configuration
+        run: |
+          npx cap doctor
+
+  # ==========================================
+  # Job 6: i18n Validation
+  # ==========================================
+  i18n-validation:
+    name: 🌍 i18n Validation
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: |
+          npm ci --no-audit --prefer-offline
+
+      - name: 🔍 Extract i18n Messages
+        run: |
+          npm run extract-i18n
+
+      - name: ✅ Validate Translation Files
+        run: |
+          # Überprüfe ob alle Translation-Files existieren
+          if [ ! -f "src/locale/messages.de.xlf" ]; then
+            echo "❌ German translation file missing"
+            exit 1
+          fi
+          
+          if [ ! -f "src/locale/messages.en.xlf" ]; then
+            echo "❌ English translation file missing"
+            exit 1
+          fi
+          
+          echo "✅ All translation files found"
+
+      - name: 🏗️ Test Localized Builds
+        run: |
+          npm run build:de
+          npm run build:en
+
+  # ==========================================
+  # Job 7: Performance Audit
+  # ==========================================
+  performance-audit:
+    name: ⚡ Performance Audit
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    needs: [build-verification]
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: |
+          npm ci --no-audit --prefer-offline
+
+      - name: 🏗️ Build for Performance Test
+        run: |
+          npm run build:en
+
+      - name: 🚀 Start Test Server
+        run: |
+          npx http-server www/en -p 8080 -s &
+          sleep 5
+
+      - name: ⚡ Run Lighthouse Audit
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          configPath: './lighthouserc.json'
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
+  # ==========================================
+  # Job 8: Deployment Validation (Production-like)
+  # ==========================================
+  deployment-validation:
+    name: 🚀 Deployment Validation
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    needs: [code-quality, unit-tests, build-verification, security-scan]
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: |
+          npm ci --no-audit --prefer-offline
+
+      - name: 🏗️ Production Build
+        run: |
+          npm run build:i18n
+
+      - name: 🔍 Validate Build Output
+        run: |
+          # Überprüfe ob alle erforderlichen Dateien existieren
+          if [ ! -d "www/de" ] || [ ! -d "www/en" ]; then
+            echo "❌ Localized build directories missing"
+            exit 1
+          fi
+          
+          if [ ! -f "www/de/index.html" ] || [ ! -f "www/en/index.html" ]; then
+            echo "❌ Index files missing"
+            exit 1
+          fi
+          
+          echo "✅ Build validation successful"
+
+      - name: 📊 Bundle Size Analysis
+        run: |
+          du -sh www/de/* www/en/* | sort -h
+          
+          # Warnung bei zu großen Bundles
+          BUNDLE_SIZE=$(du -s www/ | cut -f1)
+          if [ $BUNDLE_SIZE -gt 10240 ]; then
+            echo "⚠️ Bundle size is larger than 10MB: ${BUNDLE_SIZE}KB"
+          fi
+
+  # ==========================================
+  # Job 9: Notification & Summary
+  # ==========================================
+  pipeline-summary:
+    name: 📋 Pipeline Summary
+    runs-on: ubuntu-latest
+    if: always() && github.event.pull_request.draft == false
+    needs: [
+      code-quality,
+      unit-tests,
+      build-verification,
+      security-scan,
+      mobile-build,
+      i18n-validation,
+      performance-audit,
+      deployment-validation
+    ]
+    
+    steps:
+      - name: 📊 Generate Summary
+        run: |
+          echo "## 🚀 BetterGS CI/CD Pipeline Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📋 Job Results:" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔍 Code Quality: ${{ needs.code-quality.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 🧪 Unit Tests: ${{ needs.unit-tests.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 🏗️ Build Verification: ${{ needs.build-verification.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔒 Security Scan: ${{ needs.security-scan.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 📱 Mobile Build: ${{ needs.mobile-build.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 🌍 i18n Validation: ${{ needs.i18n-validation.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- ⚡ Performance Audit: ${{ needs.performance-audit.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 🚀 Deployment Validation: ${{ needs.deployment-validation.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Bestimme Gesamtstatus
+          if [[ "${{ needs.code-quality.result }}" == "success" && 
+                "${{ needs.unit-tests.result }}" == "success" && 
+                "${{ needs.build-verification.result }}" == "success" && 
+                "${{ needs.security-scan.result }}" == "success" ]]; then
+            echo "### ✅ Pipeline Status: SUCCESS" >> $GITHUB_STEP_SUMMARY
+            echo "All critical checks passed! This PR is ready for review." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### ❌ Pipeline Status: FAILED" >> $GITHUB_STEP_SUMMARY
+            echo "Some checks failed. Please review and fix the issues." >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: 🎯 Set PR Status
+        if: github.event_name == 'pull_request'
+        run: |
+          if [[ "${{ needs.code-quality.result }}" == "success" && 
+                "${{ needs.unit-tests.result }}" == "success" && 
+                "${{ needs.build-verification.result }}" == "success" ]]; then
+            echo "✅ All checks passed - PR ready for review"
+          else
+            echo "❌ Some checks failed - Please fix issues before review"
+            exit 1
+          fi

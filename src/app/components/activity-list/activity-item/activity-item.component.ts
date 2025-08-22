@@ -16,7 +16,7 @@ import { ApplicationService } from 'src/app/core/services/application.service';
 import { Tracking } from 'src/app/core/models/tracking.model';
 import { Router, RouterLinkWithHref } from '@angular/router';
 import { ElapsedTimePipe } from 'src/app/core/pipes/elapsed-time.pipe';
-import { User } from 'src/app/core/models/user.model';
+import { User } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-activity-item',

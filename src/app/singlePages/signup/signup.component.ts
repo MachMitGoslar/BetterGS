@@ -140,7 +140,7 @@ export class SignupComponent implements OnInit, OnDestroy {
    */
   private checkAuthState() {
     const userSub = this.applicationService.$currentUser.subscribe((user) => {
-      if (user && !user.firestoreUser?.isAnonymous) {
+      if (user && !user.isAnonymous) {
         // User is logged in, redirect to home
         this.router.navigate(['/tabs']);
       }
@@ -202,35 +202,36 @@ export class SignupComponent implements OnInit, OnDestroy {
         duration: 30000, // 30 seconds timeout
       });
       await loading.present();
-
+      
       console.log('Creating account with:', { email, password, displayName });
       
-      // Create account with email, password and display name in one go
-      await this.applicationService.createUserWithEmailAndDisplayName(email, password, displayName);
-
-      await loading.dismiss();
-
+      // Create the user account
+      await this.applicationService.createUserWithEmailAndDisplayName(
+        email,
+        password,
+        displayName
+      );
+      
       // Show success message
       this.notificationService.addNotification(
         'Account created successfully! Welcome to BetterGS.',
         'success'
       );
-
-      // Redirect to home
-      this.router.navigate(['/tabs']);
-    } catch (error: any) {
+      
+      await loading.dismiss();
       this.isLoading = false;
+      
+      // Redirect to tabs after successful signup
+      this.router.navigate(['/tabs']);
+      
+    } catch (error) {
+      this.isLoading = false;
+      console.error('Sign up error:', error);
+      this.handleSignUpError(error);
       
       // Dismiss loading if still present
       this.loadingController.dismiss();
-
-      console.error('Sign up error:', error);
-
-      // Handle specific error messages
-      this.handleSignUpError(error);
     }
-
-    this.isLoading = false;
   }
 
   /**
@@ -238,7 +239,7 @@ export class SignupComponent implements OnInit, OnDestroy {
    */
   private handleSignUpError(error: any) {
     let errorMessage = 'Sign up failed. Please try again.';
-
+    console.log('Sign up error:', error);
     if (error.code) {
       switch (error.code) {
         case 'auth/email-already-in-use':
