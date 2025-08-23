@@ -343,8 +343,7 @@ jobs:
 
       - name: 🏗️ Production Build
         run: |
-          npx ionic build --configuration=production,en
-          npx ionic build --configuration=production,de
+          npx ionic build --configuration=production
 
       - name: 🔍 Validate Build Output
         run: |
