@@ -12,6 +12,10 @@
 
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
+import { Firestore } from '@angular/fire/firestore';
+import { Auth } from '@angular/fire/auth';
+import { Storage } from '@angular/fire/storage';
+import { ModalController } from '@ionic/angular';
 
 // ==========================================
 // Firestore Mock Types and Interfaces
@@ -885,6 +889,14 @@ export class MockAuth {
   }
 
   /**
+   * Mock onAuthStateChanged - returns unsubscribe function
+   */
+  onAuthStateChanged(callback: (user: MockUser | null) => void): () => void {
+    const subscription = this.userSubject.subscribe(callback);
+    return () => subscription.unsubscribe();
+  }
+
+  /**
    * Clear auth state
    */
   clearAuth(): void {
@@ -1016,6 +1028,14 @@ export const FIREBASE_TESTING_PROVIDERS = [
  * @param mockData - Initial data to populate in Firestore
  * @returns Testing module configuration
  */
+// ==========================================
+// Test Configuration Functions
+// ==========================================
+
+/**
+ * Create Firebase testing module with providers and mocks
+ * Provides all necessary Firebase services for testing
+ */
 export function createFirebaseTestingModule(mockData?: {
   [path: string]: any;
 }) {
@@ -1032,15 +1052,21 @@ export function createFirebaseTestingModule(mockData?: {
 
   return {
     providers: [
-      { provide: MockFirestore, useValue: mockFirestore },
-      { provide: MockAuth, useValue: mockAuth },
-      { provide: MockStorage, useValue: mockStorage },
-      { provide: 'Firestore', useValue: mockFirestore },
-      { provide: 'Auth', useValue: mockAuth },
-      { provide: 'Storage', useValue: mockStorage },
+      { provide: Firestore, useValue: mockFirestore },
+      { provide: Auth, useValue: mockAuth },
+      { provide: Storage, useValue: mockStorage },
     ],
     mockFirestore,
     mockAuth,
     mockStorage,
   };
+}
+
+/**
+ * Configure TestBed for standalone components
+ * Handles the imports array for standalone components with Firebase providers
+ */
+export function configureStandaloneComponentTest(component: any): any[] {
+  const firebaseModule = createFirebaseTestingModule();
+  return [component];
 }

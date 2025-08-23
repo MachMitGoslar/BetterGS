@@ -303,12 +303,14 @@ jobs:
       - name: 🚀 Start Test Server
         run: |
           npx http-server www/en -p 8080 -s &
-          sleep 5
+          echo "Waiting for server to start..."
+          sleep 10
+          curl --retry 10 --retry-delay 1 --retry-connrefused http://localhost:8080 || echo "Server check failed"
 
       - name: ⚡ Run Lighthouse Audit
         uses: treosh/lighthouse-ci-action@v10
         with:
-          configPath: './lighthouserc.json'
+          configPath: './lighthouserc.ci.json'
           uploadArtifacts: true
           temporaryPublicStorage: true
 

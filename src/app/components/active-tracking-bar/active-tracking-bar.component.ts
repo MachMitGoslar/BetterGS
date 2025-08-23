@@ -28,27 +28,33 @@ import { TrackingEditModalComponent } from '../tracking-edit-modal/tracking-edit
   imports: [IonTitle, ElapsedTimePipe, IonIcon, CommonModule],
 })
 export class ActiveTrackingBarComponent implements OnInit {
-  $activeTracking: Observable<Tracking | void>;
-  public _activeTracking: Tracking | void = undefined;
+  $activeTracking: Observable<Tracking | undefined>;
+  public _activeTracking?: Tracking;
   public elapsedTime: number = 0;
 
   public applicationService: ApplicationService = inject(ApplicationService);
   public modalController: ModalController = inject(ModalController);
+  private _interval: any | undefined;
+
   constructor() {
-    this.$activeTracking = this.applicationService
-      .$activeTracking as Observable<Tracking | void>;
+    this.$activeTracking = this.applicationService.$activeTracking;
   }
 
   ngOnInit() {
     this.$activeTracking.subscribe((tracking) => {
       this._activeTracking = tracking;
     });
-    setInterval(() => {
-      if (this._activeTracking && this._activeTracking.startDate) {
-        this.elapsedTime =
-          new Date().getTime() - this._activeTracking.startDate.getTime();
-      }
-    }, 100);
+
+    if (this._activeTracking && this._activeTracking.startDate) {
+      this._interval = setInterval(() => {
+        if (this._activeTracking && this._activeTracking.startDate) {
+          this.elapsedTime =
+            new Date().getTime() - this._activeTracking.startDate.getTime();
+        } else {
+          clearInterval(this._interval!);
+        }
+      }, 100);
+    }
   }
 
   async stopTracking(tracking: Tracking | void): Promise<void> {

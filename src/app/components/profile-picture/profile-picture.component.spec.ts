@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
+import { createFirebaseTestingModule } from '../../../testing/firebase-testing-utils';
 
 import { ProfilePictureComponent } from './profile-picture.component';
 
@@ -8,9 +9,10 @@ describe('ProfilePictureComponent', () => {
   let fixture: ComponentFixture<ProfilePictureComponent>;
 
   beforeEach(waitForAsync(() => {
+    const firebaseModule = createFirebaseTestingModule();
     TestBed.configureTestingModule({
-      declarations: [ProfilePictureComponent],
-      imports: [IonicModule.forRoot()],
+      imports: [IonicModule.forRoot(), ProfilePictureComponent],
+      providers: firebaseModule.providers,
     }).compileComponents();
 
     fixture = TestBed.createComponent(ProfilePictureComponent);

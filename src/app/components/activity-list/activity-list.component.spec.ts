@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
+import { createFirebaseTestingModule } from '../../../testing/firebase-testing-utils';
 
 import { ActivityListComponent } from './activity-list.component';
 
@@ -8,9 +9,10 @@ describe('ActivityListComponent', () => {
   let fixture: ComponentFixture<ActivityListComponent>;
 
   beforeEach(waitForAsync(() => {
+    const firebaseModule = createFirebaseTestingModule();
     TestBed.configureTestingModule({
-      declarations: [ActivityListComponent],
-      imports: [IonicModule.forRoot()],
+      imports: [IonicModule.forRoot(), ActivityListComponent],
+      providers: firebaseModule.providers,
     }).compileComponents();
 
     fixture = TestBed.createComponent(ActivityListComponent);

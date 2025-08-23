@@ -11,6 +11,8 @@
  */
 
 import { BehaviorSubject, Observable, of } from 'rxjs';
+import { TestBed } from '@angular/core/testing';
+import { IonicModule } from '@ionic/angular';
 import { createFirebaseTestingModule } from './firebase-testing-utils';
 
 // ==========================================
@@ -653,3 +655,23 @@ export const TestInteractions = {
     element.dispatchEvent(new Event('click', { bubbles: true }));
   },
 };
+
+/**
+ * Standard test configuration for standalone components
+ *
+ * @param component - The standalone component to test
+ * @param additionalImports - Additional imports needed for the component
+ * @param additionalProviders - Additional providers needed for the component
+ */
+export function configureStandaloneComponentTest<T>(
+  component: any,
+  additionalImports: any[] = [],
+  additionalProviders: any[] = []
+): Promise<void> {
+  const firebaseModule = createFirebaseTestingModule();
+
+  return TestBed.configureTestingModule({
+    imports: [component, IonicModule.forRoot(), ...additionalImports],
+    providers: [...firebaseModule.providers, ...additionalProviders],
+  }).compileComponents();
+}

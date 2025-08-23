@@ -95,7 +95,7 @@ export class ApplicationService {
    * Observable stream of active tracking session
    * @description Provides real-time access to current tracking state
    */
-  $activeTracking = new ReplaySubject<Tracking | void>(1);
+  $activeTracking = new ReplaySubject<Tracking | undefined>(1);
 
   // ========================================
   // PUBLIC PROPERTIES
@@ -123,7 +123,7 @@ export class ApplicationService {
    * @description Internal reference to active tracking
    * @private
    */
-  _activeTracking: Tracking | void = undefined;
+  _activeTracking?: Tracking;
 
   // ========================================
   // ADDITIONAL PROPERTIES
@@ -942,9 +942,9 @@ export class ApplicationService {
 
     try {
       if (this._activeTracking) {
-        this._activeTracking = this.trackingService.stopTracking(
-          this._activeTracking
-        );
+        this.trackingService.stopTracking(this._activeTracking);
+        this._activeTracking = undefined;
+        this.$activeTracking.next(this._activeTracking);
         this.notificationService.addNotification(
           this.i18nService.getTranslation('success.tracking.stopped'),
           'success'
@@ -1000,9 +1000,8 @@ export class ApplicationService {
     }
 
     try {
-      this._activeTracking = this.trackingService.stopTracking(
-        this._activeTracking
-      );
+      this.trackingService.stopTracking(this._activeTracking);
+      this._activeTracking = undefined;
       this.$activeTracking.next(this._activeTracking);
 
       this.notificationService.addNotification(
