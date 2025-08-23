@@ -532,10 +532,6 @@ export class ProfilePage implements OnInit, OnDestroy {
         'danger'
       );
     } finally {
-      this.notificationService.addNotification(
-        'Profile updated successfully!',
-        'success'
-      );
       this.isLoading = false;
     }
   }
