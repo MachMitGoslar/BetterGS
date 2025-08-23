@@ -337,6 +337,10 @@ jobs:
         run: |
           npm ci --no-audit --prefer-offline
 
+      - name: 📦 Install Ionic CLI
+        run: |
+          npm install @ionic/cli --no-audit --prefer-offline
+
       - name: 🏗️ Production Build
         run: |
           ionic build --configuration=production,en
