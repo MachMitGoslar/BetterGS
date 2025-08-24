@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { createFirebaseTestingModule } from '../../testing/firebase-testing-utils';
 
 import { TabsPage } from './tabs.page';
 
@@ -8,9 +9,10 @@ describe('TabsPage', () => {
   let fixture: ComponentFixture<TabsPage>;
 
   beforeEach(async () => {
+    const firebaseModule = createFirebaseTestingModule();
     await TestBed.configureTestingModule({
       imports: [TabsPage],
-      providers: [provideRouter([])]
+      providers: [provideRouter([]), ...firebaseModule.providers],
     }).compileComponents();
   });
 

@@ -11,7 +11,9 @@ export const routes: Routes = [
       {
         path: 'my_activities',
         loadComponent: () =>
-          import('./my_activities/my_activities.page').then((m) => m.MyActivitiesPage),
+          import('./my_activities/my_activities.page').then(
+            (m) => m.MyActivitiesPage
+          ),
       },
       {
         path: 'ranking',
@@ -27,16 +29,15 @@ export const routes: Routes = [
         path: 'admin',
         loadComponent: () =>
           import('./admin-page/admin-page.page').then((m) => m.AdminPagePage),
-          canActivate: [() => import('../core/guards/admin.guard').then(m => m.adminGuard)],
+        canActivate: [
+          () => import('../core/guards/admin.guard').then((m) => m.adminGuard),
+        ],
       },
       {
         path: '',
         redirectTo: '/tabs/my_activities',
         pathMatch: 'full',
-
       },
-
-      
     ],
   },
   {
@@ -44,6 +45,4 @@ export const routes: Routes = [
     redirectTo: '/tabs/my_activities',
     pathMatch: 'full',
   },
-
-
 ];

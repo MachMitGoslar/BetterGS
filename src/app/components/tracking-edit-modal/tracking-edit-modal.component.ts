@@ -1,8 +1,20 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewChild,
+  ElementRef,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { 
-  ModalController, 
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import {
+  ModalController,
   ToastController,
   IonHeader,
   IonToolbar,
@@ -20,7 +32,7 @@ import {
   IonProgressBar,
   IonLabel,
   IonFooter,
-  IonSpinner
+  IonSpinner,
 } from '@ionic/angular/standalone';
 import { Tracking } from 'src/app/core/models/tracking.model';
 import { TrackingService } from 'src/app/core/services/tracking.service';
@@ -51,11 +63,10 @@ import { NotificationService } from 'src/app/core/services/notification.service'
     IonProgressBar,
     IonLabel,
     IonFooter,
-    IonSpinner
-  ]
+    IonSpinner,
+  ],
 })
 export class TrackingEditModalComponent implements OnInit {
-
   @Input() tracking: Tracking | undefined;
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
@@ -68,14 +79,12 @@ export class TrackingEditModalComponent implements OnInit {
 
   private readonly maxFileSize = 5 * 1024 * 1024; // 5MB
   private readonly allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-
-  constructor(
-    private modalController: ModalController,
-    private toastController: ToastController,
-    private formBuilder: FormBuilder,
-    private trackingService: TrackingService,
-    public notificationService: NotificationService
-  ) {
+  private modalController: ModalController = inject(ModalController);
+  private toastController: ToastController = inject(ToastController);
+  private formBuilder: FormBuilder = inject(FormBuilder);
+  private trackingService: TrackingService = inject(TrackingService);
+  public notificationService: NotificationService = inject(NotificationService);
+  constructor() {
     this.initializeForm();
   }
 
@@ -88,7 +97,7 @@ export class TrackingEditModalComponent implements OnInit {
    */
   private initializeForm() {
     this.trackingForm = this.formBuilder.group({
-      notes: ['', [Validators.maxLength(500)]]
+      notes: ['', [Validators.maxLength(500)]],
     });
   }
 
@@ -96,12 +105,12 @@ export class TrackingEditModalComponent implements OnInit {
    * Loads existing tracking data into the form
    */
   private loadTrackingData() {
-    console.log(this.tracking)
+    console.log(this.tracking);
     if (this.tracking) {
       this.trackingForm.patchValue({
-        notes: this.tracking.notes || ''
+        notes: this.tracking.notes || '',
       });
-      
+
       // Load existing image if available
       if (this.tracking.imageUrl) {
         this.selectedImage = this.tracking.imageUrl;
@@ -184,12 +193,11 @@ export class TrackingEditModalComponent implements OnInit {
    */
   private readFileAsDataURL(file: File) {
     const reader = new FileReader();
-      let metadata = {
-        contentType: file.type,
-        name: file.name,
-        size: file.size,
-        
-      } as any;
+    let metadata = {
+      contentType: file.type,
+      name: file.name,
+      size: file.size,
+    } as any;
     reader.onload = (e) => {
       this.selectedImage = e.target?.result as string;
       this.metadata = metadata; // Store metadata for upload
@@ -208,10 +216,17 @@ export class TrackingEditModalComponent implements OnInit {
    */
   private async uploadImage() {
     try {
-      this.tracking!.imageUrl = await this.trackingService.uploadImage(this.selectedImage!, this.tracking!, this.metadata!);
+      this.tracking!.imageUrl = await this.trackingService.uploadImage(
+        this.selectedImage!,
+        this.tracking!,
+        this.metadata!
+      );
     } catch (error) {
       console.error('Error uploading image:', error);
-      await this.notificationService.addNotification("Fehler beim Hochladen des Bildes: " + error, 'danger');
+      await this.notificationService.addNotification(
+        'Fehler beim Hochladen des Bildes: ' + error,
+        'danger'
+      );
     }
   }
 
@@ -223,7 +238,7 @@ export class TrackingEditModalComponent implements OnInit {
     this.selectedImage = null;
     this.uploadProgress = 0;
     this.uploadError = null;
-    
+
     // Clear the file input
     if (this.fileInput) {
       this.fileInput.nativeElement.value = '';
@@ -244,27 +259,43 @@ export class TrackingEditModalComponent implements OnInit {
       // Update tracking object
       const formData = this.trackingForm.value;
       this.tracking.notes = formData.notes;
-      
+
       // If there's a new image, it would be uploaded here
-      if (this.selectedImage && this.selectedImage !== this.tracking.imageUrl && this.metadata) {
+      if (
+        this.selectedImage &&
+        this.selectedImage !== this.tracking.imageUrl &&
+        this.metadata
+      ) {
         try {
-          this.tracking.imageUrl = await this.trackingService.uploadImage(this.selectedImage, this.tracking, this.metadata);
+          this.tracking.imageUrl = await this.trackingService.uploadImage(
+            this.selectedImage,
+            this.tracking,
+            this.metadata
+          );
         } catch (error) {
           this.uploadError = 'Fehler beim Hochladen des Bildes: ' + error;
-          await this.notificationService.addNotification(this.uploadError, 'danger');
-          return
+          await this.notificationService.addNotification(
+            this.uploadError,
+            'danger'
+          );
+          return;
         }
       }
 
-      this.trackingService.saveToDB(this.tracking)
+      this.trackingService.saveToDB(this.tracking);
 
-      await this.notificationService.addNotification('Tracking erfolgreich gespeichert!', 'success');
+      await this.notificationService.addNotification(
+        'Tracking erfolgreich gespeichert!',
+        'success'
+      );
       this.modalController.dismiss(this.tracking, 'saved');
-
     } catch (error) {
       console.error('Error saving tracking:', error);
       this.uploadError = 'Fehler beim Speichern. Bitte versuche es erneut.';
-      await this.notificationService.addNotification(this.uploadError, 'danger');
+      await this.notificationService.addNotification(
+        this.uploadError,
+        'danger'
+      );
     } finally {
       this.isLoading = false;
     }

@@ -1,5 +1,4 @@
 .tracking-container {
-  
   max-width: 800px;
   margin: -60px auto 10px;
 }
@@ -7,7 +6,7 @@
 .current-activity-card {
   margin-bottom: 20px;
   text-align: center;
-  
+
   .activity-icon {
     font-size: 2rem;
     margin-right: 8px;
@@ -20,24 +19,22 @@
   aspect-ratio: 24/9;
 }
 ion-card-title {
-    
-    font-size: 1.5rem;
-    font-weight: bold;   
-
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .timer-display {
   text-align: center;
   padding: 20px 0;
-  
+
   .elapsed-time {
     font-size: min(2.5rem, 20vw);
     font-weight: bold;
     color: var(--ion-color-primary);
     margin: 0;
-    font-family: 'Courier New', monospace;
+    font-family: "Courier New", monospace;
   }
-  
+
   .timer-status {
     font-size: 1rem;
     color: var(--ion-color-medium);
@@ -50,27 +47,27 @@ ion-card-title {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  
+
   .control-button {
     height: 60px;
     font-size: 1.2rem;
     font-weight: bold;
-    
+
     ion-icon {
       font-size: 1.5rem;
     }
   }
-  
+
   .start-button {
     --background: var(--ion-color-success);
     --color: white;
   }
-  
+
   .stop-button {
     --background: var(--ion-color-danger);
     --color: white;
   }
-  
+
   .pause-button {
     --background: var(--ion-color-warning);
     --color: white;
@@ -79,17 +76,17 @@ ion-card-title {
 
 .session-info {
   margin-top: 20px;
-  
+
   ion-item {
     --padding-start: 0;
     --inner-padding-end: 0;
   }
-  
+
   h3 {
     font-weight: 600;
     margin-bottom: 4px;
   }
-  
+
   p {
     color: var(--ion-color-medium);
     margin: 0;
@@ -101,7 +98,7 @@ ion-card-title {
   .control-buttons {
     flex-direction: row;
     justify-content: center;
-    
+
     .control-button {
       width: 200px;
       margin: 0 8px;

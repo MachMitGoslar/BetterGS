@@ -21,31 +21,31 @@ export interface Notification {
 
 /**
  * NotificationService - User Notification Management Service
- * 
+ *
  * This service handles all notification-related operations in the BetterGS application,
  * including both in-app notifications and local device notifications. It provides
  * a centralized system for user feedback and engagement.
- * 
+ *
  * Key Responsibilities:
  * - In-app notification management (success, info, warning, danger)
  * - Local device notification scheduling and management
  * - Notification state tracking (displayed/undisplayed)
  * - Notification removal and cleanup
  * - Real-time notification streaming to components
- * 
+ *
  * Architecture:
  * - Uses ReplaySubject for reactive notification streams
  * - Integrates with Capacitor Local Notifications plugin
  * - Maintains internal notification state with unique IDs
  * - Provides type-safe notification interfaces
  * - Supports both immediate and scheduled notifications
- * 
+ *
  * Notification Types:
  * - success: Positive feedback (green)
  * - info: Informational messages (blue)
  * - warning: Cautionary messages (yellow)
  * - danger: Error messages (red)
- * 
+ *
  * @author BetterGS Development Team
  * @version 2.0.0
  * @since 2025-08-22
@@ -55,7 +55,6 @@ export interface Notification {
   providedIn: 'root',
 })
 export class NotificationService {
-
   // ========================================
   // PRIVATE PROPERTIES
   // ========================================
@@ -98,7 +97,7 @@ export class NotificationService {
 
   /**
    * NotificationService Constructor
-   * 
+   *
    * Initializes the service with empty notification state.
    */
   constructor() {}
@@ -109,10 +108,10 @@ export class NotificationService {
 
   /**
    * Add a new in-app notification
-   * 
+   *
    * Creates a new notification with a unique ID and adds it to the
    * notification stream for display in the UI.
-   * 
+   *
    * @public
    * @param msg - The notification message to display
    * @param type - The type of notification (success, info, warning, danger)
@@ -129,24 +128,24 @@ export class NotificationService {
       message: msg,
       timestamp: new Date(),
       type: type,
-      displayed: false
+      displayed: false,
     });
     this.$notifications.next(this._notifications);
   }
 
   /**
    * Mark notification as displayed
-   * 
+   *
    * Updates the notification state to indicate it has been shown to the user.
    * This helps track which notifications still need attention.
-   * 
+   *
    * @public
    * @param id - The unique ID of the notification to mark as displayed
    * @returns {void}
    * @since 1.0.0
    */
   markNotificationAsDisplayed(id: number): void {
-    const notification = this._notifications.find(n => n.id === id);
+    const notification = this._notifications.find((n) => n.id === id);
     if (notification) {
       notification.displayed = true;
     }
@@ -154,23 +153,23 @@ export class NotificationService {
 
   /**
    * Get undisplayed notifications
-   * 
+   *
    * Returns all notifications that haven't been marked as displayed yet.
    * Useful for showing badges or highlighting unread notifications.
-   * 
+   *
    * @public
    * @returns {Notification[]} Array of undisplayed notifications
    * @since 1.0.0
    */
   getUndisplayedNotifications(): Notification[] {
-    return this._notifications.filter(n => !n.displayed);
+    return this._notifications.filter((n) => !n.displayed);
   }
 
   /**
    * Remove notification
-   * 
+   *
    * Removes a notification from the system and updates the notification stream.
-   * 
+   *
    * @public
    * @param id - The unique ID of the notification to remove
    * @returns {void}
@@ -187,10 +186,10 @@ export class NotificationService {
 
   /**
    * Schedule local device notifications
-   * 
+   *
    * Schedules notifications to be displayed by the device even when
    * the app is not in the foreground. Useful for reminders and alerts.
-   * 
+   *
    * @public
    * @param notification - Array of notification schemas to schedule
    * @returns {Promise<void>} Promise that resolves when notifications are scheduled
@@ -218,10 +217,10 @@ export class NotificationService {
 
   /**
    * Cancel local device notifications
-   * 
+   *
    * Cancels previously scheduled local notifications to prevent
    * them from being displayed.
-   * 
+   *
    * @public
    * @param notificationId - The ID of the notification to cancel
    * @returns {Promise<void>} Promise that resolves when notifications are cancelled
@@ -232,14 +231,13 @@ export class NotificationService {
       (n) => n.notifications
     );
     const notificationArray: LocalNotificationDescriptor[] = [];
-    
+
     notifications.forEach((n) => {
       n.forEach((nn) => {
         notificationArray.push(nn);
       });
     });
-    
+
     await LocalNotifications.cancel({ notifications: notificationArray });
   }
-
 }

@@ -1,10 +1,18 @@
-<ion-item *ngIf="activity" detail="true" button [routerLink]="['/tracking', activity.id]">
-  <ion-icon slot="start" [name]="activity.icon || 'bicycle'" [color]="color"></ion-icon>
+<ion-item
+  *ngIf="activity"
+  detail="true"
+  button
+  [routerLink]="['/tracking', activity.id]"
+>
+  <ion-icon
+    slot="start"
+    [name]="activity.icon || 'bicycle'"
+    [color]="color"
+  ></ion-icon>
   <ion-label>
     <h2>{{ activity.title }}</h2>
     <p>{{ activity.description }}</p>
-    <p> {{activity.timeSpend | elapsedTime}}</p>
+    <p>{{ activity.timeSpend | elapsedTime }}</p>
     <!-- <p><small>{{ activity?.date | date }}</small></p> -->
   </ion-label>
-
 </ion-item>

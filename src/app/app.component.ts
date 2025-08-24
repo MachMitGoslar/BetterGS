@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
-import { NotificationComponent } from "./components/notification/notification.component";
+import { NotificationComponent } from './components/notification/notification.component';
 import { ApplicationService } from './core/services/application.service';
-import { ActiveTrackingBarComponent } from "./components/active-tracking-bar/active-tracking-bar.component";
+import { ActiveTrackingBarComponent } from './components/active-tracking-bar/active-tracking-bar.component';
 
 @Component({
   selector: 'app-root',
@@ -10,5 +10,7 @@ import { ActiveTrackingBarComponent } from "./components/active-tracking-bar/act
   imports: [IonApp, IonRouterOutlet, NotificationComponent],
 })
 export class AppComponent {
-  constructor(public appService: ApplicationService) {}
+  public appService = inject(ApplicationService);
+
+  constructor() {}
 }

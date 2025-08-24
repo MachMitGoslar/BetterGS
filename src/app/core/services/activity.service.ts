@@ -11,36 +11,43 @@ import {
   collectionSnapshots,
   deleteDoc,
 } from '@angular/fire/firestore';
-import { defaultIfEmpty, map, Observable, ReplaySubject, Subscription, tap } from 'rxjs';
+import {
+  defaultIfEmpty,
+  map,
+  Observable,
+  ReplaySubject,
+  Subscription,
+  tap,
+} from 'rxjs';
 import { Activity } from '../models/activity.model';
 import { I18nService } from './i18n.service';
 
 /**
  * ActivityService - Activity Data Management Service
- * 
+ *
  * This service is responsible for managing all activity-related data operations
  * in the BetterGS application. It provides a clean interface for CRUD operations
  * on activities and maintains real-time synchronization with Firestore.
- * 
+ *
  * Key Responsibilities:
  * - Activity CRUD operations (Create, Read, Update, Delete)
  * - Real-time activity data synchronization with Firestore
  * - User-specific activity data management
  * - Optimistic UI updates for better user experience
  * - Error handling and data consistency
- * 
+ *
  * Architecture:
  * - Uses ReplaySubject for reactive data streams
  * - Implements optimistic updates for immediate UI feedback
  * - Maintains local cache for performance optimization
  * - Provides both individual and collection-based operations
- * 
+ *
  * Data Flow:
  * - Components subscribe to $activities observable
  * - Service maintains internal _activities array
  * - Firestore operations update both local and remote state
  * - Real-time listeners keep data synchronized
- * 
+ *
  * @author BetterGS Development Team
  * @version 2.0.0
  * @since 2025-08-22
@@ -50,7 +57,6 @@ import { I18nService } from './i18n.service';
   providedIn: 'root',
 })
 export class ActivityService {
-
   // ========================================
   // PUBLIC OBSERVABLES
   // ========================================
@@ -93,13 +99,13 @@ export class ActivityService {
 
   /**
    * ActivityService Constructor
-   * 
+   *
    * Initializes the service with required dependencies for activity management.
-   * 
+   *
    * @param i18nService - Internationalization service for error messages
    */
-  constructor(private i18nService: I18nService) {
-  }
+  private i18nService: I18nService = inject(I18nService);
+  constructor() {}
 
   // ========================================
   // DATA LOADING & SYNCHRONIZATION
@@ -107,19 +113,21 @@ export class ActivityService {
 
   /**
    * Initialize activities data stream from Firestore
-   * 
+   *
    * Sets up real-time listener for activities collection changes and
    * automatically updates the local cache and observable stream.
-   * 
+   *
    * @public
    * @returns {void}
    * @since 1.0.0
    */
   getActivities(): void {
-    let subscription = collectionSnapshots(collection(this.firestore, 'activities')).subscribe({
+    let subscription = collectionSnapshots(
+      collection(this.firestore, 'activities')
+    ).subscribe({
       next: (snapshots) => {
         console.log('Activities collection changed:', snapshots);
-        
+
         // Map Firestore document changes to Activity model instances
         this._activities = snapshots.map((snapshot) => {
           const id = snapshot.id;
@@ -128,18 +136,18 @@ export class ActivityService {
           activity.ref = snapshot.ref;
           return activity;
         });
-        
+
         console.log('Mapped activities:', this._activities);
-        
+
         // Notify subscribers of the updated activities list
         this.$activities.next(this._activities);
       },
       error: (error) => {
         console.error('Error fetching activities:', error);
         this.$activities.next([]);
-      }
+      },
     });
-    
+
     this.subscription.push(subscription);
   }
 
@@ -149,10 +157,10 @@ export class ActivityService {
 
   /**
    * Get current activities array
-   * 
+   *
    * Provides direct access to the cached activities array.
    * Use this for immediate access without subscribing to the observable.
-   * 
+   *
    * @public
    * @returns {Activity[]} Array of Activity objects
    * @since 1.0.0
@@ -163,9 +171,9 @@ export class ActivityService {
 
   /**
    * Find and return a specific activity by its ID
-   * 
+   *
    * Searches the local cache for an activity with the specified ID.
-   * 
+   *
    * @public
    * @param id - The unique identifier of the activity
    * @returns {Activity | undefined} The activity if found, undefined otherwise
@@ -181,11 +189,11 @@ export class ActivityService {
 
   /**
    * Add a new activity to the system
-   * 
+   *
    * Creates a new activity in Firestore with server timestamps.
    * The activity is automatically added to the local cache through
    * the real-time listener.
-   * 
+   *
    * @public
    * @param activity - The Activity object to add
    * @returns {Promise<void>} Promise that resolves when activity is created
@@ -212,10 +220,10 @@ export class ActivityService {
 
   /**
    * Update an existing activity in the system
-   * 
+   *
    * Updates an existing activity in Firestore with server timestamp.
    * The local cache is automatically updated through the real-time listener.
-   * 
+   *
    * @public
    * @param activity - The Activity object with updated data
    * @returns {Promise<void>} Promise that resolves when activity is updated
@@ -237,16 +245,18 @@ export class ActivityService {
         throw error;
       }
     } else {
-      throw new Error(this.i18nService.getTranslation('activity.error.updateFailed'));
+      throw new Error(
+        this.i18nService.getTranslation('activity.error.updateFailed')
+      );
     }
   }
 
   /**
    * Delete an activity from the system
-   * 
+   *
    * Removes an activity from both local cache and Firestore.
    * Implements optimistic updates for immediate UI feedback with rollback on error.
-   * 
+   *
    * @public
    * @param activityId - The ID of the activity to delete
    * @returns {Promise<void>} Promise that resolves when activity is deleted
@@ -259,7 +269,9 @@ export class ActivityService {
     );
 
     if (activityIndex === -1) {
-      throw new Error(this.i18nService.getTranslation('activity.error.notFound'));
+      throw new Error(
+        this.i18nService.getTranslation('activity.error.notFound')
+      );
     }
 
     const activity = this._activities[activityIndex];
@@ -296,10 +308,10 @@ export class ActivityService {
 
   /**
    * Get activities for a specific user
-   * 
+   *
    * Retrieves user-specific activity data including tracking information
    * such as time spent and active status for each activity.
-   * 
+   *
    * @public
    * @param user_id - The ID of the user to get activities for
    * @returns {Observable<Activity[]>} Stream of user-specific activities
@@ -318,10 +330,10 @@ export class ActivityService {
       map((change) => {
         console.log('Activities for user changed:', change);
         console.log('Activities for user:', this._activities);
-        
+
         change.map((doc) => {
           const data = doc.data();
-          
+
           this._activities.map((activity) => {
             if (activity.id === doc.id) {
               activity.ref = doc.ref; // Update reference to the document
@@ -330,7 +342,7 @@ export class ActivityService {
             }
           });
         });
-        
+
         return this._activities;
       })
     );
@@ -342,10 +354,10 @@ export class ActivityService {
 
   /**
    * Clean up service resources
-   * 
+   *
    * Unsubscribes from all active subscriptions to prevent memory leaks.
    * Should be called when the service is no longer needed.
-   * 
+   *
    * @public
    * @returns {void}
    * @since 1.0.0
@@ -356,5 +368,4 @@ export class ActivityService {
     }
     console.log('ActivityService subscription destroyed');
   }
-
 }

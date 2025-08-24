@@ -15,15 +15,15 @@
 }
 
 @keyframes gradient {
-	0% {
-		background-position: 0% 50%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 @keyframes pulse-glow {
@@ -44,38 +44,43 @@
   justify-content: center;
   align-items: center;
   display: flex;
-  background: linear-gradient(90deg, var(--ion-color-success-tint), var(--ion-color-success-shade));
+  background: linear-gradient(
+    90deg,
+    var(--ion-color-success-tint),
+    var(--ion-color-success-shade)
+  );
   background-size: 400% 400%;
   color: white;
   // Main pulsing background
   animation: gradient 2s ease-in-out infinite;
   width: 100%;
-  
+
   // Add a subtle border
   border-bottom: 2px solid rgba(255, 255, 255, 0.3);
-  
+
   // Ensure content is visible over the background
-  ion-title, ion-icon, ion-button {
+  ion-title,
+  ion-icon,
+  ion-button {
     position: relative;
     z-index: 2;
   }
-  
+
   // Style the tracking text
   .tracking-text {
     font-weight: 600;
     font-size: 1rem;
     z-index: 20;
   }
-  
-  .tracking_stopButton {
 
+  .tracking_stopButton {
     width: 40px;
     height: 40px;
     margin: 10px;
     ion-icon {
       font-size: 1.5rem;
     }
-    
+
     &:hover {
       --background: rgba(255, 255, 255, 0.3);
       box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
@@ -92,10 +97,9 @@
     animation: pulse-glow 2s ease-in-out infinite;
   }
 
-  
   // Add a subtle animated overlay for extra visual appeal
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: -100%;
@@ -141,7 +145,7 @@
       box-shadow: 0 0 10px rgba(13, 143, 75, 0.6);
     }
   }
-  
+
   .tracking_bar {
     // Apply the dark mode animation
     animation: pulse-green-dark 2s ease-in-out infinite;
@@ -154,13 +158,13 @@
     animation: none;
     background: linear-gradient(90deg, #10dc60, #28e070);
     box-shadow: 0 0 10px rgba(16, 220, 96, 0.5);
-    
+
     .tracking-text,
     .tracking-icon {
       animation: none;
       text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
     }
-    
+
     &::before {
       animation: none;
       display: none;

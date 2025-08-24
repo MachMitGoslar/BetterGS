@@ -40,11 +40,11 @@ export interface ActivtiyTrackings {
 
 /**
  * TrackingService - Activity Tracking Management Service
- * 
+ *
  * This service handles all tracking-related operations in the BetterGS application,
  * including starting/stopping tracking sessions, saving tracking data to Firestore,
  * and managing tracking-related media uploads.
- * 
+ *
  * Key Responsibilities:
  * - Activity tracking session management (start/stop)
  * - Tracking data persistence to Firestore
@@ -52,21 +52,21 @@ export interface ActivtiyTrackings {
  * - Local notification scheduling for active tracking
  * - User statistics aggregation (total time, tracking count)
  * - Activity-specific tracking data retrieval
- * 
+ *
  * Architecture:
  * - Integrates with Firestore for data persistence
  * - Uses Firebase Storage for image uploads
  * - Implements batch operations for data consistency
  * - Manages local notifications for user engagement
  * - Provides reactive data streams for real-time updates
- * 
+ *
  * Data Flow:
  * - Components call start/stop tracking methods
  * - Service manages tracking state and timestamps
  * - Data is persisted using batch operations
  * - Statistics are automatically updated
  * - Local notifications keep users informed
- * 
+ *
  * @author BetterGS Development Team
  * @version 2.0.0
  * @since 2025-08-22
@@ -76,7 +76,6 @@ export interface ActivtiyTrackings {
   providedIn: 'root',
 })
 export class TrackingService {
-
   // ========================================
   // PUBLIC OBSERVABLES
   // ========================================
@@ -144,7 +143,7 @@ export class TrackingService {
 
   /**
    * TrackingService Constructor
-   * 
+   *
    * Initializes the service with empty tracking data and sets up
    * the initial state for tracking management.
    */
@@ -160,10 +159,10 @@ export class TrackingService {
 
   /**
    * Get tracking sessions for a specific activity
-   * 
+   *
    * Retrieves all tracking sessions for a given activity and user,
    * sorted by start date in descending order (most recent first).
-   * 
+   *
    * @public
    * @param user - The user ID to get trackings for
    * @param activityRef - Reference to the activity document
@@ -206,10 +205,10 @@ export class TrackingService {
 
   /**
    * Start tracking an activity
-   * 
+   *
    * Initiates a new tracking session for the specified activity and user.
    * Schedules local notifications to remind user about active tracking.
-   * 
+   *
    * @public
    * @param activity - The activity to start tracking
    * @param user - The user who is starting the tracking
@@ -224,12 +223,12 @@ export class TrackingService {
           'tracking.localNotifications.startTracking'
         ),
         body: 'Dein Tracking für ' + activity.title + ' läuft noch.',
-        schedule: { at: new Date(Date.now() + (60 * 1000)) }, // Schedule for 1 minute later
+        schedule: { at: new Date(Date.now() + 60 * 1000) }, // Schedule for 1 minute later
       },
     ];
-    
+
     this.notificationService.scheduleLocalNotifications(notifications);
-    
+
     return Tracking.startTracking(
       activity.ref!,
       doc(this.firestore, 'users', user.uid)
@@ -238,10 +237,10 @@ export class TrackingService {
 
   /**
    * Stop tracking session
-   * 
+   *
    * Ends the current tracking session by setting end date and
    * marking it as inactive. Validates required references before stopping.
-   * 
+   *
    * @public
    * @param tracking - The tracking session to stop
    * @returns {void}
@@ -254,13 +253,13 @@ export class TrackingService {
         this.i18nService.getTranslation('tracking.error.userRefRequired')
       );
     }
-    
+
     if (tracking.activityRef === undefined || tracking.activityRef === null) {
       throw new Error(
         this.i18nService.getTranslation('tracking.error.activityRefRequired')
       );
     }
-    
+
     tracking.endDate = new Date();
     tracking.is_active = false;
   }
@@ -271,10 +270,10 @@ export class TrackingService {
 
   /**
    * Save tracking data to Firestore
-   * 
+   *
    * Persists tracking session data to Firestore using batch operations
    * for consistency. Updates user statistics and activity duration.
-   * 
+   *
    * @public
    * @param tracking - The tracking session to save
    * @returns {void}
@@ -287,7 +286,7 @@ export class TrackingService {
         this.i18nService.getTranslation('tracking.error.userRefRequired')
       );
     }
-    
+
     if (tracking.activityRef === undefined || tracking.activityRef === null) {
       throw new Error(
         this.i18nService.getTranslation('tracking.error.activityRefRequired')
@@ -338,11 +337,7 @@ export class TrackingService {
 
     // Update user global statistics
     batch.set(
-      doc(
-        this.firestore,
-        'user_profile',
-        tracking.userRef.id
-      ),
+      doc(this.firestore, 'user_profile', tracking.userRef.id),
       {
         trackedTime: increment(tracking.duration),
         total_trackings: increment(1),
@@ -368,10 +363,10 @@ export class TrackingService {
 
   /**
    * Upload image for tracking session
-   * 
+   *
    * Uploads a base64 encoded image to Firebase Storage and associates
    * it with the tracking session. Updates tracking object with image URL.
-   * 
+   *
    * @public
    * @param file_string - Base64 encoded image string
    * @param tracking - The tracking session to associate the image with
@@ -399,9 +394,9 @@ export class TrackingService {
         this.storage,
         `user_profile/${tracking.userRef.id}/activities/${tracking.activityRef.id}/trackings/${tracking.id}`
       );
-      
+
       console.log('Uploading image to:', storageRef.fullPath);
-      
+
       uploadString(storageRef, file_string, StringFormat.DATA_URL, metadata)
         .then((snapshot) => {
           getDownloadURL(snapshot.ref)
@@ -418,5 +413,4 @@ export class TrackingService {
         });
     });
   }
-
 }

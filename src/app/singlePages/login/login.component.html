@@ -1,12 +1,12 @@
-
-
 <ion-content [fullscreen]="true" class="login-content">
   <div class="login-container">
     <!-- Logo/Brand Section -->
     <div class="brand-section">
       <ion-icon name="trophy-outline" class="brand-icon"></ion-icon>
       <h1 class="brand-title">BetterGS</h1>
-      <p class="brand-subtitle" i18n="@@login.brand.subtitle">Track your activities and improve your performance</p>
+      <p class="brand-subtitle" i18n="@@login.brand.subtitle">
+        Track your activities and improve your performance
+      </p>
     </div>
 
     <!-- Login Form -->
@@ -15,7 +15,9 @@
         <ion-card-content>
           <div class="form-section">
             <h2 i18n="@@login.welcome.title">Welcome Back</h2>
-            <p class="form-subtitle" i18n="@@login.welcome.subtitle">Sign in to your account</p>
+            <p class="form-subtitle" i18n="@@login.welcome.subtitle">
+              Sign in to your account
+            </p>
 
             <!-- Email Input -->
             <ion-item class="form-item" [class.error]="isFieldInvalid('email')">
@@ -32,12 +34,17 @@
             </ion-item>
             <div class="error-message" *ngIf="isFieldInvalid('email')">
               <ion-text color="danger">
-                <small i18n="@@validation.email.required">Please enter a valid email address</small>
+                <small i18n="@@validation.email.required"
+                  >Please enter a valid email address</small
+                >
               </ion-text>
             </div>
 
             <!-- Password Input -->
-            <ion-item class="form-item" [class.error]="isFieldInvalid('password')">
+            <ion-item
+              class="form-item"
+              [class.error]="isFieldInvalid('password')"
+            >
               <ion-input
                 formControlName="password"
                 [type]="showPassword ? 'text' : 'password'"
@@ -53,24 +60,30 @@
                   (click)="togglePasswordVisibility()"
                   type="button"
                 >
-                  <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+                  <ion-icon
+                    [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"
+                  ></ion-icon>
                 </ion-button>
               </ion-input>
             </ion-item>
             <div class="error-message" *ngIf="isFieldInvalid('password')">
               <ion-text color="danger">
-                <small i18n="@@validation.password.required">Password is required</small>
+                <small i18n="@@validation.password.required"
+                  >Password is required</small
+                >
               </ion-text>
             </div>
 
             <!-- Remember Me & Forgot Password -->
             <div class="form-options">
               <ion-checkbox formControlName="rememberMe"></ion-checkbox>
-              <ion-label class="remember-label" i18n="@@login.remember.me">Remember me</ion-label>
-              
-              <ion-button 
-                fill="clear" 
-                size="small" 
+              <ion-label class="remember-label" i18n="@@login.remember.me"
+                >Remember me</ion-label
+              >
+
+              <ion-button
+                fill="clear"
+                size="small"
                 class="forgot-password-btn"
                 (click)="onForgotPassword()"
                 type="button"
@@ -97,7 +110,9 @@
             >
               <ion-spinner name="crescent" *ngIf="isLoading"></ion-spinner>
               <span *ngIf="!isLoading" i18n="@@login.sign.in">Sign In</span>
-              <span *ngIf="isLoading" i18n="@@login.signing.in">Signing In...</span>
+              <span *ngIf="isLoading" i18n="@@login.signing.in"
+                >Signing In...</span
+              >
             </ion-button>
 
             <!-- Divider -->
@@ -122,7 +137,13 @@
             <div class="signup-section">
               <p>
                 <span i18n="@@login.no.account">Don't have an account?</span>
-                <ion-button fill="clear" size="small" (click)="onSignUp()" type="button" i18n="@@signup.title">
+                <ion-button
+                  fill="clear"
+                  size="small"
+                  (click)="onSignUp()"
+                  type="button"
+                  i18n="@@signup.title"
+                >
                   Sign Up
                 </ion-button>
               </p>

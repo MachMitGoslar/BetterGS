@@ -27,7 +27,10 @@
             <p class="form-subtitle">Fill in your details to get started</p>
 
             <!-- Display Name Input -->
-            <ion-item class="form-item" [class.error]="isFieldInvalid('displayName')">
+            <ion-item
+              class="form-item"
+              [class.error]="isFieldInvalid('displayName')"
+            >
               <ion-input
                 formControlName="displayName"
                 type="text"
@@ -63,7 +66,10 @@
             </div>
 
             <!-- Password Input -->
-            <ion-item class="form-item" [class.error]="isFieldInvalid('password')">
+            <ion-item
+              class="form-item"
+              [class.error]="isFieldInvalid('password')"
+            >
               <ion-input
                 formControlName="password"
                 [type]="showPassword ? 'text' : 'password'"
@@ -78,7 +84,9 @@
                   (click)="togglePasswordVisibility()"
                   type="button"
                 >
-                  <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+                  <ion-icon
+                    [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"
+                  ></ion-icon>
                 </ion-button>
               </ion-input>
             </ion-item>
@@ -89,7 +97,12 @@
             </div>
 
             <!-- Confirm Password Input -->
-            <ion-item class="form-item" [class.error]="isFieldInvalid('confirmPassword') || passwordMismatch">
+            <ion-item
+              class="form-item"
+              [class.error]="
+                isFieldInvalid('confirmPassword') || passwordMismatch
+              "
+            >
               <ion-input
                 formControlName="confirmPassword"
                 [type]="showConfirmPassword ? 'text' : 'password'"
@@ -104,11 +117,18 @@
                   (click)="toggleConfirmPasswordVisibility()"
                   type="button"
                 >
-                  <ion-icon [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+                  <ion-icon
+                    [name]="
+                      showConfirmPassword ? 'eye-off-outline' : 'eye-outline'
+                    "
+                  ></ion-icon>
                 </ion-button>
               </ion-input>
             </ion-item>
-            <div class="error-message" *ngIf="isFieldInvalid('confirmPassword') || passwordMismatch">
+            <div
+              class="error-message"
+              *ngIf="isFieldInvalid('confirmPassword') || passwordMismatch"
+            >
               <ion-text color="danger">
                 <small>Passwords do not match</small>
               </ion-text>
@@ -118,10 +138,14 @@
             <div class="terms-section">
               <ion-checkbox formControlName="agreeToTerms"></ion-checkbox>
               <ion-label class="terms-label">
-                I agree to the 
-                <ion-button fill="clear" size="small" (click)="showTerms()">Terms of Service</ion-button>
-                and 
-                <ion-button fill="clear" size="small" (click)="showPrivacy()">Privacy Policy</ion-button>
+                I agree to the
+                <ion-button fill="clear" size="small" (click)="showTerms()"
+                  >Terms of Service</ion-button
+                >
+                and
+                <ion-button fill="clear" size="small" (click)="showPrivacy()"
+                  >Privacy Policy</ion-button
+                >
               </ion-label>
             </div>
             <div class="error-message" *ngIf="isFieldInvalid('agreeToTerms')">
@@ -154,7 +178,12 @@
             <div class="login-section">
               <p>
                 Already have an account?
-                <ion-button fill="clear" size="small" (click)="onLogin()" type="button">
+                <ion-button
+                  fill="clear"
+                  size="small"
+                  (click)="onLogin()"
+                  type="button"
+                >
                   Sign In
                 </ion-button>
               </p>

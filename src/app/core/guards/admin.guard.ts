@@ -13,11 +13,10 @@ export const adminGuard: CanActivateFn = (route, state) => {
       if (profile && profile !== null && profile.role === 'admin') {
         return true; // User is logged in, allow access
       } else {
-        console.log("ROUTING");
+        console.log('ROUTING');
         router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
         return false; // User is not logged in, redirect to login page
       }
     })
   );
-
 };

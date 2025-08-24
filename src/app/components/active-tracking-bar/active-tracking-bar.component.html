@@ -1,12 +1,18 @@
-  <div class="tracking_bar" *ngIf="$activeTracking | async as activeTracking">
-    <ion-icon size="large" name="stopwatch-outline" class="tracking-icon"></ion-icon>
-    <ion-title class="tracking-text">
-      <div class="tracking_description">
-        {{ (activity | async)?.title }}
-      </div> 
-      <div class="tracking_timer">{{ elapsedTime | elapsedTime }}</div>
-    </ion-title>
-      <ion-icon class="tracking_stopButton" (click)="stopTracking(activeTracking)" name="square"></ion-icon>
-  </div>
-
-
+<div class="tracking_bar" *ngIf="$activeTracking | async as activeTracking">
+  <ion-icon
+    size="large"
+    name="stopwatch-outline"
+    class="tracking-icon"
+  ></ion-icon>
+  <ion-title class="tracking-text">
+    <div class="tracking_description">
+      {{ (activity | async)?.title }}
+    </div>
+    <div class="tracking_timer">{{ elapsedTime | elapsedTime }}</div>
+  </ion-title>
+  <ion-icon
+    class="tracking_stopButton"
+    (click)="stopTracking(activeTracking)"
+    name="square"
+  ></ion-icon>
+</div>

@@ -49,6 +49,14 @@
             "aot": true
           },
           "configurations": {
+            "de": {
+              "localize": ["de"],
+              "outputPath": "www/de"
+            },
+            "en": {
+              "localize": ["en"],
+              "outputPath": "www/en"
+            },
             "production": {
               "budgets": [
                 {
@@ -88,14 +96,12 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
-            "configurations": {
               "de": {
-                "buildTarget": "app:build:de"
+                "buildTarget": "app:build:production,de"
               },
               "en": {
-                "buildTarget": "app:build:en"
-              }
-            },
+                "buildTarget": "app:build:production,en"
+              },
             "production": {
               "buildTarget": "app:build:production"
             },

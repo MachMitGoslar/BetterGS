@@ -1,10 +1,10 @@
 /**
  * Firebase Testing Utilities
- * 
+ *
  * Comprehensive mocks and stubs for Firebase services used in testing.
  * Provides realistic behavior for Firestore, Authentication, and Storage
  * without requiring actual Firebase connections.
- * 
+ *
  * @description Testing infrastructure for Firebase-dependent components
  * @since 1.0.0
  * @author BetterGS Team
@@ -12,6 +12,10 @@
 
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
+import { Firestore } from '@angular/fire/firestore';
+import { Auth } from '@angular/fire/auth';
+import { Storage } from '@angular/fire/storage';
+import { ModalController } from '@ionic/angular';
 
 // ==========================================
 // Firestore Mock Types and Interfaces
@@ -99,7 +103,7 @@ export interface MockWriteBatch {
 
 /**
  * Mock Firestore Database
- * 
+ *
  * Provides a complete in-memory simulation of Firestore database
  * operations for testing purposes. Maintains data consistency
  * and provides realistic async behavior.
@@ -111,7 +115,7 @@ export class MockFirestore {
 
   /**
    * Get or create a collection reference
-   * 
+   *
    * @param path - Collection path
    * @returns Mock collection reference
    */
@@ -123,7 +127,7 @@ export class MockFirestore {
     return {
       id: path.split('/').pop() || path,
       path,
-      
+
       doc: (id?: string) => {
         const docId = id || this.generateId();
         return this.doc(`${path}/${docId}`);
@@ -138,17 +142,17 @@ export class MockFirestore {
 
       get: async () => {
         const collection = this.collections.get(path) || new Map();
-        const docs = Array.from(collection.entries()).map(([id, data]) => 
+        const docs = Array.from(collection.entries()).map(([id, data]) =>
           this.createDocumentSnapshot(id, data, `${path}/${id}`)
         );
-        
+
         return {
           docs,
           size: docs.length,
           empty: docs.length === 0,
           forEach: (callback: (doc: MockDocumentSnapshot) => void) => {
             docs.forEach(callback);
-          }
+          },
         };
       },
 
@@ -157,7 +161,11 @@ export class MockFirestore {
       },
 
       orderBy: (field: string, direction?: 'asc' | 'desc') => {
-        return this.createQuery(path, [], [{ field, direction: direction || 'asc' }]);
+        return this.createQuery(
+          path,
+          [],
+          [{ field, direction: direction || 'asc' }]
+        );
       },
 
       limit: (limit: number) => {
@@ -169,24 +177,24 @@ export class MockFirestore {
         const subscription = subject.subscribe(() => {
           this.collection(path).get().then(callback);
         });
-        
+
         // Initial call
         this.collection(path).get().then(callback);
-        
+
         return () => subscription.unsubscribe();
-      }
+      },
     };
   }
 
   /**
    * Get a document reference
-   * 
+   *
    * @param path - Document path
    * @returns Mock document reference
    */
   doc(path: string): MockDocumentReference {
     const [collectionPath, docId] = this.splitPath(path);
-    
+
     return {
       id: docId,
       path,
@@ -199,14 +207,14 @@ export class MockFirestore {
 
       set: async (data: any, options?: any) => {
         const collection = this.getOrCreateCollection(collectionPath);
-        
+
         if (options?.merge) {
           const existing = collection.get(docId) || {};
           collection.set(docId, { ...existing, ...data });
         } else {
           collection.set(docId, { ...data });
         }
-        
+
         this.notifyListeners(collectionPath);
         this.notifyListeners(`doc:${path}`);
       },
@@ -215,7 +223,7 @@ export class MockFirestore {
         const collection = this.getOrCreateCollection(collectionPath);
         const existing = collection.get(docId) || {};
         collection.set(docId, { ...existing, ...data });
-        
+
         this.notifyListeners(collectionPath);
         this.notifyListeners(`doc:${path}`);
       },
@@ -234,18 +242,18 @@ export class MockFirestore {
         const subscription = subject.subscribe(() => {
           this.doc(path).get().then(callback);
         });
-        
+
         // Initial call
         this.doc(path).get().then(callback);
-        
+
         return () => subscription.unsubscribe();
-      }
+      },
     };
   }
 
   /**
    * Create a write batch
-   * 
+   *
    * @returns Mock write batch
    */
   batch(): MockWriteBatch {
@@ -271,7 +279,7 @@ export class MockFirestore {
         for (const operation of operations) {
           await operation();
         }
-      }
+      },
     };
   }
 
@@ -285,7 +293,7 @@ export class MockFirestore {
 
   /**
    * Set data directly for testing
-   * 
+   *
    * @param path - Document path
    * @param data - Data to set
    */
@@ -297,7 +305,7 @@ export class MockFirestore {
 
   /**
    * Get data directly for testing
-   * 
+   *
    * @param path - Document path
    * @returns Document data
    */
@@ -343,13 +351,17 @@ export class MockFirestore {
     }
   }
 
-  private createDocumentSnapshot(id: string, data: any, path: string): MockDocumentSnapshot {
+  private createDocumentSnapshot(
+    id: string,
+    data: any,
+    path: string
+  ): MockDocumentSnapshot {
     return {
       id,
       exists: data !== undefined,
       data: () => data,
       get: (field: string) => data?.[field],
-      ref: this.doc(path)
+      ref: this.doc(path),
     };
   }
 
@@ -357,35 +369,46 @@ export class MockFirestore {
    * Execute query and return filtered documents
    */
   private executeQuery(
-    path: string, 
+    path: string,
     whereConditions: Array<{ field: string; operator: string; value: any }>,
     orderConditions: Array<{ field: string; direction: 'asc' | 'desc' }>,
     limitValue?: number
   ): MockDocumentSnapshot[] {
     // Get all documents for the collection
     let docs: MockDocumentSnapshot[] = [];
-    
+
     const collection = this.collections.get(path);
     if (collection) {
       collection.forEach((docData, docId) => {
-        docs.push(this.createDocumentSnapshot(docId, docData, `${path}/${docId}`));
+        docs.push(
+          this.createDocumentSnapshot(docId, docData, `${path}/${docId}`)
+        );
       });
     }
 
     // Apply where conditions
     whereConditions.forEach(({ field, operator, value }) => {
-      docs = docs.filter(doc => {
+      docs = docs.filter((doc) => {
         const fieldValue = doc.get(field);
         switch (operator) {
-          case '==': return fieldValue === value;
-          case '!=': return fieldValue !== value;
-          case '<': return fieldValue < value;
-          case '<=': return fieldValue <= value;
-          case '>': return fieldValue > value;
-          case '>=': return fieldValue >= value;
-          case 'array-contains': return Array.isArray(fieldValue) && fieldValue.includes(value);
-          case 'in': return Array.isArray(value) && value.includes(fieldValue);
-          default: return true;
+          case '==':
+            return fieldValue === value;
+          case '!=':
+            return fieldValue !== value;
+          case '<':
+            return fieldValue < value;
+          case '<=':
+            return fieldValue <= value;
+          case '>':
+            return fieldValue > value;
+          case '>=':
+            return fieldValue >= value;
+          case 'array-contains':
+            return Array.isArray(fieldValue) && fieldValue.includes(value);
+          case 'in':
+            return Array.isArray(value) && value.includes(fieldValue);
+          default:
+            return true;
         }
       });
     });
@@ -409,32 +432,41 @@ export class MockFirestore {
   }
 
   private createQuery(
-    path: string, 
-    whereConditions: any[] = [], 
-    orderConditions: any[] = [], 
+    path: string,
+    whereConditions: any[] = [],
+    orderConditions: any[] = [],
     limitValue?: number
   ): MockQuery {
     return {
       get: async () => {
         let collection = this.collections.get(path) || new Map();
-        let docs = Array.from(collection.entries()).map(([id, data]) => 
+        let docs = Array.from(collection.entries()).map(([id, data]) =>
           this.createDocumentSnapshot(id, data, `${path}/${id}`)
         );
 
         // Apply where conditions
         whereConditions.forEach(({ field, operator, value }) => {
-          docs = docs.filter(doc => {
+          docs = docs.filter((doc) => {
             const fieldValue = doc.get(field);
             switch (operator) {
-              case '==': return fieldValue === value;
-              case '!=': return fieldValue !== value;
-              case '>': return fieldValue > value;
-              case '>=': return fieldValue >= value;
-              case '<': return fieldValue < value;
-              case '<=': return fieldValue <= value;
-              case 'array-contains': return Array.isArray(fieldValue) && fieldValue.includes(value);
-              case 'in': return Array.isArray(value) && value.includes(fieldValue);
-              default: return true;
+              case '==':
+                return fieldValue === value;
+              case '!=':
+                return fieldValue !== value;
+              case '>':
+                return fieldValue > value;
+              case '>=':
+                return fieldValue >= value;
+              case '<':
+                return fieldValue < value;
+              case '<=':
+                return fieldValue <= value;
+              case 'array-contains':
+                return Array.isArray(fieldValue) && fieldValue.includes(value);
+              case 'in':
+                return Array.isArray(value) && value.includes(fieldValue);
+              default:
+                return true;
             }
           });
         });
@@ -460,16 +492,26 @@ export class MockFirestore {
           empty: docs.length === 0,
           forEach: (callback: (doc: MockDocumentSnapshot) => void) => {
             docs.forEach(callback);
-          }
+          },
         };
       },
 
       where: (field: string, operator: any, value: any) => {
-        return this.createQuery(path, [...whereConditions, { field, operator, value }], orderConditions, limitValue);
+        return this.createQuery(
+          path,
+          [...whereConditions, { field, operator, value }],
+          orderConditions,
+          limitValue
+        );
       },
 
       orderBy: (field: string, direction?: 'asc' | 'desc') => {
-        return this.createQuery(path, whereConditions, [...orderConditions, { field, direction: direction || 'asc' }], limitValue);
+        return this.createQuery(
+          path,
+          whereConditions,
+          [...orderConditions, { field, direction: direction || 'asc' }],
+          limitValue
+        );
       },
 
       limit: (limit: number) => {
@@ -480,32 +522,42 @@ export class MockFirestore {
         const subject = this.getOrCreateListener(`query:${path}`);
         const subscription = subject.subscribe(() => {
           // Re-evaluate query with current data
-          const filteredDocs = this.executeQuery(path, whereConditions, orderConditions, limitValue);
+          const filteredDocs = this.executeQuery(
+            path,
+            whereConditions,
+            orderConditions,
+            limitValue
+          );
           const querySnapshot = {
             empty: filteredDocs.length === 0,
             size: filteredDocs.length,
             docs: filteredDocs,
             forEach: (callback: (doc: MockDocumentSnapshot) => void) => {
               filteredDocs.forEach(callback);
-            }
+            },
           } as MockQuerySnapshot;
           callback(querySnapshot);
         });
-        
+
         // Initial call
-        const initialDocs = this.executeQuery(path, whereConditions, orderConditions, limitValue);
+        const initialDocs = this.executeQuery(
+          path,
+          whereConditions,
+          orderConditions,
+          limitValue
+        );
         const initialSnapshot = {
           empty: initialDocs.length === 0,
           size: initialDocs.length,
           docs: initialDocs,
           forEach: (callback: (doc: MockDocumentSnapshot) => void) => {
             initialDocs.forEach(callback);
-          }
+          },
         } as MockQuerySnapshot;
         callback(initialSnapshot);
-        
+
         return () => subscription.unsubscribe();
-      }
+      },
     } as MockQuery;
   }
 }
@@ -588,17 +640,21 @@ export const mockFirestoreFunctions = {
    */
   query: (collectionRef: MockCollectionReference, ...constraints: any[]) => {
     let result: MockQuery = collectionRef as any;
-    
-    constraints.forEach(constraint => {
+
+    constraints.forEach((constraint) => {
       if (constraint.type === 'where') {
-        result = result.where(constraint.field, constraint.operator, constraint.value);
+        result = result.where(
+          constraint.field,
+          constraint.operator,
+          constraint.value
+        );
       } else if (constraint.type === 'orderBy') {
         result = result.orderBy(constraint.field, constraint.direction);
       } else if (constraint.type === 'limit') {
         result = result.limit(constraint.value);
       }
     });
-    
+
     return result;
   },
 
@@ -609,7 +665,7 @@ export const mockFirestoreFunctions = {
     type: 'where',
     field,
     operator,
-    value
+    value,
   }),
 
   /**
@@ -618,7 +674,7 @@ export const mockFirestoreFunctions = {
   orderBy: (field: string, direction?: 'asc' | 'desc') => ({
     type: 'orderBy',
     field,
-    direction: direction || 'asc'
+    direction: direction || 'asc',
   }),
 
   /**
@@ -626,7 +682,7 @@ export const mockFirestoreFunctions = {
    */
   limit: (value: number) => ({
     type: 'limit',
-    value
+    value,
   }),
 
   /**
@@ -639,7 +695,7 @@ export const mockFirestoreFunctions = {
    */
   arrayUnion: (...elements: any[]) => ({
     _methodName: 'arrayUnion',
-    _elements: elements
+    _elements: elements,
   }),
 
   /**
@@ -647,7 +703,7 @@ export const mockFirestoreFunctions = {
    */
   arrayRemove: (...elements: any[]) => ({
     _methodName: 'arrayRemove',
-    _elements: elements
+    _elements: elements,
   }),
 
   /**
@@ -655,7 +711,7 @@ export const mockFirestoreFunctions = {
    */
   increment: (value: number) => ({
     _methodName: 'increment',
-    _operand: value
+    _operand: value,
   }),
 
   /**
@@ -671,12 +727,14 @@ export const mockFirestoreFunctions = {
   /**
    * Mock collectionSnapshots function (for RxJS)
    */
-  collectionSnapshots: (collectionRef: MockCollectionReference): Observable<MockQuerySnapshot> => {
-    return new Observable(subscriber => {
-      const unsubscribe = collectionRef.onSnapshot(snapshot => {
+  collectionSnapshots: (
+    collectionRef: MockCollectionReference
+  ): Observable<MockQuerySnapshot> => {
+    return new Observable((subscriber) => {
+      const unsubscribe = collectionRef.onSnapshot((snapshot) => {
         subscriber.next(snapshot);
       });
-      
+
       return unsubscribe;
     });
   },
@@ -684,15 +742,17 @@ export const mockFirestoreFunctions = {
   /**
    * Mock docSnapshots function (for RxJS)
    */
-  docSnapshots: (docRef: MockDocumentReference): Observable<MockDocumentSnapshot> => {
-    return new Observable(subscriber => {
-      const unsubscribe = docRef.onSnapshot(snapshot => {
+  docSnapshots: (
+    docRef: MockDocumentReference
+  ): Observable<MockDocumentSnapshot> => {
+    return new Observable((subscriber) => {
+      const unsubscribe = docRef.onSnapshot((snapshot) => {
         subscriber.next(snapshot);
       });
-      
+
       return unsubscribe;
     });
-  }
+  },
 };
 
 // ==========================================
@@ -733,7 +793,10 @@ export class MockAuth {
   /**
    * Mock sign in with email and password
    */
-  async signInWithEmailAndPassword(email: string, password: string): Promise<{ user: MockUser }> {
+  async signInWithEmailAndPassword(
+    email: string,
+    password: string
+  ): Promise<{ user: MockUser }> {
     const user: MockUser = {
       uid: `mock-uid-${Date.now()}`,
       email,
@@ -743,10 +806,10 @@ export class MockAuth {
       photoURL: null,
       metadata: {
         creationTime: new Date().toISOString(),
-        lastSignInTime: new Date().toISOString()
-      }
+        lastSignInTime: new Date().toISOString(),
+      },
     };
-    
+
     this.setCurrentUser(user);
     return { user };
   }
@@ -754,7 +817,10 @@ export class MockAuth {
   /**
    * Mock create user with email and password
    */
-  async createUserWithEmailAndPassword(email: string, password: string): Promise<{ user: MockUser }> {
+  async createUserWithEmailAndPassword(
+    email: string,
+    password: string
+  ): Promise<{ user: MockUser }> {
     const user: MockUser = {
       uid: `mock-uid-${Date.now()}`,
       email,
@@ -764,10 +830,10 @@ export class MockAuth {
       photoURL: null,
       metadata: {
         creationTime: new Date().toISOString(),
-        lastSignInTime: new Date().toISOString()
-      }
+        lastSignInTime: new Date().toISOString(),
+      },
     };
-    
+
     this.setCurrentUser(user);
     return { user };
   }
@@ -785,10 +851,10 @@ export class MockAuth {
       photoURL: null,
       metadata: {
         creationTime: new Date().toISOString(),
-        lastSignInTime: new Date().toISOString()
-      }
+        lastSignInTime: new Date().toISOString(),
+      },
     };
-    
+
     this.setCurrentUser(user);
     return { user };
   }
@@ -823,6 +889,14 @@ export class MockAuth {
   }
 
   /**
+   * Mock onAuthStateChanged - returns unsubscribe function
+   */
+  onAuthStateChanged(callback: (user: MockUser | null) => void): () => void {
+    const subscription = this.userSubject.subscribe(callback);
+    return () => subscription.unsubscribe();
+  }
+
+  /**
    * Clear auth state
    */
   clearAuth(): void {
@@ -841,7 +915,11 @@ export interface MockStorageReference {
   bucket: string;
   fullPath: string;
   name: string;
-  putString(data: string, format?: string, metadata?: any): Promise<MockUploadResult>;
+  putString(
+    data: string,
+    format?: string,
+    metadata?: any
+  ): Promise<MockUploadResult>;
   getDownloadURL(): Promise<string>;
   delete(): Promise<void>;
   child(path: string): MockStorageReference;
@@ -874,7 +952,7 @@ export class MockStorage {
    */
   ref(path?: string): MockStorageReference {
     const fullPath = path || '';
-    
+
     return {
       bucket: 'mock-bucket',
       fullPath,
@@ -882,7 +960,7 @@ export class MockStorage {
 
       putString: async (data: string, format?: string, metadata?: any) => {
         this.files.set(fullPath, { data, metadata: metadata || {} });
-        
+
         return {
           ref: this.ref(fullPath),
           metadata: {
@@ -891,8 +969,8 @@ export class MockStorage {
             name: fullPath.split('/').pop() || '',
             size: data.length,
             timeCreated: new Date().toISOString(),
-            contentType: metadata?.contentType || 'application/octet-stream'
-          }
+            contentType: metadata?.contentType || 'application/octet-stream',
+          },
         };
       },
 
@@ -906,7 +984,7 @@ export class MockStorage {
 
       child: (childPath: string) => {
         return this.ref(`${fullPath}/${childPath}`);
-      }
+      },
     };
   }
 
@@ -931,7 +1009,7 @@ export class MockStorage {
 
 /**
  * Firebase Testing Providers
- * 
+ *
  * Complete provider configuration for testing Firebase-dependent components.
  * Use this in your TestBed.configureTestingModule() calls.
  */
@@ -941,16 +1019,26 @@ export const FIREBASE_TESTING_PROVIDERS = [
   MockStorage,
   { provide: 'Firestore', useClass: MockFirestore },
   { provide: 'Auth', useClass: MockAuth },
-  { provide: 'Storage', useClass: MockStorage }
+  { provide: 'Storage', useClass: MockStorage },
 ];
 
 /**
  * Helper function to create Firebase testing module
- * 
+ *
  * @param mockData - Initial data to populate in Firestore
  * @returns Testing module configuration
  */
-export function createFirebaseTestingModule(mockData?: { [path: string]: any }) {
+// ==========================================
+// Test Configuration Functions
+// ==========================================
+
+/**
+ * Create Firebase testing module with providers and mocks
+ * Provides all necessary Firebase services for testing
+ */
+export function createFirebaseTestingModule(mockData?: {
+  [path: string]: any;
+}) {
   const mockFirestore = new MockFirestore();
   const mockAuth = new MockAuth();
   const mockStorage = new MockStorage();
@@ -964,15 +1052,21 @@ export function createFirebaseTestingModule(mockData?: { [path: string]: any }) 
 
   return {
     providers: [
-      { provide: MockFirestore, useValue: mockFirestore },
-      { provide: MockAuth, useValue: mockAuth },
-      { provide: MockStorage, useValue: mockStorage },
-      { provide: 'Firestore', useValue: mockFirestore },
-      { provide: 'Auth', useValue: mockAuth },
-      { provide: 'Storage', useValue: mockStorage }
+      { provide: Firestore, useValue: mockFirestore },
+      { provide: Auth, useValue: mockAuth },
+      { provide: Storage, useValue: mockStorage },
     ],
     mockFirestore,
     mockAuth,
-    mockStorage
+    mockStorage,
   };
+}
+
+/**
+ * Configure TestBed for standalone components
+ * Handles the imports array for standalone components with Firebase providers
+ */
+export function configureStandaloneComponentTest(component: any): any[] {
+  const firebaseModule = createFirebaseTestingModule();
+  return [component];
 }

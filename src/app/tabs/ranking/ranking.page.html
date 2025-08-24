@@ -7,7 +7,9 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar background="primary">
-      <ion-title size="large">{{ i18nService.getTranslation('ranking.title') }}</ion-title>
+      <ion-title size="large"
+        >{{ i18nService.getTranslation('ranking.title') }}</ion-title
+      >
     </ion-toolbar>
   </ion-header>
 
@@ -48,10 +50,12 @@
 
   <!-- User Ranking List -->
   <div *ngIf="!isLoading" class="ranking-container">
-    <ion-card *ngFor="let user of users$ | async; let i = index" 
-              class="user-card" 
-              [class.top-three]="i < 3"
-              (click)="openModal(user)">
+    <ion-card
+      *ngFor="let user of users$ | async; let i = index"
+      class="user-card"
+      [class.top-three]="i < 3"
+      (click)="openModal(user)"
+    >
       <ion-item>
         <!-- Rank Badge -->
         <div slot="start" class="rank-badge" [class]="'rank-' + (i + 1)">
@@ -60,7 +64,11 @@
 
         <!-- User Avatar -->
         <ion-avatar slot="start">
-          <img *ngIf="user.profilePictureUrl" [src]="user.profilePictureUrl" [alt]="user.name" />
+          <img
+            *ngIf="user.profilePictureUrl"
+            [src]="user.profilePictureUrl"
+            [alt]="user.name"
+          />
           <div *ngIf="!user.profilePictureUrl" class="avatar-placeholder">
             {{ getInitials(user.name || "unknown") }}
           </div>
@@ -76,7 +84,8 @@
             </span>
             <span class="stat">
               <ion-icon name="medal-outline"></ion-icon>
-              {{ user.total_trackings }} {{ i18nService.getTranslation('ranking.sessions') }}
+              {{ user.total_trackings }} {{
+              i18nService.getTranslation('ranking.sessions') }}
             </span>
           </div>
         </ion-label>
@@ -86,7 +95,11 @@
           <ion-badge [color]="getRankColor(i)" class="rank-badge-end">
             #{{ i + 1 }}
           </ion-badge>
-          <ion-badge color="success" *ngIf="user.isActive" class="activity-badge">
+          <ion-badge
+            color="success"
+            *ngIf="user.isActive"
+            class="activity-badge"
+          >
             {{ i18nService.getTranslation('user.status.active') }}
           </ion-badge>
         </div>
@@ -100,7 +113,4 @@
       <p>{{ i18nService.getTranslation('ranking.noUsersDescription') }}</p>
     </div>
   </div>
-
-
-
 </ion-content>

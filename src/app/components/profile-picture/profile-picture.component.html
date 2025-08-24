@@ -1,12 +1,12 @@
-<img 
+<img
   *ngIf="pictureUrl; else defaultAvatar"
-  [src]="pictureUrl" 
+  [src]="pictureUrl"
   alt="Profile Picture"
-  class="profile-avatar">
+  class="profile-avatar"
+/>
 
 <ng-template #defaultAvatar>
   <div class="default-avatar">
     <ion-icon name="person" class="avatar-icon"></ion-icon>
   </div>
 </ng-template>
-

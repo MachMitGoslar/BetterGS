@@ -8,11 +8,11 @@ ion-header {
   ion-toolbar {
     --background: var(--ion-color-primary);
     --color: white;
-    
+
     ion-title {
       font-weight: 600;
     }
-    
+
     ion-button {
       --color: white;
     }
@@ -23,7 +23,7 @@ ion-header {
 .tracking-summary {
   margin: 16px;
   margin-bottom: 20px;
-  
+
   .summary-icon {
     font-size: 1.5rem;
     margin-right: 8px;
@@ -35,11 +35,11 @@ ion-header {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
-  
+
   .summary-item {
     display: flex;
     flex-direction: column;
-    
+
     .label {
       font-size: 0.8rem;
       font-weight: 600;
@@ -48,12 +48,12 @@ ion-header {
       letter-spacing: 0.5px;
       margin-bottom: 4px;
     }
-    
+
     .value {
       font-size: 1.1rem;
       font-weight: 700;
       color: var(--ion-color-dark);
-      font-family: 'Courier New', monospace;
+      font-family: "Courier New", monospace;
     }
   }
 }
@@ -62,7 +62,7 @@ ion-header {
 .notes-section {
   margin: 16px;
   margin-bottom: 20px;
-  
+
   .section-icon {
     font-size: 1.3rem;
     margin-right: 8px;
@@ -74,14 +74,14 @@ ion-header {
   --padding-start: 0;
   --inner-padding-end: 0;
   margin-top: 8px;
-  
+
   .notes-textarea {
     width: 100%;
     border: 1px solid var(--ion-color-primary);
     border-radius: 8px;
     padding: 12px;
     transition: border-color 0.3s ease;
-    
+
     &:focus {
       border-color: var(--ion-color-primary);
     }
@@ -99,7 +99,7 @@ ion-header {
 .image-section {
   margin: 16px;
   margin-bottom: 100px; // Space for footer
-  
+
   .section-icon {
     font-size: 1.3rem;
     margin-right: 8px;
@@ -119,13 +119,13 @@ ion-header {
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
   &:hover {
     border-color: var(--ion-color-primary);
     background: var(--ion-color-primary-tint);
     opacity: 0.9;
   }
-  
+
   &.has-image {
     padding: 0;
     border: none;
@@ -139,14 +139,14 @@ ion-header {
     color: var(--ion-color-medium);
     margin-bottom: 12px;
   }
-  
+
   .upload-text {
     font-size: 1.1rem;
     font-weight: 600;
     color: var(--ion-color-dark);
     margin: 0 0 8px 0;
   }
-  
+
   .upload-hint {
     font-size: 0.9rem;
     color: var(--ion-color-medium);
@@ -160,14 +160,14 @@ ion-header {
   height: 200px;
   border-radius: 12px;
   overflow: hidden;
-  
+
   .preview-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 12px;
   }
-  
+
   .image-overlay {
     position: absolute;
     top: 0;
@@ -182,7 +182,7 @@ ion-header {
     opacity: 0;
     transition: opacity 0.3s ease;
     border-radius: 12px;
-    
+
     .remove-button,
     .change-button {
       --background: rgba(255, 255, 255, 0.2);
@@ -191,21 +191,21 @@ ion-header {
       border-radius: 50%;
       width: 48px;
       height: 48px;
-      
+
       ion-icon {
         font-size: 1.5rem;
       }
     }
-    
+
     .remove-button {
       --background: rgba(244, 67, 54, 0.8);
     }
-    
+
     .change-button {
       --background: rgba(33, 150, 243, 0.8);
     }
   }
-  
+
   &:hover .image-overlay {
     opacity: 1;
   }
@@ -213,12 +213,12 @@ ion-header {
 
 .upload-progress {
   margin-top: 16px;
-  
+
   ion-progress-bar {
     height: 6px;
     border-radius: 3px;
   }
-  
+
   .progress-text {
     display: block;
     text-align: center;
@@ -231,7 +231,7 @@ ion-header {
 .error-message {
   margin-top: 12px;
   --color: var(--ion-color-danger);
-  
+
   ion-icon {
     margin-right: 8px;
   }
@@ -251,14 +251,14 @@ ion-footer {
   justify-content: space-between;
   align-items: center;
   padding: 8px 16px;
-  
+
   ion-button {
     min-width: 100px;
-    
+
     &[fill="clear"] {
       --color: var(--ion-color-medium);
     }
-    
+
     &[fill="solid"] {
       --background: var(--ion-color-primary);
       --color: white;
@@ -273,12 +273,12 @@ ion-footer {
     grid-template-columns: 1fr;
     gap: 12px;
   }
-  
+
   .upload-area {
     min-height: 120px;
     padding: 16px;
   }
-  
+
   .image-preview {
     height: 150px;
   }

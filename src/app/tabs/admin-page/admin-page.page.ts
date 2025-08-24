@@ -4,15 +4,21 @@
  */
 const ICON_LIST = {
   // TODO: Move to proper icon configuration service
-}
+};
 
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
-import { 
-  IonContent, 
-  IonHeader, 
-  IonTitle, 
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormsModule,
+} from '@angular/forms';
+import {
+  IonContent,
+  IonHeader,
+  IonTitle,
   IonToolbar,
   IonCard,
   IonCardHeader,
@@ -35,7 +41,7 @@ import {
   IonModal,
   IonButtons,
   AlertController,
-  ActionSheetController
+  ActionSheetController,
 } from '@ionic/angular/standalone';
 import { Observable, Subscription, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -85,7 +91,21 @@ import {
   medal,
   moon,
   paw,
-  receipt, warningOutline, fitnessOutline, peopleOutline, timeOutline, trendingUpOutline, addCircleOutline, imageOutline, addOutline, listOutline, pauseOutline, calendarOutline, createOutline, trashOutline } from 'ionicons/icons';
+  receipt,
+  warningOutline,
+  fitnessOutline,
+  peopleOutline,
+  timeOutline,
+  trendingUpOutline,
+  addCircleOutline,
+  imageOutline,
+  addOutline,
+  listOutline,
+  pauseOutline,
+  calendarOutline,
+  createOutline,
+  trashOutline,
+} from 'ionicons/icons';
 
 import { User } from '@angular/fire/auth';
 import { Activity } from 'src/app/core/models/activity.model';
@@ -99,10 +119,10 @@ import { UserService } from 'src/app/core/services/user.service';
 
 /**
  * AdminPagePage Component
- * 
+ *
  * This component provides a comprehensive admin interface for managing activities,
  * users, and viewing application statistics. It includes:
- * 
+ *
  * Features:
  * - Activity creation, editing, and deletion
  * - Activity status management (active/inactive)
@@ -111,13 +131,13 @@ import { UserService } from 'src/app/core/services/user.service';
  * - Real-time statistics dashboard
  * - User permission validation
  * - Responsive design for mobile and desktop
- * 
+ *
  * Architecture:
  * - Uses ApplicationService for unified notification handling
  * - Implements reactive forms for data validation
  * - Manages subscriptions properly to prevent memory leaks
  * - Follows Ionic Angular standalone component patterns
- * 
+ *
  * @author BetterGS Development Team
  * @version 1.0.0
  * @since 2025-08-22
@@ -132,9 +152,9 @@ import { UserService } from 'src/app/core/services/user.service';
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    IonContent, 
-    IonHeader, 
-    IonTitle, 
+    IonContent,
+    IonHeader,
+    IonTitle,
     IonToolbar,
     IonCard,
     IonCardHeader,
@@ -157,11 +177,10 @@ import { UserService } from 'src/app/core/services/user.service';
     IonModal,
     IonButtons,
     I18nPipe,
-    ElapsedTimePipe
-  ]
+    ElapsedTimePipe,
+  ],
 })
 export class AdminPagePage implements OnInit, OnDestroy {
-  
   @ViewChild('iconModal') iconModal!: IonModal;
 
   // ========================================
@@ -191,7 +210,7 @@ export class AdminPagePage implements OnInit, OnDestroy {
    * @description Shows loading spinner during async operations
    */
   isLoading: boolean = false;
-  
+
   /**
    * Complete list of activities from the database
    * @description Master array containing all activities
@@ -311,7 +330,7 @@ export class AdminPagePage implements OnInit, OnDestroy {
 
   /**
    * Constructor for AdminPagePage
-   * 
+   *
    * @param formBuilder - Angular reactive forms builder for form creation
    * @param applicationService - Main application service for business logic and notifications
    * @param activityService - Service for activity data operations
@@ -322,15 +341,15 @@ export class AdminPagePage implements OnInit, OnDestroy {
    * @param actionSheetController - Ionic action sheet controller for action menus
    */
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private applicationService: ApplicationService,
-    private activityService: ActivityService,
-    private userService: UserService,
-    private notificationService: NotificationService,
-    private i18nService: I18nService,
-    private alertController: AlertController,
-  ) {
+  private formBuilder = inject(FormBuilder);
+  private applicationService = inject(ApplicationService);
+  private activityService = inject(ActivityService);
+  private userService = inject(UserService);
+  private notificationService = inject(NotificationService);
+  private i18nService = inject(I18nService);
+  private alertController = inject(AlertController);
+
+  constructor() {
     this.initializeForm();
     this.setupIcons();
   }
@@ -356,7 +375,7 @@ export class AdminPagePage implements OnInit, OnDestroy {
    * @implements OnDestroy
    */
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
   // ========================================
@@ -371,7 +390,7 @@ export class AdminPagePage implements OnInit, OnDestroy {
   private initializeForm(): void {
     this.activityForm = this.formBuilder.group({
       title: ['', [Validators.required, Validators.minLength(2)]],
-      description: ['', [Validators.required, Validators.maxLength(500)]]
+      description: ['', [Validators.required, Validators.maxLength(500)]],
     });
   }
 
@@ -383,50 +402,50 @@ export class AdminPagePage implements OnInit, OnDestroy {
   private setupIcons(): void {
     addIcons({
       warning,
-  fitness,
-  people,
-  time,
-  trendingUp,
-  addCircle,
-  add,
-  list,
-  image,
-  closeCircle,
-  create,
-  pause,
-  play,
-  trash,
-  close,
-  calendar,
-  // Activity icons for picker
-  walk,
-  bicycle,
-  barbell,
-  football,
-  basketball,
-  tennisball,
-  heart,
-  leaf,
-  musicalNotes,
-  brush,
-  camera,
-  book,
-  laptop,
-  gameController,
-  car,
-  train,
-  airplane,
-  home,
-  restaurant,
-  cafe,
-  //Additional icons
-  globe,
-  construct,
-  fastFood,
-  medal,
-  moon,
-  paw,
-  receipt,
+      fitness,
+      people,
+      time,
+      trendingUp,
+      addCircle,
+      add,
+      list,
+      image,
+      closeCircle,
+      create,
+      pause,
+      play,
+      trash,
+      close,
+      calendar,
+      // Activity icons for picker
+      walk,
+      bicycle,
+      barbell,
+      football,
+      basketball,
+      tennisball,
+      heart,
+      leaf,
+      musicalNotes,
+      brush,
+      camera,
+      book,
+      laptop,
+      gameController,
+      car,
+      train,
+      airplane,
+      home,
+      restaurant,
+      cafe,
+      //Additional icons
+      globe,
+      construct,
+      fastFood,
+      medal,
+      moon,
+      paw,
+      receipt,
     });
   }
 
@@ -444,9 +463,11 @@ export class AdminPagePage implements OnInit, OnDestroy {
       this.currentUser = user;
     });
 
-    const isAdminSub = this.userService.$currentUserPrivateProfile.subscribe((isAdmin) => {
-      this.isAdmin = isAdmin?.role === 'admin' || false;
-    });
+    const isAdminSub = this.userService.$currentUserPrivateProfile.subscribe(
+      (isAdmin) => {
+        this.isAdmin = isAdmin?.role === 'admin' || false;
+      }
+    );
 
     this.subscriptions.push(userSub);
     this.subscriptions.push(isAdminSub);
@@ -458,10 +479,12 @@ export class AdminPagePage implements OnInit, OnDestroy {
    * @private
    */
   private loadActivities(): void {
-    const activitiesSub = this.activityService.$activities.subscribe(activities => {
-      this.activities = activities;
-      this.filterActivities();
-    });
+    const activitiesSub = this.activityService.$activities.subscribe(
+      (activities) => {
+        this.activities = activities;
+        this.filterActivities();
+      }
+    );
     this.subscriptions.push(activitiesSub);
   }
 
@@ -473,14 +496,16 @@ export class AdminPagePage implements OnInit, OnDestroy {
    */
   private loadStatistics(): void {
     // Total activities count
-    const activitiesSub = this.activityService.$activities.subscribe(activities => {
-      this.totalActivities = activities.length;
-    });
+    const activitiesSub = this.activityService.$activities.subscribe(
+      (activities) => {
+        this.totalActivities = activities.length;
+      }
+    );
     this.subscriptions.push(activitiesSub);
 
     // TODO: Implement proper statistics from backend services
     this.totalUsers = 0; // Would come from user service
-    this.totalTrackingTime = 0; // Would come from tracking service  
+    this.totalTrackingTime = 0; // Would come from tracking service
     this.activeTrackings = 0; // Would come from tracking service
   }
 
@@ -498,9 +523,10 @@ export class AdminPagePage implements OnInit, OnDestroy {
       this.filteredActivities = this.activities;
     } else {
       const term = this.searchTerm.toLowerCase();
-      this.filteredActivities = this.activities.filter(activity =>
-        activity.title.toLowerCase().includes(term) ||
-        activity.description.toLowerCase().includes(term)
+      this.filteredActivities = this.activities.filter(
+        (activity) =>
+          activity.title.toLowerCase().includes(term) ||
+          activity.description.toLowerCase().includes(term)
       );
     }
   }
@@ -528,7 +554,7 @@ export class AdminPagePage implements OnInit, OnDestroy {
 
     try {
       const formData = this.activityForm.value;
-      
+
       // Create new activity instance
       const newActivity = new Activity();
       console.log('Creating new activity:', newActivity);
@@ -546,10 +572,11 @@ export class AdminPagePage implements OnInit, OnDestroy {
             contentType: this.selectedImageFile.type,
             customMetadata: {
               uploadedAt: new Date().toISOString(),
-              activityId: newActivity.id
-            }
+              activityId: newActivity.id,
+            },
           }
-        );4
+        );
+        4;
         newActivity.imageUrl = imageUrl;
       }
 
@@ -558,7 +585,6 @@ export class AdminPagePage implements OnInit, OnDestroy {
 
       // Reset form
       this.resetForm();
-
     } catch (error) {
       console.error('Error creating activity:', error);
       // ApplicationService already handles error notifications
@@ -591,11 +617,10 @@ export class AdminPagePage implements OnInit, OnDestroy {
   async toggleActivityStatus(activity: Activity): Promise<void> {
     try {
       this.isLoading = true;
-      
+
       activity.isActive = !activity.isActive;
       // Use ApplicationService for unified notification handling
       await this.applicationService.updateActivity(activity);
-
     } catch (error) {
       console.error('Error toggling activity status:', error);
       // ApplicationService already handles error notifications
@@ -613,20 +638,22 @@ export class AdminPagePage implements OnInit, OnDestroy {
   async confirmDeleteActivity(activity: Activity): Promise<void> {
     const alert = await this.alertController.create({
       header: this.i18nService.getTranslation('admin.delete.title'),
-      message: this.i18nService.getTranslation('admin.delete.message').replace('{title}', activity.title),
+      message: this.i18nService
+        .getTranslation('admin.delete.message')
+        .replace('{title}', activity.title),
       buttons: [
         {
           text: this.i18nService.getTranslation('admin.delete.cancel'),
-          role: 'cancel'
+          role: 'cancel',
         },
         {
           text: this.i18nService.getTranslation('admin.delete.confirm'),
           role: 'destructive',
           handler: () => {
             this.deleteActivity(activity);
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
 
     await alert.present();
@@ -642,10 +669,9 @@ export class AdminPagePage implements OnInit, OnDestroy {
   private async deleteActivity(activity: Activity): Promise<void> {
     try {
       this.isLoading = true;
-      
+
       // Use ApplicationService for unified notification handling
       await this.applicationService.deleteActivity(activity.id);
-
     } catch (error) {
       console.error('Error deleting activity:', error);
       // ApplicationService already handles error notifications
@@ -748,7 +774,6 @@ export class AdminPagePage implements OnInit, OnDestroy {
         this.selectedImageFile = selectedFile;
         this.selectedImagePreview = await this.fileToBase64(selectedFile);
       }
-
     } catch (error) {
       console.error('Error selecting image:', error);
       this.notificationService.addNotification(

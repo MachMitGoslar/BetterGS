@@ -4,14 +4,11 @@ import {
   IonTabBar,
   IonTabButton,
   IonIcon,
-  IonLabel, IonTab } from '@ionic/angular/standalone';
+  IonLabel,
+  IonTab,
+} from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { 
-  stopwatch,
-  trophy,
-  person,
-  settings
- } from 'ionicons/icons';
+import { stopwatch, trophy, person, settings } from 'ionicons/icons';
 import { ActiveTrackingBarComponent } from '../components/active-tracking-bar/active-tracking-bar.component';
 import { ApplicationService } from '../core/services/application.service';
 import { User } from '@angular/fire/auth';
@@ -22,28 +19,20 @@ import { UserService } from '../core/services/user.service';
   selector: 'app-tabs',
   templateUrl: 'tabs.page.html',
   styleUrls: ['tabs.page.scss'],
-  imports: [ 
-    IonTabs,
-    IonTabBar,
-    IonTabButton,
-    IonIcon,
-    IonLabel,
-    CommonModule
-  ],
+  imports: [IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, CommonModule],
 })
 export class TabsPage {
   public environmentInjector = inject(EnvironmentInjector);
   public currentUser: User | null = null;
   public role: 'user' | 'admin' = 'user';
+  public applicationService = inject(ApplicationService);
+  public userService = inject(UserService);
 
-  constructor(
-    public applicationService: ApplicationService,
-    public userService: UserService
-  ) {
-    this.applicationService.$currentUser.subscribe(user => {
+  constructor() {
+    this.applicationService.$currentUser.subscribe((user) => {
       this.currentUser = user;
     });
-    this.userService.$currentUserPrivateProfile.subscribe(profile => {
+    this.userService.$currentUserPrivateProfile.subscribe((profile) => {
       this.role = profile?.role || 'user';
     });
 
@@ -51,7 +40,7 @@ export class TabsPage {
       stopwatch,
       trophy,
       person,
-      settings
+      settings,
     });
   }
 }

@@ -1,4 +1,9 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick,
+} from '@angular/core/testing';
 import { of, BehaviorSubject } from 'rxjs';
 import { ModalController } from '@ionic/angular/standalone';
 
@@ -7,11 +12,15 @@ import { UserService } from '../../core/services/user.service';
 import { I18nService } from '../../core/services/i18n.service';
 import { UserPublicProfile } from 'src/app/core/models/user_public_profile.model';
 import { UserDetailModalComponent } from '../../components/user-detail-modal/user-detail-modal.component';
-import { createTestingEnvironment, MOCK_PUBLIC_PROFILE, triggerObservableUpdate } from '../../../testing/shared-testing-config';
+import {
+  createTestingEnvironment,
+  MOCK_PUBLIC_PROFILE,
+  triggerObservableUpdate,
+} from '../../../testing/shared-testing-config';
 
 /**
  * Test Suite for RankingPage Component
- * 
+ *
  * Comprehensive tests covering:
  * - Component initialization and lifecycle
  * - Data loading and refresh functionality
@@ -24,12 +33,12 @@ import { createTestingEnvironment, MOCK_PUBLIC_PROFILE, triggerObservableUpdate 
 describe('RankingPage', () => {
   let component: RankingPage;
   let fixture: ComponentFixture<RankingPage>;
-  
+
   // Service mocks
   let mockUserService: any;
   let mockI18nService: any;
   let mockModalController: any;
-  
+
   // Observable subjects
   let usersSubject: BehaviorSubject<UserPublicProfile[]>;
 
@@ -46,8 +55,8 @@ describe('RankingPage', () => {
       createdAt: new Date('2024-01-01'),
       toDB: () => ({
         name: 'John Doe',
-        profilePictureUrl: 'https://example.com/john.jpg'
-      })
+        profilePictureUrl: 'https://example.com/john.jpg',
+      }),
     },
     {
       id: 'user2',
@@ -60,8 +69,8 @@ describe('RankingPage', () => {
       createdAt: new Date('2024-01-02'),
       toDB: () => ({
         name: 'Jane Smith',
-        profilePictureUrl: ''
-      })
+        profilePictureUrl: '',
+      }),
     },
     {
       id: 'user3',
@@ -74,16 +83,19 @@ describe('RankingPage', () => {
       createdAt: new Date('2024-01-03'),
       toDB: () => ({
         name: 'Bob Wilson',
-        profilePictureUrl: 'https://example.com/bob.jpg'
-      })
-    }
+        profilePictureUrl: 'https://example.com/bob.jpg',
+      }),
+    },
   ];
 
   const mockEmptyUsers: UserPublicProfile[] = [];
 
   beforeEach(async () => {
     // Setup $localize for Angular i18n
-    (globalThis as any).$localize = (template: TemplateStringsArray, ...expressions: any[]) => {
+    (globalThis as any).$localize = (
+      template: TemplateStringsArray,
+      ...expressions: any[]
+    ) => {
       let result = template[0];
       for (let i = 0; i < expressions.length; i++) {
         result += expressions[i] + template[i + 1];
@@ -96,8 +108,8 @@ describe('RankingPage', () => {
       initialData: {
         'users/user1/public': mockUsers[0],
         'users/user2/public': mockUsers[1],
-        'users/user3/public': mockUsers[2]
-      }
+        'users/user3/public': mockUsers[2],
+      },
     });
 
     // Create behavior subjects
@@ -106,7 +118,9 @@ describe('RankingPage', () => {
     // Override UserService with ranking-specific functionality
     mockUserService = {
       ...testEnv.mocks.services.mockUserService,
-      getAllUsersForRanking: jasmine.createSpy('getAllUsersForRanking').and.returnValue(usersSubject.asObservable())
+      getAllUsersForRanking: jasmine
+        .createSpy('getAllUsersForRanking')
+        .and.returnValue(usersSubject.asObservable()),
     };
 
     mockI18nService = testEnv.mocks.services.mockI18nService;
@@ -118,8 +132,8 @@ describe('RankingPage', () => {
         ...testEnv.providers,
         { provide: UserService, useValue: mockUserService },
         { provide: I18nService, useValue: mockI18nService },
-        { provide: ModalController, useValue: mockModalController }
-      ]
+        { provide: ModalController, useValue: mockModalController },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(RankingPage);
@@ -169,15 +183,15 @@ describe('RankingPage', () => {
     describe('ngOnInit', () => {
       it('should call loadRanking on initialization', () => {
         spyOn(component, 'loadRanking');
-        
+
         component.ngOnInit();
-        
+
         expect(component.loadRanking).toHaveBeenCalled();
       });
 
       it('should set up users observable stream', () => {
         component.ngOnInit();
-        
+
         expect(mockUserService.getAllUsersForRanking).toHaveBeenCalled();
         expect(component.users$).toBeDefined();
       });
@@ -185,37 +199,48 @@ describe('RankingPage', () => {
 
     describe('ngOnDestroy', () => {
       it('should unsubscribe from all subscriptions', () => {
-        const mockSubscription1 = jasmine.createSpyObj('Subscription', ['unsubscribe']);
-        const mockSubscription2 = jasmine.createSpyObj('Subscription', ['unsubscribe']);
+        const mockSubscription1 = jasmine.createSpyObj('Subscription', [
+          'unsubscribe',
+        ]);
+        const mockSubscription2 = jasmine.createSpyObj('Subscription', [
+          'unsubscribe',
+        ]);
         mockSubscription1.closed = false;
         mockSubscription2.closed = false;
-        
-        (component as any).subscriptions = [mockSubscription1, mockSubscription2];
-        
+
+        (component as any).subscriptions = [
+          mockSubscription1,
+          mockSubscription2,
+        ];
+
         (component as any).ngOnDestroy();
-        
+
         expect(mockSubscription1.unsubscribe).toHaveBeenCalled();
         expect(mockSubscription2.unsubscribe).toHaveBeenCalled();
       });
 
       it('should not unsubscribe from already closed subscriptions', () => {
-        const mockSubscription = jasmine.createSpyObj('Subscription', ['unsubscribe']);
+        const mockSubscription = jasmine.createSpyObj('Subscription', [
+          'unsubscribe',
+        ]);
         mockSubscription.closed = true;
-        
+
         (component as any).subscriptions = [mockSubscription];
-        
+
         (component as any).ngOnDestroy();
-        
+
         expect(mockSubscription.unsubscribe).not.toHaveBeenCalled();
       });
 
       it('should clear subscriptions array', () => {
-        const mockSubscription = jasmine.createSpyObj('Subscription', ['unsubscribe']);
+        const mockSubscription = jasmine.createSpyObj('Subscription', [
+          'unsubscribe',
+        ]);
         mockSubscription.closed = false;
         (component as any).subscriptions = [mockSubscription];
-        
+
         (component as any).ngOnDestroy();
-        
+
         expect((component as any).subscriptions.length).toBe(0);
       });
     });
@@ -229,21 +254,21 @@ describe('RankingPage', () => {
     describe('loadRanking', () => {
       it('should call userService.getAllUsersForRanking', () => {
         component.loadRanking();
-        
+
         expect(mockUserService.getAllUsersForRanking).toHaveBeenCalled();
       });
 
       it('should update users$ observable', () => {
         const previousObservable = component.users$;
-        
+
         component.loadRanking();
-        
+
         expect(component.users$).toBe(mockUserService.getAllUsersForRanking());
       });
 
       it('should set loading state to false after loading', () => {
         component.loadRanking();
-        
+
         expect(component.isLoading).toBeFalsy();
       });
     });
@@ -251,19 +276,23 @@ describe('RankingPage', () => {
     describe('onRefresh', () => {
       it('should call loadRanking', () => {
         spyOn(component, 'loadRanking');
-        const mockEvent = { target: { complete: jasmine.createSpy('complete') } };
-        
+        const mockEvent = {
+          target: { complete: jasmine.createSpy('complete') },
+        };
+
         component.onRefresh(mockEvent);
-        
+
         expect(component.loadRanking).toHaveBeenCalled();
       });
 
       it('should complete refresh event after timeout', fakeAsync(() => {
-        const mockEvent = { target: { complete: jasmine.createSpy('complete') } };
-        
+        const mockEvent = {
+          target: { complete: jasmine.createSpy('complete') },
+        };
+
         component.onRefresh(mockEvent);
         tick(1000);
-        
+
         expect(mockEvent.target.complete).toHaveBeenCalled();
       }));
 
@@ -276,7 +305,7 @@ describe('RankingPage', () => {
 
       it('should handle event without target gracefully', fakeAsync(() => {
         const mockEvent = {};
-        
+
         expect(() => {
           component.onRefresh(mockEvent);
           tick(1000);
@@ -401,28 +430,28 @@ describe('RankingPage', () => {
     describe('openModal', () => {
       it('should create modal with UserDetailModalComponent', async () => {
         const user = mockUsers[0];
-        
+
         await component.openModal(user);
-        
+
         expect(mockModalController.create).toHaveBeenCalledWith(
           jasmine.objectContaining({
             component: UserDetailModalComponent,
             componentProps: {
-              user: user
-            }
+              user: user,
+            },
           })
         );
       });
 
       it('should configure modal with breakpoints', async () => {
         const user = mockUsers[0];
-        
+
         await component.openModal(user);
-        
+
         expect(mockModalController.create).toHaveBeenCalledWith(
           jasmine.objectContaining({
             breakpoints: [0, 0.25, 0.5, 0.75],
-            initialBreakpoint: 0.5
+            initialBreakpoint: 0.5,
           })
         );
       });
@@ -430,36 +459,48 @@ describe('RankingPage', () => {
       it('should present the modal', async () => {
         const user = mockUsers[0];
         const mockModal = {
-          present: jasmine.createSpy('present').and.returnValue(Promise.resolve())
+          present: jasmine
+            .createSpy('present')
+            .and.returnValue(Promise.resolve()),
         };
         mockModalController.create.and.returnValue(Promise.resolve(mockModal));
-        
+
         await component.openModal(user);
-        
+
         expect(mockModal.present).toHaveBeenCalled();
       });
 
       it('should handle modal creation errors gracefully', async () => {
         const user = mockUsers[0];
-        mockModalController.create.and.returnValue(Promise.reject(new Error('Modal creation failed')));
+        mockModalController.create.and.returnValue(
+          Promise.reject(new Error('Modal creation failed'))
+        );
         spyOn(console, 'error');
-        
+
         await component.openModal(user);
-        
-        expect(console.error).toHaveBeenCalledWith('Error opening user detail modal:', jasmine.any(Error));
+
+        expect(console.error).toHaveBeenCalledWith(
+          'Error opening user detail modal:',
+          jasmine.any(Error)
+        );
       });
 
       it('should handle modal presentation errors gracefully', async () => {
         const user = mockUsers[0];
         const mockModal = {
-          present: jasmine.createSpy('present').and.returnValue(Promise.reject(new Error('Present failed')))
+          present: jasmine
+            .createSpy('present')
+            .and.returnValue(Promise.reject(new Error('Present failed'))),
         };
         mockModalController.create.and.returnValue(Promise.resolve(mockModal));
         spyOn(console, 'error');
-        
+
         await component.openModal(user);
-        
-        expect(console.error).toHaveBeenCalledWith('Error opening user detail modal:', jasmine.any(Error));
+
+        expect(console.error).toHaveBeenCalledWith(
+          'Error opening user detail modal:',
+          jasmine.any(Error)
+        );
       });
     });
   });
@@ -472,16 +513,16 @@ describe('RankingPage', () => {
     it('should handle complete ranking workflow', fakeAsync(() => {
       // Initialize component
       component.ngOnInit();
-      
+
       // Simulate users data loading
       usersSubject.next(mockUsers);
       tick();
-      
+
       // Verify loading state
       expect(component.isLoading).toBeFalsy();
-      
+
       // Verify users data is available
-      component.users$.subscribe(users => {
+      component.users$.subscribe((users) => {
         expect(users).toEqual(mockUsers);
         expect(users.length).toBe(3);
       });
@@ -489,11 +530,11 @@ describe('RankingPage', () => {
 
     it('should handle empty ranking state', fakeAsync(() => {
       component.ngOnInit();
-      
+
       usersSubject.next(mockEmptyUsers);
       tick();
-      
-      component.users$.subscribe(users => {
+
+      component.users$.subscribe((users) => {
         expect(users).toEqual(mockEmptyUsers);
         expect(users.length).toBe(0);
       });
@@ -502,23 +543,23 @@ describe('RankingPage', () => {
     it('should handle refresh workflow', fakeAsync(() => {
       spyOn(component, 'loadRanking');
       const mockEvent = { target: { complete: jasmine.createSpy('complete') } };
-      
+
       component.onRefresh(mockEvent);
       tick(1000);
-      
+
       expect(component.loadRanking).toHaveBeenCalled();
       expect(mockEvent.target.complete).toHaveBeenCalled();
     }));
 
     it('should handle modal opening workflow', async () => {
       const user = mockUsers[0];
-      
+
       await component.openModal(user);
-      
+
       expect(mockModalController.create).toHaveBeenCalledWith(
         jasmine.objectContaining({
           component: UserDetailModalComponent,
-          componentProps: { user }
+          componentProps: { user },
         })
       );
     });
@@ -532,12 +573,14 @@ describe('RankingPage', () => {
     });
 
     it('should handle subscription cleanup on destroy', () => {
-      const mockSubscription = jasmine.createSpyObj('Subscription', ['unsubscribe']);
+      const mockSubscription = jasmine.createSpyObj('Subscription', [
+        'unsubscribe',
+      ]);
       mockSubscription.closed = false;
       (component as any).subscriptions = [mockSubscription];
-      
+
       (component as any).ngOnDestroy();
-      
+
       expect(mockSubscription.unsubscribe).toHaveBeenCalled();
       expect((component as any).subscriptions.length).toBe(0);
     });
@@ -548,11 +591,13 @@ describe('RankingPage', () => {
         { input: 1800000, expected: '30m' },
         { input: 3600000, expected: '1h 0m' },
         { input: 5400000, expected: '1h 30m' },
-        { input: 7200000, expected: '2h 0m' }
+        { input: 7200000, expected: '2h 0m' },
       ];
-      
-      testCases.forEach(testCase => {
-        expect(component.formatDuration(testCase.input)).toBe(testCase.expected);
+
+      testCases.forEach((testCase) => {
+        expect(component.formatDuration(testCase.input)).toBe(
+          testCase.expected
+        );
       });
     });
 
@@ -562,10 +607,10 @@ describe('RankingPage', () => {
         { input: 'John Doe', expected: 'JD' },
         { input: 'Mary Jane Smith', expected: 'MJ' },
         { input: '', expected: '' },
-        { input: 'a b c d', expected: 'AB' }
+        { input: 'a b c d', expected: 'AB' },
       ];
-      
-      testCases.forEach(testCase => {
+
+      testCases.forEach((testCase) => {
         expect(component.getInitials(testCase.input)).toBe(testCase.expected);
       });
     });
@@ -578,17 +623,17 @@ describe('RankingPage', () => {
 
     it('should handle observable stream lifecycle', fakeAsync(() => {
       let receivedUsers: UserPublicProfile[] = [];
-      
+
       component.ngOnInit();
-      component.users$.subscribe(users => {
+      component.users$.subscribe((users) => {
         receivedUsers = users;
       });
-      
+
       // Test empty state
       usersSubject.next([]);
       tick();
       expect(receivedUsers).toEqual([]);
-      
+
       // Test with data
       usersSubject.next(mockUsers);
       tick();

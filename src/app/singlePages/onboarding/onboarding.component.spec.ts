@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
+import { createFirebaseTestingModule } from '../../../testing/firebase-testing-utils';
 
 import { OnboardingComponent } from './onboarding.component';
 
@@ -8,9 +9,10 @@ describe('OnboardingComponent', () => {
   let fixture: ComponentFixture<OnboardingComponent>;
 
   beforeEach(waitForAsync(() => {
+    const firebaseModule = createFirebaseTestingModule();
     TestBed.configureTestingModule({
-      declarations: [ OnboardingComponent ],
-      imports: [IonicModule.forRoot()]
+      imports: [IonicModule.forRoot(), OnboardingComponent],
+      providers: firebaseModule.providers,
     }).compileComponents();
 
     fixture = TestBed.createComponent(OnboardingComponent);

@@ -1,11 +1,33 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Tracking } from 'src/app/core/models/tracking.model';
 import { Activity } from 'src/app/core/models/activity.model';
 import { ActivityService } from 'src/app/core/services/activity.service';
 import { Timestamp } from '@angular/fire/firestore';
-import { IonContent, IonIcon, ModalController, IonButton, IonHeader, IonToolbar, IonTitle, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonItem, IonLabel, IonBackButton, IonCardSubtitle, IonButtons, IonList, IonItemDivider, IonGrid, IonCol, IonRow } from "@ionic/angular/standalone";
+import {
+  IonContent,
+  IonIcon,
+  ModalController,
+  IonButton,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent,
+  IonItem,
+  IonLabel,
+  IonBackButton,
+  IonCardSubtitle,
+  IonButtons,
+  IonList,
+  IonItemDivider,
+  IonGrid,
+  IonCol,
+  IonRow,
+} from '@ionic/angular/standalone';
 import { ApplicationService } from 'src/app/core/services/application.service';
 import { ActivatedRoute } from '@angular/router';
 import { ElapsedTimePipe } from 'src/app/core/pipes/elapsed-time.pipe';
@@ -18,7 +40,8 @@ import { TrackingEditModalComponent } from 'src/app/components/tracking-edit-mod
   templateUrl: './tracking.component.html',
   styleUrls: ['./tracking.component.scss'],
   standalone: true,
-  imports: [IonItemDivider,
+  imports: [
+    IonItemDivider,
     CommonModule,
     FormsModule,
     IonContent,
@@ -37,56 +60,68 @@ import { TrackingEditModalComponent } from 'src/app/components/tracking-edit-mod
     IonCardSubtitle,
     IonButtons,
     ElapsedTimePipe,
-    TrackingCardComponent, IonGrid, IonRow, IonCol]
+    TrackingCardComponent,
+    IonGrid,
+    IonRow,
+    IonCol,
+  ],
 })
 export class TrackingComponent implements OnInit, OnDestroy {
-
-   // Properties for tracking state
+  // Properties for tracking state
   isTracking: boolean = false;
   currentActivity: Activity | undefined;
-  currentTracking: Tracking | void = void 0;  
+  currentTracking: Tracking | void = void 0;
   recentTrackings: Observable<Tracking[]> | undefined;
-  
+
   // Properties for time display
   public elapsedTime: number = 0;
   private intervalId: any;
-  
+
   // Available activities
   activities: Activity[] = [];
 
-  constructor(
-    private applicationService: ApplicationService,
-    private activityService: ActivityService,
-    public modalCtrl: ModalController,
-    public route: ActivatedRoute
-  ) { }
+  private applicationService = inject(ApplicationService);
+  private activityService = inject(ActivityService);
+  public modalCtrl = inject(ModalController);
+  public route = inject(ActivatedRoute);
+
+  constructor() {}
 
   ngOnInit() {
     // Load available activities
-    this.activityService.$activities.subscribe(activities => {
+    this.activityService.$activities.subscribe((activities) => {
       this.activities = activities;
     });
 
-    if(!this.route.snapshot.params['activityId']) {
-      throw("No activity ID provided in route parameters"); 
+    if (!this.route.snapshot.params['activityId']) {
+      throw 'No activity ID provided in route parameters';
     }
 
-    this.currentActivity = this.activities.find(activity => activity.id === this.route.snapshot.params['activityId']) || undefined;
+    this.currentActivity =
+      this.activities.find(
+        (activity) => activity.id === this.route.snapshot.params['activityId']
+      ) || undefined;
     if (!this.currentActivity) {
-      console.warn('No activity found for the provided ID:', this.route.snapshot.params['activityId']);
+      console.warn(
+        'No activity found for the provided ID:',
+        this.route.snapshot.params['activityId']
+      );
       return;
     }
-    this.recentTrackings = this.applicationService.getRecentTrackngsByActivity(this.currentActivity)
+    this.recentTrackings = this.applicationService.getRecentTrackngsByActivity(
+      this.currentActivity
+    );
 
     // TODO: Initialize current tracking from service if available
-    this.applicationService.$activeTracking.subscribe(tracking => {
+    this.applicationService.$activeTracking.subscribe((tracking) => {
       this.currentTracking = tracking;
       if (this.currentTracking) {
         this.isTracking = true;
         this.startTimer();
         // Find the current activity
         this.currentActivity = this.activities.find(
-          activity => activity.ref?.id === this.currentTracking?.activityRef?.id
+          (activity) =>
+            activity.ref?.id === this.currentTracking?.activityRef?.id
         );
       }
     });
@@ -109,8 +144,6 @@ export class TrackingComponent implements OnInit, OnDestroy {
    * Starts tracking for the selected activity
    */
   startTracking() {
-    
-
     // Create new tracking instance using the static method
     this.applicationService.startTracking(this.currentActivity!);
 
@@ -128,10 +161,10 @@ export class TrackingComponent implements OnInit, OnDestroy {
     this.applicationService.stopTracking();
     this.isTracking = false;
     this.stopTimer();
-    
+
     // Here you could save the tracking to the database
     // this.trackingService.saveTracking(this.currentTracking);
-    
+
     // Reset state
     this.elapsedTime = 0;
 
@@ -139,12 +172,11 @@ export class TrackingComponent implements OnInit, OnDestroy {
     let modal = await this.modalCtrl.create({
       component: TrackingEditModalComponent,
       componentProps: {
-        tracking: finishedTracking
-      }
+        tracking: finishedTracking,
+      },
     });
     await modal.present();
   }
-
 
   /**
    * Handles activity selection from dropdown
@@ -177,8 +209,6 @@ export class TrackingComponent implements OnInit, OnDestroy {
     }
   }
 
- 
-
   /**
    * Formats the start time of current tracking
    */
@@ -187,7 +217,7 @@ export class TrackingComponent implements OnInit, OnDestroy {
 
     return this.currentTracking.startDate.toLocaleTimeString('de-DE', {
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   }
 
@@ -201,7 +231,7 @@ export class TrackingComponent implements OnInit, OnDestroy {
       month: '2-digit',
       year: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   }
 }

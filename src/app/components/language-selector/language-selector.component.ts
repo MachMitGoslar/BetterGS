@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   IonButton,
@@ -13,23 +13,18 @@ import { globeOutline, checkmark } from 'ionicons/icons';
 @Component({
   selector: 'app-language-selector',
   templateUrl: './language-selector.component.html',
-  styleUrls: ['./language-selector.component.scss'],  
+  styleUrls: ['./language-selector.component.scss'],
   standalone: true,
-  imports: [
-    CommonModule,
-    IonButton,
-    IonIcon,
-  ],
+  imports: [CommonModule, IonButton, IonIcon],
 })
 export class LanguageSelectorComponent implements OnInit, OnDestroy {
   currentLanguage: Language = { code: 'en', name: 'English', flag: '🇺🇸' };
-  
+
   private subscriptions: Subscription[] = [];
 
-  constructor(
-    private i18nService: I18nService,
-    private actionSheetController: ActionSheetController
-  ) {
+  private i18nService = inject(I18nService);
+  private actionSheetController = inject(ActionSheetController);
+  constructor() {
     this.setupIcons();
   }
 
@@ -42,7 +37,7 @@ export class LanguageSelectorComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
   /**
@@ -51,7 +46,7 @@ export class LanguageSelectorComponent implements OnInit, OnDestroy {
   private setupIcons() {
     addIcons({
       'globe-outline': globeOutline,
-      'checkmark': checkmark,
+      checkmark: checkmark,
     });
   }
 
@@ -60,25 +55,25 @@ export class LanguageSelectorComponent implements OnInit, OnDestroy {
    */
   async openLanguageSelector() {
     const currentLang = this.i18nService.getCurrentLanguage();
-    
+
     const buttons = [
-      ...this.i18nService.supportedLanguages.map(language => ({
+      ...this.i18nService.supportedLanguages.map((language) => ({
         text: `${language.flag} ${language.name}`,
         icon: language.code === currentLang ? 'checkmark' : undefined,
         handler: () => {
           this.selectLanguage(language.code);
-        }
+        },
       })),
       {
         text: this.i18nService.getTranslation('common.cancel'),
         role: 'cancel' as const,
-        handler: () => {}
-      }
+        handler: () => {},
+      },
     ];
 
     const actionSheet = await this.actionSheetController.create({
       header: this.i18nService.getTranslation('language.selector'),
-      buttons: buttons
+      buttons: buttons,
     });
 
     await actionSheet.present();

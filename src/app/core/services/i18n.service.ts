@@ -1,4 +1,4 @@
-import { Injectable, LOCALE_ID, Inject } from '@angular/core';
+import { Injectable, LOCALE_ID, Inject, inject } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { translations } from '../../../locale/translations';
@@ -15,11 +15,11 @@ export interface Language {
 
 /**
  * I18nService - Internationalization Service
- * 
+ *
  * This service handles all internationalization (i18n) and localization (l10n)
  * operations in the BetterGS application. It provides language switching,
  * translation management, and locale-specific formatting.
- * 
+ *
  * Key Responsibilities:
  * - Language switching and persistence
  * - Translation key resolution
@@ -27,18 +27,18 @@ export interface Language {
  * - Browser language detection
  * - Language preference storage
  * - Real-time language change notifications
- * 
+ *
  * Architecture:
  * - Uses BehaviorSubject for reactive language changes
  * - Integrates with Angular's LOCALE_ID injection token
  * - Supports localStorage for language persistence
  * - Provides fallback mechanisms for missing translations
  * - Uses native Intl API for locale-specific formatting
- * 
+ *
  * Supported Languages:
  * - English (en) - 🇺🇸
  * - German (de) - 🇩🇪
- * 
+ *
  * @author BetterGS Development Team
  * @version 2.0.0
  * @since 2025-08-22
@@ -48,7 +48,6 @@ export interface Language {
   providedIn: 'root',
 })
 export class I18nService {
-
   // ========================================
   // PRIVATE PROPERTIES
   // ========================================
@@ -69,7 +68,8 @@ export class I18nService {
    * @description Provides real-time access to language changes
    * @public
    */
-  public currentLanguage$: Observable<string> = this.currentLanguageSubject.asObservable();
+  public currentLanguage$: Observable<string> =
+    this.currentLanguageSubject.asObservable();
 
   // ========================================
   // PUBLIC CONSTANTS
@@ -91,13 +91,16 @@ export class I18nService {
 
   /**
    * I18nService Constructor
-   * 
+   *
    * Initializes the service with the user's preferred language from
    * localStorage, Angular's LOCALE_ID, or defaults to German.
-   * 
+   *
    * @param localeId - Angular's injected LOCALE_ID token
    */
-  constructor(@Inject(LOCALE_ID) private localeId: string) {
+
+  private localeId = inject(LOCALE_ID);
+
+  constructor() {
     // Set initial language from locale or localStorage
     const savedLanguage = this.getSavedLanguage();
     const initialLanguage = savedLanguage || this.localeId || 'de';
@@ -110,9 +113,9 @@ export class I18nService {
 
   /**
    * Get the current language code
-   * 
+   *
    * Returns the currently active language code.
-   * 
+   *
    * @public
    * @returns {string} Current language code (e.g., 'en', 'de')
    * @since 1.0.0
@@ -123,10 +126,10 @@ export class I18nService {
 
   /**
    * Set the current language
-   * 
+   *
    * Changes the active language and persists the preference to localStorage.
    * Only accepts supported language codes.
-   * 
+   *
    * @public
    * @param languageCode - The language code to set
    * @returns {void}
@@ -141,39 +144,42 @@ export class I18nService {
 
   /**
    * Get the current language object
-   * 
+   *
    * Returns the complete language object for the current language,
    * including code, name, and flag.
-   * 
+   *
    * @public
    * @returns {Language} Current language object
    * @since 1.0.0
    */
   getCurrentLanguageObject(): Language {
     const currentCode = this.getCurrentLanguage();
-    return this.supportedLanguages.find(lang => lang.code === currentCode) || this.supportedLanguages[0];
+    return (
+      this.supportedLanguages.find((lang) => lang.code === currentCode) ||
+      this.supportedLanguages[0]
+    );
   }
 
   /**
    * Check if a language is supported
-   * 
+   *
    * Validates whether a given language code is in the list of supported languages.
-   * 
+   *
    * @public
    * @param languageCode - The language code to check
    * @returns {boolean} True if language is supported, false otherwise
    * @since 1.0.0
    */
   isLanguageSupported(languageCode: string): boolean {
-    return this.supportedLanguages.some(lang => lang.code === languageCode);
+    return this.supportedLanguages.some((lang) => lang.code === languageCode);
   }
 
   /**
    * Get browser language preference
-   * 
+   *
    * Detects the user's browser language and returns it if supported,
    * otherwise returns the default language (German).
-   * 
+   *
    * @public
    * @returns {string} Supported browser language or default language
    * @since 1.0.0
@@ -185,11 +191,11 @@ export class I18nService {
 
   /**
    * Change language and reload page
-   * 
+   *
    * Changes the language and optionally reloads the page for full i18n support.
    * In production apps with proper Angular i18n, this would redirect to
    * the appropriate locale-specific route.
-   * 
+   *
    * @public
    * @param languageCode - The language code to switch to
    * @returns {void}
@@ -204,7 +210,7 @@ export class I18nService {
       // console.log('Reloading to:', `./${languageCode}/index.html`);
       //   window.location.href = `./${languageCode}/index.html`;
       // // } else {
-         // window.location.reload();
+      // window.location.reload();
       // // }
     }
   }
@@ -215,9 +221,9 @@ export class I18nService {
 
   /**
    * Save language preference to localStorage
-   * 
+   *
    * Persists the selected language to browser storage for future sessions.
-   * 
+   *
    * @private
    * @param languageCode - The language code to save
    * @returns {void}
@@ -229,9 +235,9 @@ export class I18nService {
 
   /**
    * Get saved language from localStorage
-   * 
+   *
    * Retrieves the previously saved language preference from browser storage.
-   * 
+   *
    * @private
    * @returns {string | null} Saved language code or null if not found
    * @since 1.0.0
@@ -246,12 +252,12 @@ export class I18nService {
 
   /**
    * Get translation for a key
-   * 
+   *
    * Retrieves the translated text for a given translation key in the current language.
    * Falls back to the key itself if translation is not found.
-   * 
+   *
    * Note: This is a fallback method. In production, you should use Angular i18n.
-   * 
+   *
    * @public
    * @param key - The translation key to look up
    * @returns {string} Translated text or the key if translation not found
@@ -264,9 +270,9 @@ export class I18nService {
 
   /**
    * Format date according to current locale
-   * 
+   *
    * Formats a date using the current language's locale settings.
-   * 
+   *
    * @public
    * @param date - The date to format
    * @returns {string} Formatted date string
@@ -275,19 +281,19 @@ export class I18nService {
   formatDate(date: Date): string {
     const currentLang = this.getCurrentLanguage();
     const locale = currentLang === 'de' ? 'de-DE' : 'en-US';
-    
+
     return new Intl.DateTimeFormat(locale, {
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
     }).format(date);
   }
 
   /**
    * Format number according to current locale
-   * 
+   *
    * Formats a number using the current language's locale settings.
-   * 
+   *
    * @public
    * @param num - The number to format
    * @returns {string} Formatted number string
@@ -296,8 +302,7 @@ export class I18nService {
   formatNumber(num: number): string {
     const currentLang = this.getCurrentLanguage();
     const locale = currentLang === 'de' ? 'de-DE' : 'en-US';
-    
+
     return new Intl.NumberFormat(locale).format(num);
   }
-
 }

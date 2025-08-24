@@ -1,19 +1,27 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { 
-  IonCard, 
-  IonCardHeader, 
-  IonCardTitle, 
-  IonCardSubtitle, 
-  IonCardContent, 
+import {
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardSubtitle,
+  IonCardContent,
   IonIcon,
-  ModalController
-} from "@ionic/angular/standalone";
+  ModalController,
+} from '@ionic/angular/standalone';
 import { Tracking } from 'src/app/core/models/tracking.model';
 import { ElapsedTimePipe } from 'src/app/core/pipes/elapsed-time.pipe';
 import { ActivityService } from 'src/app/core/services/activity.service';
-import { pencil, imageOutline, timeOutline, playCircleOutline, arrowForwardOutline, stopCircleOutline, documentTextOutline } from 'ionicons/icons';
+import {
+  pencil,
+  imageOutline,
+  timeOutline,
+  playCircleOutline,
+  arrowForwardOutline,
+  stopCircleOutline,
+  documentTextOutline,
+} from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { TrackingEditModalComponent } from '../tracking-edit-modal/tracking-edit-modal.component';
 import { Activity } from 'src/app/core/models/activity.model';
@@ -30,19 +38,30 @@ import { Activity } from 'src/app/core/models/activity.model';
     IonCardContent,
     IonIcon,
     ElapsedTimePipe,
-  ]
+  ],
 })
 export class TrackingCardComponent implements OnInit {
-
   @Input() tracking: Tracking | undefined;
   activity?: Activity;
+  public activityService: ActivityService = inject(ActivityService);
+  public modalController: ModalController = inject(ModalController);
 
-  constructor( public activityService: ActivityService, public modalController: ModalController) { 
-    addIcons({imageOutline,pencil,timeOutline,playCircleOutline,arrowForwardOutline,stopCircleOutline,documentTextOutline});
+  constructor() {
+    addIcons({
+      imageOutline,
+      pencil,
+      timeOutline,
+      playCircleOutline,
+      arrowForwardOutline,
+      stopCircleOutline,
+      documentTextOutline,
+    });
   }
 
   ngOnInit() {
-        this.activity = this.activityService.activities.find(a => a.id === this.tracking!.activityRef!.id);
+    this.activity = this.activityService.activities.find(
+      (a) => a.id === this.tracking!.activityRef!.id
+    );
   }
 
   getActivityName(): string {
@@ -62,10 +81,9 @@ export class TrackingCardComponent implements OnInit {
     const modal = await this.modalController.create({
       component: TrackingEditModalComponent,
       componentProps: {
-        tracking: this.tracking
-      }
+        tracking: this.tracking,
+      },
     });
     modal.present();
   }
-
 }

@@ -16,7 +16,7 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      
+
       ion-icon {
         font-size: 1.5em;
       }
@@ -238,7 +238,7 @@
     aspect-ratio: 1;
     --border-radius: 12px;
     margin: 0;
-    
+
     &.selected {
       --background: var(--ion-color-primary);
       --color: var(--ion-color-primary-contrast);
