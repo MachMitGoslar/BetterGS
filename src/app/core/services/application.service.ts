@@ -1062,16 +1062,6 @@ export class ApplicationService implements OnDestroy {
    * Initialize platform-specific app state listeners
    */
   private async initializeAppStateListeners(): Promise<void> {
-    // Skip initialization in test environment
-    if (
-      typeof jasmine !== 'undefined' ||
-      (typeof window !== 'undefined' && (window as any).jasmine) ||
-      (typeof global !== 'undefined' && (global as any).jasmine)
-    ) {
-      console.log('Skipping app state listeners in test environment');
-      return;
-    }
-
     if (this.platform.is('capacitor')) {
       // Setup Capacitor app state listeners for mobile
       let listener = await App.addListener('appStateChange', (state) => {

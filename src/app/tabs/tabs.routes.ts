@@ -26,14 +26,6 @@ export const routes: Routes = [
           import('./profile/profile.page').then((m) => m.ProfilePage),
       },
       {
-        path: 'admin',
-        loadComponent: () =>
-          import('./admin-page/admin-page.page').then((m) => m.AdminPagePage),
-        canActivate: [
-          () => import('../core/guards/admin.guard').then((m) => m.adminGuard),
-        ],
-      },
-      {
         path: '',
         redirectTo: '/tabs/my_activities',
         pathMatch: 'full',

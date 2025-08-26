@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 import { ModalController } from '@ionic/angular/standalone';
-import { createFirebaseTestingModule } from '../../../testing/firebase-testing-utils';
 
 import { TrackingCardComponent } from './tracking-card.component';
+import { createTestingEnvironment } from 'src/testing/shared-testing-config';
 
 describe('TrackingCardComponent', () => {
   let component: TrackingCardComponent;
   let fixture: ComponentFixture<TrackingCardComponent>;
 
   beforeEach(waitForAsync(() => {
-    const firebaseModule = createFirebaseTestingModule();
+    const testEnv = createTestingEnvironment();
 
     TestBed.configureTestingModule({
       imports: [IonicModule.forRoot(), TrackingCardComponent],
-      providers: [...firebaseModule.providers, ModalController],
+      providers: [...testEnv.providers, ModalController],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TrackingCardComponent);

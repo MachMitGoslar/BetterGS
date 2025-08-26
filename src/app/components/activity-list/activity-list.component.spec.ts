@@ -3,16 +3,17 @@ import { IonicModule } from '@ionic/angular';
 import { createFirebaseTestingModule } from '../../../testing/firebase-testing-utils';
 
 import { ActivityListComponent } from './activity-list.component';
+import { createTestingEnvironment } from 'src/testing/shared-testing-config';
 
 describe('ActivityListComponent', () => {
   let component: ActivityListComponent;
   let fixture: ComponentFixture<ActivityListComponent>;
 
   beforeEach(waitForAsync(() => {
-    const firebaseModule = createFirebaseTestingModule();
+    const testEnv = createTestingEnvironment();
     TestBed.configureTestingModule({
       imports: [IonicModule.forRoot(), ActivityListComponent],
-      providers: firebaseModule.providers,
+      providers: testEnv.providers,
     }).compileComponents();
 
     fixture = TestBed.createComponent(ActivityListComponent);

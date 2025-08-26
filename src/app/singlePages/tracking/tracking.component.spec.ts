@@ -5,8 +5,6 @@ import { ModalController } from '@ionic/angular/standalone';
 import { createTestingEnvironment } from '../../../testing/shared-testing-config';
 
 import { TrackingComponent } from './tracking.component';
-import { BehaviorSubject } from 'rxjs';
-import { I18nService } from 'src/app/core/services/i18n.service';
 
 describe('TrackingComponent', () => {
   let component: TrackingComponent;

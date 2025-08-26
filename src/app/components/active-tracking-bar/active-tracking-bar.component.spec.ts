@@ -13,9 +13,18 @@ describe('ActiveTrackingBarComponent', () => {
     const testEnv = createTestingEnvironment();
 
     TestBed.configureTestingModule({
-      imports: [IonicModule.forRoot(), ActiveTrackingBarComponent],
-      providers: [...testEnv.providers, ModalController],
-    }).compileComponents();
+      imports: [
+        IonicModule.forRoot(), 
+        ActiveTrackingBarComponent
+      ],
+      providers: [
+        ...testEnv.providers,
+        { provide: ModalController, useValue: testEnv.mocks.ionic.mockModalController },
+      ],
+    })
+    .compileComponents();
+
+    console.log('Test providers configured:', testEnv.providers.length);
 
     fixture = TestBed.createComponent(ActiveTrackingBarComponent);
     component = fixture.componentInstance;
