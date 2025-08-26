@@ -12,6 +12,7 @@ import {
   writeBatch,
   collectionGroup,
   getDocs,
+  getCountFromServer,
 } from '@angular/fire/firestore';
 import {
   Auth,
@@ -589,5 +590,18 @@ export class UserService {
           .sort((a, b) => b.trackedTime - a.trackedTime); // Sort by tracked time descending
       })
     );
+  }
+
+  /**
+   * Get the count of active activities for a specific user.
+   *
+   * @param userId - The ID of the user whose activities are being counted
+   * @returns {Promise<number>} Promise that resolves to the number of active activities
+   */
+  async getUserActiveActivityCount(userId: string): Promise<number> {
+    const snapshot = await getCountFromServer(
+      collection(this.firestore, `user_profile/${userId}/activities`)
+    );
+    return snapshot.data().count;
   }
 }

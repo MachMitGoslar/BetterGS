@@ -171,6 +171,11 @@ export class ProfilePage implements OnInit, OnDestroy {
   _privateUserData: UserPrivateProfile | undefined;
 
   /**
+   * User's active activity count (number of ongoing activities)
+   */
+  userActiveActivityCount: Promise<number> = Promise.resolve(0);
+
+  /**
    * Reactive form group for profile editing
    */
   profileForm!: FormGroup;
@@ -395,6 +400,9 @@ export class ProfilePage implements OnInit, OnDestroy {
         this.populateForm();
       }
     );
+    this.userActiveActivityCount = this.userService.getUserActiveActivityCount(
+      this.user?.uid!
+    );
 
     this.subscriptions.push(userSub, privateProfileSub, publicProfileSub);
   }
@@ -485,25 +493,31 @@ export class ProfilePage implements OnInit, OnDestroy {
       return;
     }
 
+    const formData = this.profileForm.value;
+
+    // Update private user data (email)
+    if (formData.email !== this._privateUserData.email) {
+      this._privateUserData.email = formData.email;
+    }
+
     try {
-      const formData = this.profileForm.value;
-
-      // Update private user data (email)
-      if (formData.email !== this._privateUserData.email) {
-        this._privateUserData.email = formData.email;
-      }
-
       // Update public user data (display name) if changed
       if (formData.displayName !== this._publicUserData.name) {
         this._publicUserData.name = formData.displayName;
         console.log('Display name changed:', formData.displayName);
+
         await this.applicationService.updateUserProfile(
           this._publicUserData.toDB()
         );
       }
 
       // Handle anonymous user registration with email/password
-      if (formData.newPassword && formData.email && this.user.isAnonymous) {
+      if (
+        formData.newPassword &&
+        formData.newPassword.length > 0 &&
+        formData.email &&
+        this.user.isAnonymous
+      ) {
         await this.applicationService.registerUserWithEmail(
           formData.email,
           formData.newPassword
@@ -513,7 +527,10 @@ export class ProfilePage implements OnInit, OnDestroy {
       // Handle password change for authenticated users
       if (
         formData.newPassword &&
+        formData.newPassword.length > 0 &&
         formData.currentPassword &&
+        formData.currentPassword.length > 0 &&
+        formData.newPassword !== formData.currentPassword &&
         !this.user.isAnonymous
       ) {
         await this.applicationService.changePassword(formData.newPassword);
@@ -526,11 +543,12 @@ export class ProfilePage implements OnInit, OnDestroy {
         confirmPassword: '',
       });
     } catch (error) {
-      console.error('Error updating profile:', error);
+      console.error('Failed to update profile:', error);
       this.notificationService.addNotification(
         'Failed to update profile. Please try again.',
         'danger'
       );
+      return;
     } finally {
       this.notificationService.addNotification(
         'Profile updated successfully!',

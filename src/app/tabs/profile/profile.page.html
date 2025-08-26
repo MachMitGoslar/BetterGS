@@ -99,8 +99,8 @@
           <div class="stat-item">
             <ion-icon name="trophy-outline" class="stat-icon"></ion-icon>
             <div class="stat-info">
-              <span class="stat-value"
-                >{{ _publicUserData?.trackedActivities }}</span
+              <span class="stat-value">
+                {{ userActiveActivityCount | async }}</span
               >
               <span class="stat-label" i18n="@@profile.activities"
                 >Activities</span

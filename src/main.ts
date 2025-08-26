@@ -48,15 +48,12 @@ bootstrapApplication(AppComponent, {
     }),
 
     provideAuth(() => {
-      let auth = initializeAuth(
-        getApp()
-        // {
-        //               persistence: !environment.production
-        //                   ? browserSessionPersistence
-        //                   : indexedDBLocalPersistence,
-        //               popupRedirectResolver: browserPopupRedirectResolver
-        //           }
-      );
+      let auth = initializeAuth(getApp(), {
+        persistence: !environment.production
+          ? browserSessionPersistence
+          : indexedDBLocalPersistence,
+        // popupRedirectResolver: browserPopupRedirectResolver,
+      });
       if (!environment.production) {
         connectAuthEmulator(
           auth,

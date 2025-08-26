@@ -462,7 +462,7 @@ describe('ProfilePage', () => {
       it('should handle update errors gracefully', async () => {
         // Set up a scenario where updateUserProfile will be called and fail
         component.profileForm.patchValue({
-          displayName: 'New Name',
+          displayName: 'New Name kkk',
           email: 'test@example.com',
         });
 

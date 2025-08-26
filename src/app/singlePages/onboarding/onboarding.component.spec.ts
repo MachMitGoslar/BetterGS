@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
-import { createFirebaseTestingModule } from '../../../testing/firebase-testing-utils';
+import { createTestingEnvironment } from '../../../testing/shared-testing-config';
 
 import { OnboardingComponent } from './onboarding.component';
 
@@ -9,10 +9,10 @@ describe('OnboardingComponent', () => {
   let fixture: ComponentFixture<OnboardingComponent>;
 
   beforeEach(waitForAsync(() => {
-    const firebaseModule = createFirebaseTestingModule();
+    const testEnv = createTestingEnvironment();
     TestBed.configureTestingModule({
       imports: [IonicModule.forRoot(), OnboardingComponent],
-      providers: firebaseModule.providers,
+      providers: testEnv.providers,
     }).compileComponents();
 
     fixture = TestBed.createComponent(OnboardingComponent);

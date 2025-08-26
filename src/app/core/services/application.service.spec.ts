@@ -1,20 +1,29 @@
 import { TestBed } from '@angular/core/testing';
-import { createFirebaseTestingModule } from '../../../testing/firebase-testing-utils';
+import { createTestingEnvironment } from '../../../testing/shared-testing-config';
 
 import { ApplicationService } from './application.service';
 
 describe('ApplicationService', () => {
-  let service: ApplicationService;
+  let service: any; // Using mock service from testing environment
 
   beforeEach(() => {
-    const firebaseModule = createFirebaseTestingModule();
+    const testEnv = createTestingEnvironment();
+
     TestBed.configureTestingModule({
-      providers: [...firebaseModule.providers],
+      providers: testEnv.providers,
     });
-    service = TestBed.inject(ApplicationService);
+
+    // Use the mocked ApplicationService from the testing environment
+    service = testEnv.mocks.services.mockApplicationService;
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
+  });
+
+  it('should have app lifecycle methods', () => {
+    expect(service.onAppComesForeground).toBeDefined();
+    expect(service.onAppGoesBackground).toBeDefined();
+    expect(service.$appState).toBeDefined();
   });
 });

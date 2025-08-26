@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 import { ModalController } from '@ionic/angular/standalone';
-import { createFirebaseTestingModule } from '../../../testing/firebase-testing-utils';
+import { createTestingEnvironment } from '../../../testing/shared-testing-config';
 
 import { ActiveTrackingBarComponent } from './active-tracking-bar.component';
 
@@ -10,11 +10,11 @@ describe('ActiveTrackingBarComponent', () => {
   let fixture: ComponentFixture<ActiveTrackingBarComponent>;
 
   beforeEach(waitForAsync(() => {
-    const firebaseModule = createFirebaseTestingModule();
+    const testEnv = createTestingEnvironment();
 
     TestBed.configureTestingModule({
       imports: [IonicModule.forRoot(), ActiveTrackingBarComponent],
-      providers: [...firebaseModule.providers, ModalController],
+      providers: [...testEnv.providers, ModalController],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ActiveTrackingBarComponent);

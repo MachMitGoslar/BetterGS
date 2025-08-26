@@ -34,6 +34,7 @@ import { ElapsedTimePipe } from 'src/app/core/pipes/elapsed-time.pipe';
 import { Observable } from 'rxjs';
 import { TrackingCardComponent } from 'src/app/components/tracking-card/tracking-card.component';
 import { TrackingEditModalComponent } from 'src/app/components/tracking-edit-modal/tracking-edit-modal.component';
+import { I18nService } from 'src/app/core/services/i18n.service';
 
 @Component({
   selector: 'app-tracking',
@@ -70,7 +71,7 @@ export class TrackingComponent implements OnInit, OnDestroy {
   // Properties for tracking state
   isTracking: boolean = false;
   currentActivity: Activity | undefined;
-  currentTracking: Tracking | void = void 0;
+  currentTracking?: Tracking;
   recentTrackings: Observable<Tracking[]> | undefined;
 
   // Properties for time display
@@ -84,6 +85,7 @@ export class TrackingComponent implements OnInit, OnDestroy {
   private activityService = inject(ActivityService);
   public modalCtrl = inject(ModalController);
   public route = inject(ActivatedRoute);
+  public i18nService = inject(I18nService);
 
   constructor() {}
 
@@ -114,6 +116,7 @@ export class TrackingComponent implements OnInit, OnDestroy {
 
     // TODO: Initialize current tracking from service if available
     this.applicationService.$activeTracking.subscribe((tracking) => {
+      console.log('Active tracking subscription fired', tracking);
       this.currentTracking = tracking;
       if (this.currentTracking) {
         this.isTracking = true;
@@ -125,6 +128,17 @@ export class TrackingComponent implements OnInit, OnDestroy {
         );
       }
     });
+    this.applicationService.onAppGoesBackground(() => {
+      this.stopTimer();
+    });
+
+    this.applicationService.onAppComesForeground(() => {
+      if (this.currentTracking && this.currentTracking.startDate) {
+        this.startTimer();
+        //this.updateElapsedTime();
+      }
+    });
+
     //   this.isTracking = true;
     //   this.startTimer();
     //   // Find the current activity
@@ -233,5 +247,17 @@ export class TrackingComponent implements OnInit, OnDestroy {
       hour: '2-digit',
       minute: '2-digit',
     });
+  }
+
+  get tracking_for_different(): boolean {
+    const different =
+      this.currentTracking?.activityRef?.id !==
+      this.route.snapshot.params['activityId'];
+    return this.currentTracking !== undefined && different;
+  }
+
+  getDifferentActivityName(activityId: string): string | undefined {
+    const activity = this.activities.find((a) => a.id === activityId);
+    return activity ? activity.title : undefined;
   }
 }

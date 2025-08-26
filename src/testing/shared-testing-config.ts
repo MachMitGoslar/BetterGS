@@ -157,6 +157,9 @@ export function createServiceMocks(overrides: any = {}) {
     deleteUser: jasmine
       .createSpy('deleteUser')
       .and.returnValue(Promise.resolve()),
+    getUserActiveActivityCount: jasmine
+      .createSpy('getUserActiveActivityCount')
+      .and.returnValue(Promise.resolve(5)),
     ...overrides.userService,
   };
 
@@ -181,6 +184,18 @@ export function createServiceMocks(overrides: any = {}) {
     deleteAccount: jasmine
       .createSpy('deleteAccount')
       .and.returnValue(Promise.resolve()),
+    initializeAppStateListeners: jasmine
+      .createSpy('initializeAppStateListeners')
+      .and.returnValue(Promise.resolve()),
+    // App Lifecycle Methods
+    onAppComesForeground: jasmine
+      .createSpy('onAppComesForeground')
+      .and.returnValue(() => {}), // Mock unsubscribe function
+    onAppGoesBackground: jasmine
+      .createSpy('onAppGoesBackground')
+      .and.returnValue(() => {}), // Mock unsubscribe function
+    isAppActive: true, // Mock property
+    $appState: new BehaviorSubject(true), // Mock observable for app state
     ...overrides.applicationService,
   };
 

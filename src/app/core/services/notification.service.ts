@@ -226,7 +226,7 @@ export class NotificationService {
    * @returns {Promise<void>} Promise that resolves when notifications are cancelled
    * @since 1.0.0
    */
-  async cancelLocalNotifications(notificationId: number): Promise<void> {
+  async cancelLocalNotifications(): Promise<void> {
     const notifications = this.active_local_notifications.map(
       (n) => n.notifications
     );
