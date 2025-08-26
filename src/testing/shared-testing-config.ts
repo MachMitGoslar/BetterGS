@@ -12,8 +12,17 @@
 
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, NavController} from "@ionic/angular"
+import {ModalController, AlertController, ActionSheetController, ToastController, LoadingController, Platform } from '@ionic/angular/standalone';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { createFirebaseTestingModule } from './firebase-testing-utils';
+import { ApplicationService } from 'src/app/core/services/application.service';
+import { UserService } from 'src/app/core/services/user.service';
+import { ActivityService } from 'src/app/core/services/activity.service';
+import { TrackingService } from 'src/app/core/services/tracking.service';
+import { NotificationService } from 'src/app/core/services/notification.service';
+import { I18nService } from 'src/app/core/services/i18n.service';
 
 // ==========================================
 // Common Test Data
@@ -157,7 +166,10 @@ export function createServiceMocks(overrides: any = {}) {
     deleteUser: jasmine
       .createSpy('deleteUser')
       .and.returnValue(Promise.resolve()),
-    ...overrides.userService,
+    getUserActiveActivityCount: jasmine
+      .createSpy('getUserActiveActivityCount')
+      .and.returnValue(Promise.resolve(5)),
+    // ...overrides.userService,
   };
 
   // Application Service Mock
@@ -181,13 +193,28 @@ export function createServiceMocks(overrides: any = {}) {
     deleteAccount: jasmine
       .createSpy('deleteAccount')
       .and.returnValue(Promise.resolve()),
+    initializeAppStateListeners: jasmine
+      .createSpy('initializeAppStateListeners')
+      .and.returnValue(Promise.resolve()),
+    // App Lifecycle Methods
+    onAppComesForeground: jasmine
+      .createSpy('onAppComesForeground')
+      .and.returnValue(() => {}), // Mock unsubscribe function
+    onAppGoesBackground: jasmine
+      .createSpy('onAppGoesBackground')
+      .and.returnValue(() => {}), // Mock unsubscribe function
+    isAppActive: true, // Mock property
+    $appState: new BehaviorSubject(true), // Mock observable for app state
+    $activeTracking: new BehaviorSubject(null), // Mock observable for active tracking
     ...overrides.applicationService,
   };
 
   // Activity Service Mock
+  
   const activitiesSubject = new BehaviorSubject(MOCK_ACTIVITIES);
   const mockActivityService = {
     $activities: activitiesSubject.asObservable(),
+    activities: MOCK_ACTIVITIES,
     createActivity: jasmine
       .createSpy('createActivity')
       .and.returnValue(Promise.resolve()),
@@ -361,7 +388,7 @@ export function createIonicMocks(overrides: any = {}) {
     getTop: jasmine
       .createSpy('getTop')
       .and.returnValue(Promise.resolve(mockModal)),
-    ...overrides.modalController,
+    //...overrides.modalController,
   };
 
   // Alert Controller Mock
@@ -434,7 +461,49 @@ export function createIonicMocks(overrides: any = {}) {
     navigateByUrl: jasmine
       .createSpy('navigateByUrl')
       .and.returnValue(Promise.resolve(true)),
+    url: '/test',
+    events: of({}), // Router events observable
+    root: {
+      subscribe: jasmine.createSpy('subscribe').and.returnValue({ unsubscribe: jasmine.createSpy('unsubscribe') }),
+      subscribeWithPriority: jasmine.createSpy('subscribeWithPriority').and.returnValue({ unsubscribe: jasmine.createSpy('unsubscribe') })
+    },
+    config: { onSameUrlNavigation: 'reload' },
+    routerState: { root: {} },
+    createUrlTree: jasmine.createSpy('createUrlTree').and.returnValue({}),
+    serializeUrl: jasmine.createSpy('serializeUrl').and.returnValue('/test'),
+    parseUrl: jasmine.createSpy('parseUrl').and.returnValue({}),
+    isActive: jasmine.createSpy('isActive').and.returnValue(true),
     ...overrides.router,
+  };
+
+  const mockLocation = {
+    back: jasmine.createSpy('back'),
+    forward: jasmine.createSpy('forward'),
+    path: jasmine.createSpy('path').and.returnValue('/test'),
+    replaceState: jasmine.createSpy('replaceState'),
+    go: jasmine.createSpy('go'),
+    isCurrentPathEqualTo: jasmine.createSpy('isCurrentPathEqualTo').and.returnValue(true),
+    ...overrides.location,
+  };
+
+  const mockNavController = {
+    navigateForward: jasmine.createSpy('navigateForward').and.returnValue(Promise.resolve(true)),
+    navigateBack: jasmine.createSpy('navigateBack').and.returnValue(Promise.resolve(true)),
+    navigateRoot: jasmine.createSpy('navigateRoot').and.returnValue(Promise.resolve(true)),
+    pop: jasmine.createSpy('pop').and.returnValue(Promise.resolve(true)),
+    push: jasmine.createSpy('push').and.returnValue(Promise.resolve(true)),
+    insert: jasmine.createSpy('insert').and.returnValue(Promise.resolve(true)),
+    insertPages: jasmine.createSpy('insertPages').and.returnValue(Promise.resolve(true)),
+    popTo: jasmine.createSpy('popTo').and.returnValue(Promise.resolve(true)),
+    popToRoot: jasmine.createSpy('popToRoot').and.returnValue(Promise.resolve(true)),
+    removeIndex: jasmine.createSpy('removeIndex').and.returnValue(Promise.resolve(true)),
+    setRoot: jasmine.createSpy('setRoot').and.returnValue(Promise.resolve(true)),
+    setPages: jasmine.createSpy('setPages').and.returnValue(Promise.resolve(true)),
+    getActive: jasmine.createSpy('getActive').and.returnValue({}),
+    getByIndex: jasmine.createSpy('getByIndex').and.returnValue({}),
+    canGoBack: jasmine.createSpy('canGoBack').and.returnValue(true),
+    getPrevious: jasmine.createSpy('getPrevious').and.returnValue({}),
+    ...overrides.navController,
   };
 
   return {
@@ -445,6 +514,8 @@ export function createIonicMocks(overrides: any = {}) {
     mockLoadingController,
     mockPlatform,
     mockRouter,
+    mockLocation,
+    mockNavController,
     mockModal,
     mockAlert,
     mockActionSheet,
@@ -552,33 +623,35 @@ export function createTestingEnvironment(
     ...firebaseModule.providers,
 
     // Service providers
-    { provide: 'UserService', useValue: serviceMocks.mockUserService },
+    { provide: UserService, useValue: serviceMocks.mockUserService },
     {
-      provide: 'ApplicationService',
+      provide: ApplicationService,
       useValue: serviceMocks.mockApplicationService,
     },
-    { provide: 'ActivityService', useValue: serviceMocks.mockActivityService },
-    { provide: 'TrackingService', useValue: serviceMocks.mockTrackingService },
+    { provide: ActivityService, useValue: serviceMocks.mockActivityService },
+    { provide: TrackingService, useValue: serviceMocks.mockTrackingService },
     {
-      provide: 'NotificationService',
+      provide: NotificationService,
       useValue: serviceMocks.mockNotificationService,
     },
-    { provide: 'I18nService', useValue: serviceMocks.mockI18nService },
+    { provide: I18nService, useValue: serviceMocks.mockI18nService },
 
     // Ionic providers
-    { provide: 'ModalController', useValue: ionicMocks.mockModalController },
-    { provide: 'AlertController', useValue: ionicMocks.mockAlertController },
+    { provide: ModalController, useValue: ionicMocks.mockModalController },
+    { provide: AlertController, useValue: ionicMocks.mockAlertController },
     {
-      provide: 'ActionSheetController',
+      provide: ActionSheetController,
       useValue: ionicMocks.mockActionSheetController,
     },
-    { provide: 'ToastController', useValue: ionicMocks.mockToastController },
+    { provide: ToastController, useValue: ionicMocks.mockToastController },
     {
-      provide: 'LoadingController',
+      provide: LoadingController,
       useValue: ionicMocks.mockLoadingController,
     },
-    { provide: 'Platform', useValue: ionicMocks.mockPlatform },
-    { provide: 'Router', useValue: ionicMocks.mockRouter },
+    { provide: Platform, useValue: ionicMocks.mockPlatform },
+    { provide: Router, useValue: ionicMocks.mockRouter },
+    { provide: Location, useValue: ionicMocks.mockLocation },
+    { provide: NavController, useValue: ionicMocks.mockNavController },
 
     // Capacitor providers
     { provide: 'Camera', useValue: capacitorMocks.mockCamera },

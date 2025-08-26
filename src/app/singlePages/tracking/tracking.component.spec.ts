@@ -2,22 +2,21 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular/standalone';
-import { createFirebaseTestingModule } from '../../../testing/firebase-testing-utils';
+import { createTestingEnvironment } from '../../../testing/shared-testing-config';
 
 import { TrackingComponent } from './tracking.component';
-import { BehaviorSubject } from 'rxjs';
 
 describe('TrackingComponent', () => {
   let component: TrackingComponent;
   let fixture: ComponentFixture<TrackingComponent>;
 
   beforeEach(waitForAsync(() => {
-    const firebaseModule = createFirebaseTestingModule();
+    const testEnv = createTestingEnvironment();
 
     TestBed.configureTestingModule({
       imports: [IonicModule.forRoot(), TrackingComponent],
       providers: [
-        ...firebaseModule.providers,
+        ...testEnv.providers,
         ModalController,
         {
           provide: ActivatedRoute,

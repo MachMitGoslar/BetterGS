@@ -135,7 +135,7 @@
       </trans-unit>
       <trans-unit id="profile.member.since" datatype="html">
         <source>Member since</source>
-        <target>Member since {{ user.createdAt | date:'MMMM yyyy' }}</target>
+        <target>Member since</target>
       </trans-unit>
       <trans-unit id="profile.your.information" datatype="html">
         <source>Your Information</source>

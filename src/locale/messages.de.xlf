@@ -134,8 +134,8 @@
         <target>Keine E-Mail</target>
       </trans-unit>
       <trans-unit id="profile.member.since" datatype="html">
-        <source>Member since {{ since }}</source>
-        <target>Mitglied seit {{ since }}</target>
+        <source>Member since:</source>
+        <target>Mitglied seit:</target>
       </trans-unit>
       <trans-unit id="profile.your.information" datatype="html">
         <source>Your Information</source>

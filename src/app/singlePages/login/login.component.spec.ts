@@ -3,6 +3,7 @@ import { IonicModule } from '@ionic/angular';
 import { createFirebaseTestingModule } from '../../../testing/firebase-testing-utils';
 
 import { LoginComponent } from './login.component';
+import { createTestingEnvironment } from 'src/testing/shared-testing-config';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -21,10 +22,10 @@ describe('LoginComponent', () => {
       return result;
     };
 
-    const firebaseModule = createFirebaseTestingModule();
+    const testEnv = createTestingEnvironment()
     TestBed.configureTestingModule({
       imports: [IonicModule.forRoot(), LoginComponent],
-      providers: firebaseModule.providers,
+      providers: testEnv.providers,
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoginComponent);

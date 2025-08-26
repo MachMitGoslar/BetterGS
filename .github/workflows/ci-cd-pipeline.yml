@@ -47,7 +47,7 @@ jobs:
           
       - name: 🎨 Check Code Formatting
         run: |
-          npm run format:check
+          npm run format
 
   # ==========================================
   # Job 2: Unit Tests

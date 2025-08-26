@@ -219,11 +219,31 @@ export class TrackingService {
     const notifications: LocalNotificationSchema[] = [
       {
         id: 0,
-        title: this.i18nService.getTranslation(
-          'tracking.localNotifications.startTracking'
-        ),
-        body: 'Dein Tracking für ' + activity.title + ' läuft noch.',
-        schedule: { at: new Date(Date.now() + 60 * 1000) }, // Schedule for 1 minute later
+        title: 'Keep up the good work!',
+        body: 'Dein Tracking für "' + activity.title + '" läuft noch.',
+        schedule: { at: new Date(Date.now() + 60 * 1000 * 5) }, // Schedule for 5 minute later
+      },
+      {
+        id: 1,
+        title: 'Wow! Weiter so!',
+        body: 'Dein Tracking für "' + activity.title + '" läuft noch.',
+        schedule: { at: new Date(Date.now() + 60 * 1000 * 15) }, // Schedule for 15 minute later
+      },
+      {
+        id: 2,
+        title: 'The full hour!',
+        body:
+          'Dein Tracking für "' + activity.title + '" läuft seit einer Stunde.',
+        schedule: { at: new Date(Date.now() + 60 * 1000 * 60) }, // Schedule for 1 hour later
+      },
+      {
+        id: 3,
+        title: 'Keep going!',
+        body:
+          'Dein Tracking für "' +
+          activity.title +
+          '" läuft seit 2 Stunden. Denk daran das die maximale Trackingzeit 3 Stunden beträgt.',
+        schedule: { at: new Date(Date.now() + 60 * 1000 * 120) }, // Schedule for 2 hours later
       },
     ];
 
@@ -262,6 +282,7 @@ export class TrackingService {
 
     tracking.endDate = new Date();
     tracking.is_active = false;
+    this.notificationService.cancelLocalNotifications(); //Cancel all remanining notifications
   }
 
   // ========================================

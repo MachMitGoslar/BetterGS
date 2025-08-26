@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title> Tracking</ion-title>
+    <ion-title i18n="@@tracking.title"> Tracking</ion-title>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/my_activities"></ion-back-button>
     </ion-buttons>
@@ -17,6 +17,15 @@
     <ion-card class="current-activity-card">
       <ion-card-content>
         <!-- Timer Display -->
+        @if(tracking_for_different) {
+        <div i18n="@@tracking.text.forDifferentActivity">
+          Tracking for a different activity:
+          <b>
+            {{ getDifferentActivityName(currentTracking!.activityRef!.id) }}
+          </b>
+        </div>
+
+        }
         <div class="timer-display">
           <h1 class="elapsed-time">{{ elapsedTime | elapsedTime : "ms" }}</h1>
         </div>

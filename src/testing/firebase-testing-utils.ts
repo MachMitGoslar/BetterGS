@@ -15,7 +15,6 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Firestore } from '@angular/fire/firestore';
 import { Auth } from '@angular/fire/auth';
 import { Storage } from '@angular/fire/storage';
-import { ModalController } from '@ionic/angular';
 
 // ==========================================
 // Firestore Mock Types and Interfaces

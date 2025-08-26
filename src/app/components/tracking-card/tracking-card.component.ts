@@ -60,7 +60,7 @@ export class TrackingCardComponent implements OnInit {
 
   ngOnInit() {
     this.activity = this.activityService.activities.find(
-      (a) => a.id === this.tracking!.activityRef!.id
+      (a) => (a.id === this.tracking?.activityRef?.id) || new Activity("unknown")
     );
   }
 
