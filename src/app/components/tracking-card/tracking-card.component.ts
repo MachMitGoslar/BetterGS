@@ -42,7 +42,7 @@ import { Activity } from 'src/app/core/models/activity.model';
 })
 export class TrackingCardComponent implements OnInit {
   @Input() tracking: Tracking | undefined;
-  activity?: Activity;
+  activity: Activity = new Activity('unknown');
   public activityService: ActivityService = inject(ActivityService);
   public modalController: ModalController = inject(ModalController);
 
@@ -59,16 +59,18 @@ export class TrackingCardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.activity = this.activityService.activities.find(
-      (a) => (a.id === this.tracking?.activityRef?.id) || new Activity("unknown")
-    );
+    if (!this.tracking) throw new Error('Tracking is undefined');
+    console.log('this Tracking', this.tracking.activityRef);
+    this.activity = this.getActivity();
+    console.log(this.tracking);
+    4;
   }
 
-  getActivityName(): string {
-    if (!this.tracking || !this.tracking.activityRef) {
-      return 'Unknown Activity';
-    }
-    return this.activity ? this.activity.title : 'Unknown Activity';
+  getActivity(): Activity {
+    console.log(this.activityService.activities);
+    return this.activityService.activities.find(
+      (a) => a.id === this.tracking?.activityRef?.id
+    )!;
   }
 
   async editTracking(): Promise<void> {

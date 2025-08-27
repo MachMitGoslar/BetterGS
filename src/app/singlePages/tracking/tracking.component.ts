@@ -27,11 +27,13 @@ import {
   IonGrid,
   IonCol,
   IonRow,
+  IonText,
+  IonChip,
 } from '@ionic/angular/standalone';
 import { ApplicationService } from 'src/app/core/services/application.service';
 import { ActivatedRoute } from '@angular/router';
 import { ElapsedTimePipe } from 'src/app/core/pipes/elapsed-time.pipe';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { TrackingCardComponent } from 'src/app/components/tracking-card/tracking-card.component';
 import { TrackingEditModalComponent } from 'src/app/components/tracking-edit-modal/tracking-edit-modal.component';
 import { I18nService } from 'src/app/core/services/i18n.service';
@@ -65,6 +67,7 @@ import { I18nService } from 'src/app/core/services/i18n.service';
     IonGrid,
     IonRow,
     IonCol,
+    IonChip,
   ],
 })
 export class TrackingComponent implements OnInit, OnDestroy {
@@ -72,7 +75,7 @@ export class TrackingComponent implements OnInit, OnDestroy {
   isTracking: boolean = false;
   currentActivity: Activity | undefined;
   currentTracking?: Tracking;
-  recentTrackings: Observable<Tracking[]> | undefined;
+  recentTrackings: Observable<[number, Tracking[]]> = of([0, []]);
 
   // Properties for time display
   public elapsedTime: number = 0;
@@ -80,6 +83,8 @@ export class TrackingComponent implements OnInit, OnDestroy {
 
   // Available activities
   activities: Activity[] = [];
+
+  alreadySpentTime: number = 0;
 
   private applicationService = inject(ApplicationService);
   private activityService = inject(ActivityService);
@@ -110,7 +115,7 @@ export class TrackingComponent implements OnInit, OnDestroy {
       );
       return;
     }
-    this.recentTrackings = this.applicationService.getRecentTrackngsByActivity(
+    this.recentTrackings = this.applicationService.getRecentTrackingsByActivity(
       this.currentActivity
     );
 
@@ -119,25 +124,31 @@ export class TrackingComponent implements OnInit, OnDestroy {
       console.log('Active tracking subscription fired', tracking);
       this.currentTracking = tracking;
       if (this.currentTracking) {
+        if (this.intervalId) {
+          this.stopTimer();
+        }
         this.isTracking = true;
+
         this.startTimer();
         // Find the current activity
         this.currentActivity = this.activities.find(
           (activity) =>
             activity.ref?.id === this.currentTracking?.activityRef?.id
         );
+      } else {
+        console.log('Other Tracking came back');
       }
     });
-    this.applicationService.onAppGoesBackground(() => {
-      this.stopTimer();
-    });
+    // this.applicationService.onAppGoesBackground(() => {
+    //   this.stopTimer();
+    // });
 
-    this.applicationService.onAppComesForeground(() => {
-      if (this.currentTracking && this.currentTracking.startDate) {
-        this.startTimer();
-        //this.updateElapsedTime();
-      }
-    });
+    // this.applicationService.onAppComesForeground(() => {
+    //   if (this.currentTracking && this.currentTracking.startDate) {
+    //     this.startTimer();
+    //     //this.updateElapsedTime();
+    //   }
+    // });
 
     //   this.isTracking = true;
     //   this.startTimer();

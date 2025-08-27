@@ -166,13 +166,13 @@ export class TrackingService {
    * @public
    * @param user - The user ID to get trackings for
    * @param activityRef - Reference to the activity document
-   * @returns {Observable<Tracking[]>} Stream of tracking sessions
+   * @returns {Observable<[number, Tracking[]]>} Stream of cumulative tracking duration and array of all sessions
    * @since 1.0.0
    */
   getTrackingsByActivity(
     user: string,
     activityRef: DocumentReference
-  ): Observable<Tracking[]> {
+  ): Observable<[number, Tracking[]]> {
     return collectionSnapshots(
       collection(
         this.firestore,
@@ -194,7 +194,14 @@ export class TrackingService {
             return (
               (a.startDate?.getTime() || 0) - (b.startDate?.getTime() || 0)
             );
-          });
+          })
+          .reduceRight<[number, Tracking[]]>(
+            (acc, curr) => {
+              const [count, trackings] = acc;
+              return [count + curr.duration, [...trackings, curr]];
+            },
+            [0, []]
+          );
       })
     );
   }
@@ -250,7 +257,7 @@ export class TrackingService {
     this.notificationService.scheduleLocalNotifications(notifications);
 
     return Tracking.startTracking(
-      activity.ref!,
+      doc(this.firestore, 'activities', activity.id),
       doc(this.firestore, 'users', user.uid)
     );
   }

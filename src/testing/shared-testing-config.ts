@@ -12,8 +12,15 @@
 
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
-import { IonicModule, NavController} from "@ionic/angular"
-import {ModalController, AlertController, ActionSheetController, ToastController, LoadingController, Platform } from '@ionic/angular/standalone';
+import { IonicModule, NavController } from '@ionic/angular';
+import {
+  ModalController,
+  AlertController,
+  ActionSheetController,
+  ToastController,
+  LoadingController,
+  Platform,
+} from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { createFirebaseTestingModule } from './firebase-testing-utils';
@@ -210,7 +217,7 @@ export function createServiceMocks(overrides: any = {}) {
   };
 
   // Activity Service Mock
-  
+
   const activitiesSubject = new BehaviorSubject(MOCK_ACTIVITIES);
   const mockActivityService = {
     $activities: activitiesSubject.asObservable(),
@@ -464,8 +471,12 @@ export function createIonicMocks(overrides: any = {}) {
     url: '/test',
     events: of({}), // Router events observable
     root: {
-      subscribe: jasmine.createSpy('subscribe').and.returnValue({ unsubscribe: jasmine.createSpy('unsubscribe') }),
-      subscribeWithPriority: jasmine.createSpy('subscribeWithPriority').and.returnValue({ unsubscribe: jasmine.createSpy('unsubscribe') })
+      subscribe: jasmine
+        .createSpy('subscribe')
+        .and.returnValue({ unsubscribe: jasmine.createSpy('unsubscribe') }),
+      subscribeWithPriority: jasmine
+        .createSpy('subscribeWithPriority')
+        .and.returnValue({ unsubscribe: jasmine.createSpy('unsubscribe') }),
     },
     config: { onSameUrlNavigation: 'reload' },
     routerState: { root: {} },
@@ -482,23 +493,41 @@ export function createIonicMocks(overrides: any = {}) {
     path: jasmine.createSpy('path').and.returnValue('/test'),
     replaceState: jasmine.createSpy('replaceState'),
     go: jasmine.createSpy('go'),
-    isCurrentPathEqualTo: jasmine.createSpy('isCurrentPathEqualTo').and.returnValue(true),
+    isCurrentPathEqualTo: jasmine
+      .createSpy('isCurrentPathEqualTo')
+      .and.returnValue(true),
     ...overrides.location,
   };
 
   const mockNavController = {
-    navigateForward: jasmine.createSpy('navigateForward').and.returnValue(Promise.resolve(true)),
-    navigateBack: jasmine.createSpy('navigateBack').and.returnValue(Promise.resolve(true)),
-    navigateRoot: jasmine.createSpy('navigateRoot').and.returnValue(Promise.resolve(true)),
+    navigateForward: jasmine
+      .createSpy('navigateForward')
+      .and.returnValue(Promise.resolve(true)),
+    navigateBack: jasmine
+      .createSpy('navigateBack')
+      .and.returnValue(Promise.resolve(true)),
+    navigateRoot: jasmine
+      .createSpy('navigateRoot')
+      .and.returnValue(Promise.resolve(true)),
     pop: jasmine.createSpy('pop').and.returnValue(Promise.resolve(true)),
     push: jasmine.createSpy('push').and.returnValue(Promise.resolve(true)),
     insert: jasmine.createSpy('insert').and.returnValue(Promise.resolve(true)),
-    insertPages: jasmine.createSpy('insertPages').and.returnValue(Promise.resolve(true)),
+    insertPages: jasmine
+      .createSpy('insertPages')
+      .and.returnValue(Promise.resolve(true)),
     popTo: jasmine.createSpy('popTo').and.returnValue(Promise.resolve(true)),
-    popToRoot: jasmine.createSpy('popToRoot').and.returnValue(Promise.resolve(true)),
-    removeIndex: jasmine.createSpy('removeIndex').and.returnValue(Promise.resolve(true)),
-    setRoot: jasmine.createSpy('setRoot').and.returnValue(Promise.resolve(true)),
-    setPages: jasmine.createSpy('setPages').and.returnValue(Promise.resolve(true)),
+    popToRoot: jasmine
+      .createSpy('popToRoot')
+      .and.returnValue(Promise.resolve(true)),
+    removeIndex: jasmine
+      .createSpy('removeIndex')
+      .and.returnValue(Promise.resolve(true)),
+    setRoot: jasmine
+      .createSpy('setRoot')
+      .and.returnValue(Promise.resolve(true)),
+    setPages: jasmine
+      .createSpy('setPages')
+      .and.returnValue(Promise.resolve(true)),
     getActive: jasmine.createSpy('getActive').and.returnValue({}),
     getByIndex: jasmine.createSpy('getByIndex').and.returnValue({}),
     canGoBack: jasmine.createSpy('canGoBack').and.returnValue(true),
