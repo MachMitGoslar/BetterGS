@@ -187,24 +187,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         }
 
         loading.dismiss();
-
-        // Show success message
-        // this.notificationService.addNotification(
-        //   'Login successful! Welcome back.',
-        //   'success'
-        // );
-
-        // this.applicationService.$currentUser.pipe(take(1)).subscribe((user) => {
-        //   if (user) {
-        //     // Redirect to home
-        //     console.log('User logged in:', user);
-        //     this.router.navigate(['/tabs']);
-        //   } else {
-        //     // If anonymous, redirect to signup
-        //     console.log('Anonymous user, redirecting to signup');
-        //     this.router.navigate(['/signup']);
-        //   }
-        // });
       },
       (error) => {
         this.isLoading = false;
@@ -220,44 +202,32 @@ export class LoginComponent implements OnInit, OnDestroy {
    */
   private handleLoginError(error: any) {
     let errorMessage = this.i18nService.getTranslation('login.failed');
-    console.log('Error: ', error);
+    console.log("Error: ",error)
     if (error.code) {
       switch (error.code) {
         case 'auth/user-not-found':
-          errorMessage = this.i18nService.getTranslation(
-            'login.user_not_found'
-          );
+          errorMessage = this.i18nService.getTranslation('login.user_not_found');
           break;
         case 'auth/wrong-password':
-          errorMessage = this.i18nService.getTranslation(
-            'login.wrong_password'
-          );
+          errorMessage = this.i18nService.getTranslation('login.wrong_password');
           break;
         case 'auth/invalid-email':
           errorMessage = this.i18nService.getTranslation('login.invalid_email');
           break;
         case 'auth/invalid-credential':
-          errorMessage = this.i18nService.getTranslation(
-            'login.credentials_wrong'
-          );
+          errorMessage = this.i18nService.getTranslation('login.credentials_wrong');
           break;
         case 'auth/user-disabled':
-          errorMessage = this.i18nService.getTranslation('login.user_disabled');
+          errorMessage = this.i18nService.getTranslation('login.user_disabled') ;
           break;
         case 'auth/too-many-requests':
-          errorMessage = this.i18nService.getTranslation(
-            'login.too_many_requests'
-          );
+          errorMessage = this.i18nService.getTranslation('login.too_many_requests');
           break;
         case 'auth/network-request-failed':
-          errorMessage = this.i18nService.getTranslation(
-            'login.network_request_failed'
-          );
+          errorMessage = this.i18nService.getTranslation('login.network_request_failed');
           break;
         default:
-          errorMessage =
-            error.message ||
-            this.i18nService.getTranslation('login.unexpected_error');
+          errorMessage = error.message || this.i18nService.getTranslation('login.unexpected_error');
       }
     }
 
