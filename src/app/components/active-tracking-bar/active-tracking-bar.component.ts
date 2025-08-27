@@ -51,7 +51,7 @@ export class ActiveTrackingBarComponent implements OnInit, OnDestroy {
     });
     this.subscriptions.push(trackingSubscription);
 
-    // // Subscribe to app lifecycle changes
+    // Subscribe to app lifecycle changes
     this.applicationService.onAppComesForeground(() => {
       if (this._activeTracking && this._activeTracking.startDate) {
         this.startTimer();

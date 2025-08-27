@@ -77,6 +77,7 @@ import { UserPrivateProfile } from 'src/app/core/models/user_private_profile.mod
 import { ProfilePictureComponent } from 'src/app/components/profile-picture/profile-picture.component';
 import { ElapsedTimePipe } from 'src/app/core/pipes/elapsed-time.pipe';
 import { I18nPipe } from 'src/app/core/pipes/i18n.pipe';
+import { ActiveTrackingBarComponent } from 'src/app/components/active-tracking-bar/active-tracking-bar.component';
 
 /**
  * ProfilePage - User Profile Management Component
@@ -143,6 +144,7 @@ import { I18nPipe } from 'src/app/core/pipes/i18n.pipe';
     ElapsedTimePipe,
     ProfilePictureComponent,
     I18nPipe,
+    ActiveTrackingBarComponent,
   ],
 })
 export class ProfilePage implements OnInit, OnDestroy {
@@ -1069,7 +1071,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     } catch (error) {
       console.error('Error deleting account:', error);
       this.notificationService.addNotification(
-        'Failed to delete account. Please try again.',
+        this.i18nService.getTranslation('profile.error.deleteFailed'),
         'danger'
       );
     } finally {
@@ -1089,7 +1091,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     try {
       const alert = await this.alertController.create({
         header: 'Logout',
-        message: 'Are you sure you want to logout?',
+        message: this.i18nService.getTranslation('profile.confirmLogout'),
         buttons: [
           {
             text: 'Cancel',
@@ -1125,16 +1127,18 @@ export class ProfilePage implements OnInit, OnDestroy {
       await this.applicationService.logout();
 
       this.notificationService.addNotification(
-        'You have been logged out successfully.',
+        this.i18nService.getTranslation('profile.loggedOut'),
         'success'
       );
 
-      // Reload to reset application state
-      window.location.reload();
+      // // Reload to reset application state
+      // window.location.pathname = "/";
+      // window.location.reload();
+      this.router.navigateByUrl('/login');
     } catch (error) {
       console.error('Error logging out:', error);
       this.notificationService.addNotification(
-        'Failed to logout. Please try again.',
+        this.i18nService.getTranslation('profile.error.logoutFailed'),
         'danger'
       );
     }

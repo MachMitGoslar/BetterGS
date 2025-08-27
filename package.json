@@ -57,6 +57,7 @@
     "@capacitor/app": "7.0.1",
     "@capacitor/camera": "^7.0.1",
     "@capacitor/core": "7.4.1",
+    "@capacitor/device": "^7.0.2",
     "@capacitor/haptics": "7.0.1",
     "@capacitor/ios": "7.4.1",
     "@capacitor/keyboard": "7.0.1",

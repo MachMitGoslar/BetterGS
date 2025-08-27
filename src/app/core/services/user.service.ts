@@ -13,6 +13,7 @@ import {
   collectionGroup,
   getDocs,
   getCountFromServer,
+  updateDoc,
 } from '@angular/fire/firestore';
 import {
   Auth,
@@ -260,12 +261,12 @@ export class UserService {
   private setupPrivateProfileSubscription(user: User): void {
     const privateProfileSub = docSnapshots(
       doc(this.firestore, 'user_data', user.uid)
-    ).subscribe((docSnapshot) => {
+    ).subscribe(async (docSnapshot) => {
       console.log('New Private profile snapshot:', docSnapshot);
 
       if (docSnapshot.exists()) {
         const data = docSnapshot.data();
-        this._currentUserPrivateProfile = UserPrivateProfile.fromDB(data);
+        this._currentUserPrivateProfile = await UserPrivateProfile.fromDB(data);
         console.log(
           'Current user private profile:',
           this._currentUserPrivateProfile
@@ -544,18 +545,11 @@ export class UserService {
    */
   async updateUserOnboardingStatus(
     userId: string,
-    onboardingCompleted: boolean
+    device_id: string
   ): Promise<void> {
     try {
       const userDocRef = doc(this.firestore, 'user_data', userId);
-      await setDoc(
-        userDocRef,
-        {
-          needsOnboarding: !onboardingCompleted,
-          onboardingCompletedAt: onboardingCompleted ? serverTimestamp() : null,
-        },
-        { merge: true }
-      );
+      await updateDoc(userDocRef, { needsOnboarding: [device_id] });
 
       console.log('User onboarding status updated successfully');
     } catch (error) {

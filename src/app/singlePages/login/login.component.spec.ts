@@ -22,7 +22,7 @@ describe('LoginComponent', () => {
       return result;
     };
 
-    const testEnv = createTestingEnvironment()
+    const testEnv = createTestingEnvironment();
     TestBed.configureTestingModule({
       imports: [IonicModule.forRoot(), LoginComponent],
       providers: testEnv.providers,

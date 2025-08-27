@@ -14,6 +14,8 @@ import { ApplicationService } from '../core/services/application.service';
 import { User } from '@angular/fire/auth';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../core/services/user.service';
+import { UserPublicProfile } from '../core/models/user_public_profile.model';
+import { UserPrivateProfile } from '../core/models/user_private_profile.model';
 
 @Component({
   selector: 'app-tabs',
@@ -29,12 +31,14 @@ export class TabsPage {
   public userService = inject(UserService);
 
   constructor() {
-    this.applicationService.$currentUser.subscribe((user) => {
+    this.applicationService.$currentUser.subscribe((user: User | null) => {
       this.currentUser = user;
     });
-    this.userService.$currentUserPrivateProfile.subscribe((profile) => {
-      this.role = profile?.role || 'user';
-    });
+    this.userService.$currentUserPrivateProfile.subscribe(
+      (profile: UserPrivateProfile | undefined) => {
+        this.role = profile?.role || 'user';
+      }
+    );
 
     addIcons({
       stopwatch,

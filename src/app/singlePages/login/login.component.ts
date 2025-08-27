@@ -41,6 +41,7 @@ import {
   warningOutline,
   logInOutline,
 } from 'ionicons/icons';
+import { I18nService } from 'src/app/core/services/i18n.service';
 
 @Component({
   selector: 'app-login',
@@ -77,6 +78,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private loadingController = inject(LoadingController);
   private applicationService = inject(ApplicationService);
   private notificationService = inject(NotificationService);
+  private i18nService = inject(I18nService);
 
   constructor() {
     this.initializeForm();
@@ -165,7 +167,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     // Show loading
     const loading = await this.loadingController.create({
-      message: 'Signing in...',
+      message: this.i18nService.getTranslation('login.signing_in'),
       duration: 30000, // 30 seconds timeout
     });
     await loading.present();
@@ -185,24 +187,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         }
 
         loading.dismiss();
-
-        // Show success message
-        this.notificationService.addNotification(
-          'Login successful! Welcome back.',
-          'success'
-        );
-
-        this.applicationService.$currentUser.pipe(take(1)).subscribe((user) => {
-          if (user) {
-            // Redirect to home
-            console.log('User logged in:', user);
-            this.router.navigate(['/tabs']);
-          } else {
-            // If anonymous, redirect to signup
-            console.log('Anonymous user, redirecting to signup');
-            this.router.navigate(['/signup']);
-          }
-        });
       },
       (error) => {
         this.isLoading = false;
@@ -217,30 +201,33 @@ export class LoginComponent implements OnInit, OnDestroy {
    * Handles login errors
    */
   private handleLoginError(error: any) {
-    let errorMessage = 'Login failed. Please try again.';
-
+    let errorMessage = this.i18nService.getTranslation('login.failed');
+    console.log("Error: ",error)
     if (error.code) {
       switch (error.code) {
         case 'auth/user-not-found':
-          errorMessage = 'No account found with this email address.';
+          errorMessage = this.i18nService.getTranslation('login.user_not_found');
           break;
         case 'auth/wrong-password':
-          errorMessage = 'Incorrect password. Please try again.';
+          errorMessage = this.i18nService.getTranslation('login.wrong_password');
           break;
         case 'auth/invalid-email':
-          errorMessage = 'Invalid email address format.';
+          errorMessage = this.i18nService.getTranslation('login.invalid_email');
+          break;
+        case 'auth/invalid-credential':
+          errorMessage = this.i18nService.getTranslation('login.credentials_wrong');
           break;
         case 'auth/user-disabled':
-          errorMessage = 'This account has been disabled.';
+          errorMessage = this.i18nService.getTranslation('login.user_disabled') ;
           break;
         case 'auth/too-many-requests':
-          errorMessage = 'Too many failed attempts. Please try again later.';
+          errorMessage = this.i18nService.getTranslation('login.too_many_requests');
           break;
         case 'auth/network-request-failed':
-          errorMessage = 'Network error. Please check your connection.';
+          errorMessage = this.i18nService.getTranslation('login.network_request_failed');
           break;
         default:
-          errorMessage = error.message || 'An unexpected error occurred.';
+          errorMessage = error.message || this.i18nService.getTranslation('login.unexpected_error');
       }
     }
 
@@ -256,7 +243,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     try {
       const loading = await this.loadingController.create({
-        message: 'Signing in as guest...',
+        message: this.i18nService.getTranslation('login.signing_in_guest'),
         duration: 15000,
       });
       await loading.present();
@@ -266,7 +253,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       await loading.dismiss();
 
       this.notificationService.addNotification(
-        'Signed in as guest successfully!',
+        this.i18nService.getTranslation('login.guest_login_success'),
         'success'
       );
 
@@ -277,7 +264,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
       console.error('Anonymous login error:', error);
       this.notificationService.addNotification(
-        'Failed to sign in as guest. Please try again.',
+        this.i18nService.getTranslation('login.guest_login_failed'),
         'danger'
       );
     }
@@ -290,23 +277,23 @@ export class LoginComponent implements OnInit, OnDestroy {
    */
   async onForgotPassword() {
     const alert = await this.alertController.create({
-      header: 'Reset Password',
-      message: 'Enter your email address to receive a password reset link.',
+      header: this.i18nService.getTranslation('login.reset_password'),
+      message: this.i18nService.getTranslation('login.reset_password_message'),
       inputs: [
         {
           name: 'email',
           type: 'email',
-          placeholder: 'Email address',
+          placeholder: this.i18nService.getTranslation('login.email_address'),
           value: this.loginForm.get('email')?.value || '',
         },
       ],
       buttons: [
         {
-          text: 'Cancel',
+          text: this.i18nService.getTranslation('common.cancel'),
           role: 'cancel',
         },
         {
-          text: 'Send Reset Link',
+          text: this.i18nService.getTranslation('login.send_reset_link'),
           handler: async (data) => {
             if (data.email) {
               await this.sendPasswordReset(data.email);
@@ -325,7 +312,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private async sendPasswordReset(email: string) {
     try {
       const loading = await this.loadingController.create({
-        message: 'Sending reset link...',
+        message: this.i18nService.getTranslation('login.sending_reset_link'),
         duration: 10000,
       });
       await loading.present();
@@ -335,7 +322,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       await loading.dismiss();
 
       this.notificationService.addNotification(
-        'Password reset link sent to your email.',
+        this.i18nService.getTranslation('login.reset_link_sent'),
         'success'
       );
     } catch (error: any) {
@@ -343,7 +330,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
       console.error('Password reset error:', error);
       this.notificationService.addNotification(
-        'Failed to send reset link. Please check your email address.',
+        this.i18nService.getTranslation('login.reset_link_failed'),
         'danger'
       );
     }

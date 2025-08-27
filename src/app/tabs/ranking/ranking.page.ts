@@ -33,6 +33,7 @@ import {
 import { addIcons } from 'ionicons';
 import { UserPublicProfile } from 'src/app/core/models/user_public_profile.model';
 import { ElapsedTimePipe } from 'src/app/core/pipes/elapsed-time.pipe';
+import { ActiveTrackingBarComponent } from 'src/app/components/active-tracking-bar/active-tracking-bar.component';
 
 /**
  * RankingPage Component
@@ -79,6 +80,7 @@ import { ElapsedTimePipe } from 'src/app/core/pipes/elapsed-time.pipe';
     IonRefresherContent,
     IonSkeletonText,
     ElapsedTimePipe,
+    ActiveTrackingBarComponent,
   ],
 })
 export class RankingPage implements OnInit, OnDestroy {

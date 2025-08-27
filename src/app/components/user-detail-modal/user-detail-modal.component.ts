@@ -70,6 +70,7 @@ interface UserActivityStats {
     IonGrid,
     IonRow,
     IonCol,
+    IonItem,
   ],
 })
 export class UserDetailModalComponent implements OnInit, OnChanges {
@@ -121,14 +122,11 @@ export class UserDetailModalComponent implements OnInit, OnChanges {
               .getTrackingsByActivity(this.user.id!, activity.ref!)
               .pipe(
                 map(
-                  (trackings) =>
+                  ([totalDuration, trackings]) =>
                     ({
                       activity,
                       trackingCount: trackings.length,
-                      totalDuration: trackings.reduce(
-                        (sum, tracking) => sum + (tracking.duration || 0),
-                        0
-                      ),
+                      totalDuration: totalDuration || 0,
                     } as UserActivityStats)
                 ),
                 catchError(() => {

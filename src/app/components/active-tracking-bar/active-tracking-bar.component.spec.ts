@@ -13,16 +13,15 @@ describe('ActiveTrackingBarComponent', () => {
     const testEnv = createTestingEnvironment();
 
     TestBed.configureTestingModule({
-      imports: [
-        IonicModule.forRoot(), 
-        ActiveTrackingBarComponent
-      ],
+      imports: [IonicModule.forRoot(), ActiveTrackingBarComponent],
       providers: [
         ...testEnv.providers,
-        { provide: ModalController, useValue: testEnv.mocks.ionic.mockModalController },
+        {
+          provide: ModalController,
+          useValue: testEnv.mocks.ionic.mockModalController,
+        },
       ],
-    })
-    .compileComponents();
+    }).compileComponents();
 
     console.log('Test providers configured:', testEnv.providers.length);
 

@@ -18,6 +18,7 @@ import {
   deleteUser,
   sendPasswordResetEmail,
   signOut,
+  UserCredential,
 } from '@angular/fire/auth';
 import {
   getStorage,
@@ -30,11 +31,14 @@ import {
 } from '@angular/fire/storage';
 import {
   BehaviorSubject,
+  defer,
   EMPTY,
   map,
   Observable,
+  of,
   ReplaySubject,
   Subscription,
+  tap,
 } from 'rxjs';
 import { Activity } from '../models/activity.model';
 import { Tracking } from '../models/tracking.model';
@@ -49,6 +53,7 @@ import { User } from '@angular/fire/auth';
 import { UserPublicProfile } from '../models/user_public_profile.model';
 import { UserPrivateProfile } from '../models/user_private_profile.model';
 import { ListenerCallback } from '@capacitor/core';
+import { Camera } from '@capacitor/camera';
 
 /**
  * ApplicationService - Main Application Service
@@ -164,19 +169,19 @@ export class ApplicationService implements OnDestroy {
    * Camera permission status
    * @description Tracks camera permission state for image capture
    */
-  public cameraPermissionGranted: boolean = false;
+  public $cameraPermissionGranted = of(false);
 
   /**
    * Photo library permission status
    * @description Tracks photo library access permission
    */
-  public photoLibraryPermissionGranted: boolean = false;
+  public $photoLibraryPermissionGranted = of(false);
 
   /**
    * Notification enablement status
    * @description Tracks whether notifications are currently enabled
    */
-  public notificationsEnabled: boolean = false;
+  public $notificationsEnabled: Observable<boolean> = of(false);
 
   private platform = inject(Platform);
 
@@ -301,45 +306,6 @@ export class ApplicationService implements OnDestroy {
         this._currentUser.uid
       ) as Observable<Activity[]>;
     }
-
-    // Check notification permissions
-    LocalNotifications.checkPermissions().then((result) => {
-      console.log('Notification permissions:', result);
-      if (result.display === 'granted') {
-        console.log('Notification permissions granted');
-        this.notificationsEnabled = true;
-      }
-    });
-  }
-
-  /**
-   * Request device permissions from user
-   *
-   * Requests notification permissions and updates the application state
-   * based on user response. Provides user feedback through notifications.
-   *
-   * @public
-   * @returns {void}
-   * @since 1.0.0
-   */
-  askForPermissions(): void {
-    LocalNotifications.requestPermissions().then((value) => {
-      console.log('Notification permissions after request:', value);
-      if (value.display === 'granted') {
-        this.notificationsAllowed = true;
-        this.notificationService.addNotification(
-          this.i18nService.getTranslation('success.notifications.allowed'),
-          'success'
-        );
-      } else {
-        this.notificationsAllowed = false;
-        console.log('Notification permissions denied');
-        this.notificationService.addNotification(
-          this.i18nService.getTranslation('error.notifications.denied'),
-          'warning'
-        );
-      }
-    });
   }
 
   // ========================================
@@ -383,17 +349,19 @@ export class ApplicationService implements OnDestroy {
    *
    * @public
    * @param activity - The activity to get tracking sessions for
-   * @returns {Observable<Tracking[]>} Stream of recent tracking sessions
+   * @returns {Observable<number, Tracking[]>} Stream of recent tracking sessions
    * @throws Will show error notification if user not logged in or activity unavailable
    * @since 1.0.0
    */
-  getRecentTrackngsByActivity(activity: Activity): Observable<Tracking[]> {
+  getRecentTrackingsByActivity(
+    activity: Activity
+  ): Observable<[number, Tracking[]]> {
     if (!this.usrSrv.currentUser) {
       this.notificationService.addNotification(
         this.i18nService.getTranslation('error.no.user.logged.in'),
         'warning'
       );
-      return new ReplaySubject<Tracking[]>(1);
+      return new ReplaySubject<[number, Tracking[]]>(1);
     }
 
     if (!activity || !activity.ref) {
@@ -401,7 +369,7 @@ export class ApplicationService implements OnDestroy {
         this.i18nService.getTranslation('error.activity.not.available'),
         'danger'
       );
-      return new ReplaySubject<Tracking[]>(1);
+      return new ReplaySubject<[number, Tracking[]]>(1);
     }
 
     return this.trackingService.getTrackingsByActivity(
@@ -634,21 +602,8 @@ export class ApplicationService implements OnDestroy {
    * @returns {Promise<void>} Promise that resolves when login is complete
    * @since 1.0.0
    */
-  loginWithEmail(email: string, password: string): Promise<void> {
-    return this.usrSrv
-      .loginWithEmail(email, password)
-      .then((userCredential) => {
-        this.notificationService.addNotification(
-          this.i18nService.getTranslation('success.login'),
-          'success'
-        );
-      })
-      .catch((error) => {
-        this.notificationService.addNotification(
-          this.i18nService.getTranslation('error.login') + ': ' + error.message,
-          'danger'
-        );
-      });
+  loginWithEmail(email: string, password: string): Promise<UserCredential> {
+    return this.usrSrv.loginWithEmail(email, password);
   }
 
   /**
@@ -979,6 +934,8 @@ export class ApplicationService implements OnDestroy {
         activity,
         this.usrSrv.currentUser
       );
+      this.$activeTracking.next(this._activeTracking);
+
       this.onAppGoesBackground(() => {
         localStorage.setItem(
           'activeTracking',
@@ -986,15 +943,15 @@ export class ApplicationService implements OnDestroy {
         );
       });
       this.onAppComesForeground(() => {
-        if (this._activeTracking) {
-          console.log('Restoring active tracking from localStorage');
-          this.$activeTracking.next(
-            JSON.parse(localStorage.getItem('activeTracking') || '{}')
-          );
+        if (!this._activeTracking) {
+          let storage_item = localStorage.getItem('activeTracking');
+          if (storage_item) {
+            this._activeTracking = JSON.parse(storage_item || '{}');
+            this.$activeTracking.next(this._activeTracking);
+            console.log('Active tracking restored:', this._activeTracking);
+          }
         }
       });
-
-      this.$activeTracking.next(this._activeTracking);
 
       this.notificationService.addNotification(
         this.i18nService.getTranslation('success.tracking.started'),
@@ -1063,6 +1020,21 @@ export class ApplicationService implements OnDestroy {
    */
   private async initializeAppStateListeners(): Promise<void> {
     if (this.platform.is('capacitor')) {
+      // Listen for local notifications permissions
+      this.$notificationsEnabled = defer(() => {
+        return LocalNotifications.checkPermissions();
+      }).pipe(map((result) => result.display === 'granted'));
+
+      //Listen for Camera Permissions
+      this.$cameraPermissionGranted = defer(() => {
+        return Camera.checkPermissions();
+      }).pipe(map((result) => result.camera === 'granted'));
+
+      //Listen for Photo Library Permissions
+      this.$photoLibraryPermissionGranted = defer(() => {
+        return Camera.checkPermissions();
+      }).pipe(map((result) => result.photos === 'granted'));
+
       // Setup Capacitor app state listeners for mobile
       let listener = await App.addListener('appStateChange', (state) => {
         console.log('App state changed:', state);

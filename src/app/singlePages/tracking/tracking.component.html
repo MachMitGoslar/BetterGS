@@ -108,17 +108,21 @@
 
   <!-- Recent Trackings List -->
   <ion-grid>
-    <ion-row>
+    <ion-row *ngIf="recentTrackings | async as activity_stats">
+      <ion-chip>
+        Bisherige Zeit: {{ activity_stats[0] | elapsedTime : "m" }} min
+      </ion-chip>
+
       <ion-item-divider>
         <ion-label>Letzte Sessions</ion-label>
       </ion-item-divider>
-      <ng-container *ngIf="recentTrackings | async as trackings">
+      <ng-container>
         <ion-col
           size-xs="12"
           size-sm="12"
           size-md="4"
           class="recent-trackings-list"
-          *ngFor="let tracking of trackings"
+          *ngFor="let tracking of activity_stats[1]"
         >
           <app-tracking-card [tracking]="tracking"> </app-tracking-card>
         </ion-col>

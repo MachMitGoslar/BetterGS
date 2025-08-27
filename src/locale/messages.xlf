@@ -38,7 +38,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/tabs/profile/profile.page.html</context>
-          <context context-type="linenumber">169,171</context>
+          <context context-type="linenumber">168,170</context>
         </context-group>
       </trans-unit>
       <trans-unit id="login.password.placeholder" datatype="html">
@@ -111,6 +111,13 @@
           <context context-type="linenumber">3,4</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="tracking.text.forDifferentActivity" datatype="html">
+        <source> Tracking for a different activity: <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/> <x id="INTERPOLATION" equiv-text="{{ getDifferentActivityName(currentTracking!.activityRef!.id) }}"/> <x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/singlePages/tracking/tracking.component.html</context>
+          <context context-type="linenumber">22,28</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="activities.title" datatype="html">
         <source> <x id="INTERPOLATION" equiv-text="{{ i18nService.getTranslation(&apos;myActivities.onboarding.title&apos;) }}"/> </source>
         <context-group purpose="location">
@@ -144,7 +151,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="profile.member.since" datatype="html">
-        <source> Member since</source>
+        <source> Member since <x id="INTERPOLATION" equiv-text="{{ _publicUserData?.createdAt | date:&apos;MMMM yyyy&apos; }}"/> </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/tabs/profile/profile.page.html</context>
           <context context-type="linenumber">54,56</context>
@@ -175,140 +182,140 @@
         <source>Activities</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/tabs/profile/profile.page.html</context>
-          <context context-type="linenumber">107,109</context>
+          <context context-type="linenumber">106,108</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.days.active" datatype="html">
         <source>Days Active</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/tabs/profile/profile.page.html</context>
-          <context context-type="linenumber">117,119</context>
+          <context context-type="linenumber">116,118</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.your.information" datatype="html">
         <source>Your Information</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/tabs/profile/profile.page.html</context>
-          <context context-type="linenumber">130,132</context>
+          <context context-type="linenumber">129,131</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.username" datatype="html">
         <source>Username</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/tabs/profile/profile.page.html</context>
-          <context context-type="linenumber">139,140</context>
+          <context context-type="linenumber">138,139</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.enter.username" datatype="html">
         <source>Enter your username</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/tabs/profile/profile.page.html</context>
-          <context context-type="linenumber">142,143</context>
+          <context context-type="linenumber">141,142</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.email.address" datatype="html">
         <source>Email Address</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/tabs/profile/profile.page.html</context>
-          <context context-type="linenumber">152,153</context>
+          <context context-type="linenumber">151,152</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.enter.email" datatype="html">
         <source>Enter your email address</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/tabs/profile/profile.page.html</context>
-          <context context-type="linenumber">156,157</context>
+          <context context-type="linenumber">155,156</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.password.security" datatype="html">
         <source>Password &amp; Security</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/tabs/profile/profile.page.html</context>
-          <context context-type="linenumber">185,187</context>
+          <context context-type="linenumber">184,186</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.current.password" datatype="html">
         <source>Current Password</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/tabs/profile/profile.page.html</context>
-          <context context-type="linenumber">194,195</context>
+          <context context-type="linenumber">193,194</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.new.password" datatype="html">
         <source>New Password</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/tabs/profile/profile.page.html</context>
-          <context context-type="linenumber">206,207</context>
+          <context context-type="linenumber">205,206</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.confirm.new.password" datatype="html">
         <source>Confirm new Password</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/tabs/profile/profile.page.html</context>
-          <context context-type="linenumber">220,221</context>
+          <context context-type="linenumber">219,220</context>
         </context-group>
       </trans-unit>
       <trans-unit id="validation.password.minlength" datatype="html">
         <source>Password must be at least 6 characters long</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/tabs/profile/profile.page.html</context>
-          <context context-type="linenumber">235,237</context>
+          <context context-type="linenumber">234,236</context>
         </context-group>
       </trans-unit>
       <trans-unit id="validation.passwords.mismatch" datatype="html">
         <source>Passwords do not match</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/tabs/profile/profile.page.html</context>
-          <context context-type="linenumber">243,245</context>
+          <context context-type="linenumber">242,244</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.password.hint" datatype="html">
         <source> Leave password fields empty if you don&apos;t want to change your password </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/tabs/profile/profile.page.html</context>
-          <context context-type="linenumber">253,255</context>
+          <context context-type="linenumber">252,254</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.saving" datatype="html">
         <source>Saving...</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/tabs/profile/profile.page.html</context>
-          <context context-type="linenumber">272,273</context>
+          <context context-type="linenumber">271,272</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.save.changes" datatype="html">
         <source>Save Changes</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/tabs/profile/profile.page.html</context>
-          <context context-type="linenumber">274,276</context>
+          <context context-type="linenumber">273,275</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.reset.changes" datatype="html">
         <source> Reset Changes </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/tabs/profile/profile.page.html</context>
-          <context context-type="linenumber">286,288</context>
+          <context context-type="linenumber">285,287</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.danger.zone" datatype="html">
         <source>Danger Zone</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/tabs/profile/profile.page.html</context>
-          <context context-type="linenumber">296,298</context>
+          <context context-type="linenumber">295,297</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.delete.warning" datatype="html">
         <source> Once you delete your account, there is no going back. Please be certain. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/tabs/profile/profile.page.html</context>
-          <context context-type="linenumber">302,305</context>
+          <context context-type="linenumber">301,304</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.delete.account" datatype="html">
         <source>Delete Account</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/tabs/profile/profile.page.html</context>
-          <context context-type="linenumber">311,313</context>
+          <context context-type="linenumber">310,312</context>
         </context-group>
       </trans-unit>
     </body>
