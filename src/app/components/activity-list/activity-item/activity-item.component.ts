@@ -9,8 +9,6 @@ import {
   IonRouterLink,
 } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
-import * as icons from 'ionicons/icons';
-import { addIcons } from 'ionicons';
 import { TrackingService } from 'src/app/core/services/tracking.service';
 import { ApplicationService } from 'src/app/core/services/application.service';
 import { Tracking } from 'src/app/core/models/tracking.model';
@@ -39,8 +37,6 @@ export class ActivityItemComponent implements OnInit {
   public trackingSrv: TrackingService = inject(TrackingService);
   public router: Router = inject(Router);
   constructor() {
-    // Ensure the icons are loaded
-    addIcons(icons);
     this.applicationService.$currentUser.subscribe((user) => {
       this.currentUser = user ? user : undefined;
     });
@@ -51,11 +47,7 @@ export class ActivityItemComponent implements OnInit {
       console.warn('Activity is not defined');
       return;
     }
-
-    if (this.activity && this.activity.icon) {
-      let icon: keyof typeof icons = this.activity.icon as keyof typeof icons;
-      addIcons({ [icon]: icons[icon] });
-    }
+    // Icon registration is now handled globally
   }
 
   get color(): string {

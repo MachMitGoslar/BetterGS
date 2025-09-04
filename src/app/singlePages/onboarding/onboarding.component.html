@@ -1,14 +1,8 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>{{ i18nService.getTranslation("onboarding.title") }}</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true" class="onboarding-content">
   <div class="onboarding-container">
     <!-- Progress Header -->
     <div class="progress-header">
-      <ion-icon name="rocket-outline" class="brand-icon"></ion-icon>
+      <img src="assets/icons/icon-512.webp" alt="App Logo" class="app-logo" />
       <h1 class="brand-title">
         {{ i18nService.getTranslation("onboarding.welcome") }}
       </h1>
@@ -18,17 +12,12 @@
     </div>
 
     <!-- Segment Navigation -->
-    <ion-segment
-      [(ngModel)]="currentStep"
-      (ionChange)="onSegmentChanged($event)"
-      mode="md"
-      class="step-segments"
-    >
+    <ion-segment [(ngModel)]="currentStep" (ionChange)="onSegmentChanged($event)" mode="md" class="step-segments">
       <ion-segment-button value="introduction">
         <ion-icon name="information-circle-outline"></ion-icon>
         <ion-label>{{
           i18nService.getTranslation("onboarding.step1.title")
-        }}</ion-label>
+          }}</ion-label>
       </ion-segment-button>
 
       <ion-segment-button value="permissions">
@@ -36,7 +25,7 @@
         <ion-icon name="camera-outline"></ion-icon>
         <ion-label>{{
           i18nService.getTranslation("onboarding.step2.title")
-        }}</ion-label>
+          }}</ion-label>
         }
       </ion-segment-button>
 
@@ -44,7 +33,7 @@
         <ion-icon name="notifications-outline"></ion-icon>
         <ion-label>{{
           i18nService.getTranslation("onboarding.step3.title")
-        }}</ion-label>
+          }}</ion-label>
       </ion-segment-button>
     </ion-segment>
 
@@ -68,16 +57,16 @@
                 <div>
                   <h3>
                     {{
-                      i18nService.getTranslation(
-                        "onboarding.step1.feature1.title"
-                      )
+                    i18nService.getTranslation(
+                    "onboarding.step1.feature1.title"
+                    )
                     }}
                   </h3>
                   <p>
                     {{
-                      i18nService.getTranslation(
-                        "onboarding.step1.feature1.description"
-                      )
+                    i18nService.getTranslation(
+                    "onboarding.step1.feature1.description"
+                    )
                     }}
                   </p>
                 </div>
@@ -88,16 +77,16 @@
                 <div>
                   <h3>
                     {{
-                      i18nService.getTranslation(
-                        "onboarding.step1.feature2.title"
-                      )
+                    i18nService.getTranslation(
+                    "onboarding.step1.feature2.title"
+                    )
                     }}
                   </h3>
                   <p>
                     {{
-                      i18nService.getTranslation(
-                        "onboarding.step1.feature2.description"
-                      )
+                    i18nService.getTranslation(
+                    "onboarding.step1.feature2.description"
+                    )
                     }}
                   </p>
                 </div>
@@ -108,16 +97,16 @@
                 <div>
                   <h3>
                     {{
-                      i18nService.getTranslation(
-                        "onboarding.step1.feature3.title"
-                      )
+                    i18nService.getTranslation(
+                    "onboarding.step1.feature3.title"
+                    )
                     }}
                   </h3>
                   <p>
                     {{
-                      i18nService.getTranslation(
-                        "onboarding.step1.feature3.description"
-                      )
+                    i18nService.getTranslation(
+                    "onboarding.step1.feature3.description"
+                    )
                     }}
                   </p>
                 </div>
@@ -139,7 +128,7 @@
             </ion-card-title>
             <ion-card-subtitle>{{
               i18nService.getTranslation("onboarding.step2.subtitle")
-            }}</ion-card-subtitle>
+              }}</ion-card-subtitle>
           </ion-card-header>
 
           <ion-card-content>
@@ -151,31 +140,27 @@
                   <div>
                     <h3>
                       {{
-                        i18nService.getTranslation(
-                          "onboarding.step2.camera.title"
-                        )
+                      i18nService.getTranslation(
+                      "onboarding.step2.camera.title"
+                      )
                       }}
                     </h3>
                     <p>
                       {{
-                        i18nService.getTranslation(
-                          "onboarding.step2.camera.description"
-                        )
+                      i18nService.getTranslation(
+                      "onboarding.step2.camera.description"
+                      )
                       }}
                     </p>
                   </div>
                 </div>
                 @if (!cameraPermissionGranted) {
-                <ion-button
-                  (click)="requestCameraPermission()"
-                  [disabled]="isLoading"
-                  fill="outline"
-                >
+                <ion-button (click)="requestCameraPermission()" [disabled]="isLoading" fill="outline">
                   @if (isLoading) {
                   <ion-spinner name="crescent"></ion-spinner>
                   } @else {
                   {{
-                    i18nService.getTranslation("onboarding.step2.camera.button")
+                  i18nService.getTranslation("onboarding.step2.camera.button")
                   }}
                   }
                 </ion-button>
@@ -184,7 +169,7 @@
                   <ion-icon name="checkmark-circle"></ion-icon>
                   <ion-label>{{
                     i18nService.getTranslation("onboarding.permissions.granted")
-                  }}</ion-label>
+                    }}</ion-label>
                 </ion-chip>
                 }
               </div>
@@ -196,31 +181,27 @@
                   <div>
                     <h3>
                       {{
-                        i18nService.getTranslation(
-                          "onboarding.step2.photos.title"
-                        )
+                      i18nService.getTranslation(
+                      "onboarding.step2.photos.title"
+                      )
                       }}
                     </h3>
                     <p>
                       {{
-                        i18nService.getTranslation(
-                          "onboarding.step2.photos.description"
-                        )
+                      i18nService.getTranslation(
+                      "onboarding.step2.photos.description"
+                      )
                       }}
                     </p>
                   </div>
                 </div>
                 @if (!photoLibraryPermissionGranted) {
-                <ion-button
-                  (click)="requestPhotoLibraryPermission()"
-                  [disabled]="isLoading"
-                  fill="outline"
-                >
+                <ion-button (click)="requestPhotoLibraryPermission()" [disabled]="isLoading" fill="outline">
                   @if (isLoading) {
                   <ion-spinner name="crescent"></ion-spinner>
                   } @else {
                   {{
-                    i18nService.getTranslation("onboarding.step2.photos.button")
+                  i18nService.getTranslation("onboarding.step2.photos.button")
                   }}
                   }
                 </ion-button>
@@ -229,7 +210,7 @@
                   <ion-icon name="checkmark-circle"></ion-icon>
                   <ion-label>{{
                     i18nService.getTranslation("onboarding.permissions.granted")
-                  }}</ion-label>
+                    }}</ion-label>
                 </ion-chip>
                 }
               </div>
@@ -250,30 +231,26 @@
             </ion-card-title>
             <ion-card-subtitle>{{
               i18nService.getTranslation("onboarding.step3.subtitle")
-            }}</ion-card-subtitle>
+              }}</ion-card-subtitle>
           </ion-card-header>
 
           <ion-card-content>
             <div class="notifications-content">
               <div class="notification-info">
-                <ion-icon
-                  name="notifications-outline"
-                  color="primary"
-                  size="large"
-                ></ion-icon>
+                <ion-icon name="notifications-outline" color="primary" size="large"></ion-icon>
                 <div class="info-text">
                   <h3>
                     {{
-                      i18nService.getTranslation(
-                        "onboarding.step3.feature.title"
-                      )
+                    i18nService.getTranslation(
+                    "onboarding.step3.feature.title"
+                    )
                     }}
                   </h3>
                   <p>
                     {{
-                      i18nService.getTranslation(
-                        "onboarding.step3.feature.description"
-                      )
+                    i18nService.getTranslation(
+                    "onboarding.step3.feature.description"
+                    )
                     }}
                   </p>
 
@@ -282,25 +259,19 @@
                       <ion-icon name="time-outline" color="primary"></ion-icon>
                       <span>{{
                         i18nService.getTranslation("onboarding.step3.benefit1")
-                      }}</span>
+                        }}</span>
                     </div>
                     <div class="benefit-item">
-                      <ion-icon
-                        name="trophy-outline"
-                        color="secondary"
-                      ></ion-icon>
+                      <ion-icon name="trophy-outline" color="secondary"></ion-icon>
                       <span>{{
                         i18nService.getTranslation("onboarding.step3.benefit2")
-                      }}</span>
+                        }}</span>
                     </div>
                     <div class="benefit-item">
-                      <ion-icon
-                        name="flash-outline"
-                        color="tertiary"
-                      ></ion-icon>
+                      <ion-icon name="flash-outline" color="tertiary"></ion-icon>
                       <span>{{
                         i18nService.getTranslation("onboarding.step3.benefit3")
-                      }}</span>
+                        }}</span>
                     </div>
                   </div>
                 </div>
@@ -309,12 +280,8 @@
               @if (isMobile) {
               <div class="notification-action">
                 @if (!notificationPermissionGranted) {
-                <ion-button
-                  (click)="requestNotificationPermission()"
-                  [disabled]="isLoading"
-                  expand="block"
-                  color="primary"
-                >
+                <ion-button (click)="requestNotificationPermission()" [disabled]="isLoading" expand="block"
+                  color="primary">
                   @if (isLoading) {
                   <ion-spinner name="crescent"></ion-spinner>
                   } @else {
@@ -326,7 +293,7 @@
                   <ion-icon name="checkmark-circle"></ion-icon>
                   <ion-label>{{
                     i18nService.getTranslation("onboarding.permissions.granted")
-                  }}</ion-label>
+                    }}</ion-label>
                 </ion-chip>
                 }
               </div>
@@ -334,7 +301,7 @@
               <div class="notification-note">
                 <ion-note>{{
                   i18nService.getTranslation("onboarding.step3.webNote")
-                }}</ion-note>
+                  }}</ion-note>
               </div>
               }
             </div>
@@ -343,51 +310,39 @@
       </div>
       }
     </div>
-
-    <!-- Navigation Buttons -->
-    <div class="navigation-buttons">
-      @if (currentStep !== 'introduction') {
-      <ion-button (click)="previousStep()" fill="outline" color="medium">
-        <ion-icon name="chevron-back" slot="start"></ion-icon>
-        {{ i18nService.getTranslation("common.back") }}
-      </ion-button>
-      } @if (currentStep !== 'notifications') {
-      <ion-button
-        (click)="nextStep()"
-        [disabled]="
-          currentStep === 'permissions' && !canProceedFromPermissions()
-        "
-        color="primary"
-      >
-        {{ i18nService.getTranslation("common.next") }}
-        <ion-icon name="chevron-forward" slot="end"></ion-icon>
-      </ion-button>
-      } @if (currentStep === 'notifications') {
-      <ion-button
-        (click)="completeOnboarding()"
-        [disabled]="isLoading"
-        expand="block"
-        color="success"
-      >
-        @if (isLoading) {
-        <ion-spinner name="crescent"></ion-spinner>
-        } @else {
-        {{ i18nService.getTranslation("onboarding.complete") }}
-        }
-      </ion-button>
-      }
-    </div>
-
-    <!-- Skip Option -->
-    <div class="skip-section">
-      <ion-button
-        (click)="skipOnboarding()"
-        fill="clear"
-        size="small"
-        color="medium"
-      >
-        {{ i18nService.getTranslation("onboarding.skip") }}
-      </ion-button>
-    </div>
+    
   </div>
+  <div class="buttons">
+      <!-- Navigation Buttons -->
+      <div class="navigation-buttons">
+        @if (currentStep !== 'introduction') {
+        <ion-button (click)="previousStep()" fill="outline" color="medium">
+          <ion-icon name="chevron-back" slot="start"></ion-icon>
+          {{ i18nService.getTranslation("common.back") }}
+        </ion-button>
+        } @if (currentStep !== 'notifications') {
+        <ion-button (click)="nextStep()" [disabled]="
+          currentStep === 'permissions' && !canProceedFromPermissions()
+        " color="primary">
+          {{ i18nService.getTranslation("common.next") }}
+          <ion-icon name="chevron-forward" slot="end"></ion-icon>
+        </ion-button>
+        } @if (currentStep === 'notifications') {
+        <ion-button (click)="completeOnboarding()" [disabled]="isLoading" expand="block" color="success">
+          @if (isLoading) {
+          <ion-spinner name="crescent"></ion-spinner>
+          } @else {
+          {{ i18nService.getTranslation("onboarding.complete") }}
+          }
+        </ion-button>
+        }
+      </div>
+
+      <!-- Skip Option -->
+      <div class="skip-section">
+        <ion-button (click)="skipOnboarding()" fill="clear" size="small" color="medium">
+          {{ i18nService.getTranslation("onboarding.skip") }}
+        </ion-button>
+      </div>
+    </div>
 </ion-content>

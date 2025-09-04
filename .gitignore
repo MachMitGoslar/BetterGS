@@ -80,3 +80,5 @@ firebase/*
 ios/
 android/
 firebase/
+
+*.psd

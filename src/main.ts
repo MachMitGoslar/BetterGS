@@ -12,6 +12,7 @@ import {
 
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
+import { IconService } from './app/core/services/icon.service';
 import {
   getFirestore,
   provideFirestore,
@@ -37,6 +38,9 @@ import { environment } from './environments/environment';
 //import { defineCustomElements } from '@ionic/pwa-elements/loader';
 // Call the element loader before the bootstrapModule/bootstrapApplication call
 //defineCustomElements(window);
+
+// Ensure IconService is instantiated at app startup
+const iconService = new IconService();
 
 bootstrapApplication(AppComponent, {
   providers: [

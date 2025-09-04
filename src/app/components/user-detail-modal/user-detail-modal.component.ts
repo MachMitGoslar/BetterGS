@@ -28,14 +28,6 @@ import { Activity } from '../../core/models/activity.model';
 import { Tracking } from '../../core/models/tracking.model';
 import { Observable, forkJoin, of } from 'rxjs';
 import { map, switchMap, catchError } from 'rxjs/operators';
-import {
-  closeOutline,
-  trophyOutline,
-  timeOutline,
-  statsChartOutline,
-  personOutline,
-} from 'ionicons/icons';
-import { addIcons } from 'ionicons';
 import { doc, Firestore } from '@angular/fire/firestore';
 import { UserPublicProfile } from 'src/app/core/models/user_public_profile.model';
 import { ElapsedTimePipe } from 'src/app/core/pipes/elapsed-time.pipe';
@@ -83,15 +75,7 @@ export class UserDetailModalComponent implements OnInit, OnChanges {
   private trackingService: TrackingService = inject(TrackingService);
   private modalController: ModalController = inject(ModalController);
 
-  constructor() {
-    addIcons({
-      closeOutline,
-      trophyOutline,
-      timeOutline,
-      statsChartOutline,
-      personOutline,
-    });
-  }
+  constructor() {}
 
   ngOnInit() {
     if (this.user) {
