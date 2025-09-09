@@ -6,7 +6,7 @@ const htmlContent =
   '<script type="text/javascript">const currentLocale = navigator.language; if (currentLocale === "de") { window.location.href = "./de/index.html"; } else { window.location.href = "./en/index.html"; } </script>';
 
 module.exports = function () {
-  "creating index.html...");
+  console.log("creating index.html...");
   createIndexHtml();
 };
 
@@ -15,7 +15,7 @@ function createIndexHtml() {
     if (error) {
       throw new Error(`Error writing file: ${INDEX_HTML_PATH}`, { cause: error });
     } else {
-      "Successfully created file:", INDEX_HTML_PATH);
+      console.log("Successfully created file:", INDEX_HTML_PATH);
     }
   });
 }
