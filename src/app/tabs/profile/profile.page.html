@@ -74,51 +74,41 @@
 
       <ion-card-content *ngIf=" ($user | async) as user">
         <div class="stats-grid">
-          <div class="stat-item">
-            <ion-icon name="time-outline" class="stat-icon"></ion-icon>
-            <div class="stat-info">
-              <span class="stat-value"
-                >{{ _publicUserData?.total_trackings }}</span
-              >
-              <span class="stat-label" i18n="@@profile.total.trackings"
-                >Total Trackings</span
-              >
-            </div>
-          </div>
+          <app-activity-card
+            icon="speedometer-outline"
+            [value]="(_publicUserData?.total_trackings ?? 0).toString()"
+            i18n_path="@@profile.total.trackings"
+          >
+            <ng-container i18n="@@profile.total.trackings"
+              >Total Tracked Time</ng-container
+            >
+          </app-activity-card>
 
-          <div class="stat-item">
-            <ion-icon name="hourglass-outline" class="stat-icon"></ion-icon>
-            <div class="stat-info">
-              <span class="stat-value"
-                >{{ _publicUserData?.trackedTime | elapsedTime }}</span
-              >
-              <span class="stat-label" i18n="@@profile.total.time"
-                >Total Time</span
-              >
-            </div>
-          </div>
+          <app-activity-card
+            icon="time-outline"
+            [value]="(_publicUserData?.trackedTime| elapsedTime).toString()"
+            i18n_path="@@profile.total.trackings"
+          >
+            <ng-container i18n="@@profile.total.trackings"
+              >Total Tracked Time</ng-container
+            >
+          </app-activity-card>
 
-          <div class="stat-item">
-            <ion-icon name="trophy-outline" class="stat-icon"></ion-icon>
-            <div class="stat-info">
-              <span class="stat-value">
-                {{ userActiveActivityCount | async }}</span
-              >
-              <span class="stat-label" i18n="@@profile.activities"
-                >Activities</span
-              >
-            </div>
-          </div>
+          <app-activity-card
+            icon="trophy-outline"
+            [value]="((userActiveActivityCount | async) ?? 0).toString()"
+          >
+            <ng-container i18n="@@profile.activities">Activities</ng-container>
+          </app-activity-card>
 
-          <div class="stat-item">
-            <ion-icon name="calendar-outline" class="stat-icon"></ion-icon>
-            <div class="stat-info">
-              <span class="stat-value">{{ days_active }}</span>
-              <span class="stat-label" i18n="@@profile.days.active"
-                >Days Active</span
-              >
-            </div>
-          </div>
+          <app-activity-card
+            icon="calendar-outline"
+            [value]="days_active.toString()"
+          >
+            <ng-container i18n="@@profile.days.active"
+              >Days Active</ng-container
+            >
+          </app-activity-card>
         </div>
       </ion-card-content>
     </ion-card>

@@ -202,7 +202,7 @@ export class LoginComponent implements OnInit, OnDestroy {
    */
   private handleLoginError(error: any) {
     let errorMessage = this.i18nService.getTranslation('login.failed');
-    console.log("Error: ",error)
+
     if (error.code) {
       switch (error.code) {
         case 'auth/user-not-found':
@@ -215,6 +215,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           errorMessage = this.i18nService.getTranslation('login.invalid_email');
           break;
         case 'auth/invalid-credential':
+
           errorMessage = this.i18nService.getTranslation('login.credentials_wrong');
           break;
         case 'auth/user-disabled':

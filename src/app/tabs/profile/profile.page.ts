@@ -32,36 +32,7 @@ import { User } from '@angular/fire/auth';
 import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { addIcons } from 'ionicons';
-import {
-  trophyOutline,
-  camera,
-  images,
-  trash,
-  close,
-  checkmark,
-  warning,
-  logOutOutline,
-  person,
-  settings,
-  logIn,
-  create,
-  trashOutline,
-  pencil,
-  checkmarkCircle,
-  closeCircle,
-  trophy,
-  personCircle,
-  personAdd,
-  personRemove,
-  personOutline,
-  lockClosedOutline,
-  statsChartOutline,
-  warningOutline,
-  timeOutline,
-  hourglassOutline,
-  calendarOutline,
-} from 'ionicons/icons';
+import { IconService } from 'src/app/core/services/icon.service';
 
 // Core Services
 import { NotificationService } from 'src/app/core/services/notification.service';
@@ -78,6 +49,8 @@ import { ProfilePictureComponent } from 'src/app/components/profile-picture/prof
 import { ElapsedTimePipe } from 'src/app/core/pipes/elapsed-time.pipe';
 import { I18nPipe } from 'src/app/core/pipes/i18n.pipe';
 import { ActiveTrackingBarComponent } from 'src/app/components/active-tracking-bar/active-tracking-bar.component';
+import { ActivityCardComponent } from 'src/app/components/activity-card/activity-card.component';
+
 
 /**
  * ProfilePage - User Profile Management Component
@@ -145,9 +118,13 @@ import { ActiveTrackingBarComponent } from 'src/app/components/active-tracking-b
     ProfilePictureComponent,
     I18nPipe,
     ActiveTrackingBarComponent,
+    ActivityCardComponent,
+
   ],
 })
 export class ProfilePage implements OnInit, OnDestroy {
+  private iconService = inject(IconService);
+
   // ==========================================
   // Public State Properties
   // ==========================================
@@ -250,7 +227,6 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   constructor() {
     this.initializeForm();
-    this.registerIcons();
   }
 
   // ==========================================
@@ -282,45 +258,7 @@ export class ProfilePage implements OnInit, OnDestroy {
   // Initialization Methods
   // ==========================================
 
-  /**
-   * Registers Ionicons for use in the component
-   *
-   * Adds all required icons to the Ionic icon registry
-   * for consistent UI throughout the profile interface.
-   *
-   * @private
-   */
-  private registerIcons(): void {
-    addIcons({
-      logOutOutline,
-      camera,
-      personOutline,
-      lockClosedOutline,
-      statsChartOutline,
-      timeOutline,
-      hourglassOutline,
-      trophyOutline,
-      calendarOutline,
-      checkmarkCircle,
-      warningOutline,
-      trashOutline,
-      images,
-      trash,
-      close,
-      checkmark,
-      warning,
-      person,
-      settings,
-      logIn: logIn,
-      create,
-      pencil,
-      closeCircle: closeCircle,
-      trophy,
-      personCircle: personCircle,
-      personAdd: personAdd,
-      personRemove: personRemove,
-    });
-  }
+  // ...existing code...
 
   /**
    * Initializes the reactive form with validation rules

@@ -78,4 +78,7 @@ firebase/*
 
 # Build directories
 ios/
+android/
 firebase/
+
+*.psd

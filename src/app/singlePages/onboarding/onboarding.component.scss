@@ -8,11 +8,14 @@
 .onboarding-container {
   max-width: 600px;
   margin: 0 auto;
-  height: 100%;
+  //height: 100%;
   display: flex;
   flex-direction: column;
 }
 
+.app-logo {
+  height: 20vh;
+}
 /* Progress Header */
 .progress-header {
   text-align: center;
@@ -105,6 +108,9 @@
     ion-card-subtitle {
       margin-top: 8px;
       font-size: 14px;
+      @media (prefers-color-scheme: dark) {
+        color: var(--ion-color-light-medium);
+      }
       color: var(--ion-color-medium);
       line-height: 1.4;
     }
@@ -137,12 +143,18 @@
       font-size: 16px;
       font-weight: 600;
       margin: 0 0 4px 0;
+      @media (prefers-color-scheme: dark) {
+        color: var(--ion-color-light);
+      }
       color: var(--ion-color-dark);
     }
 
     p {
       font-size: 14px;
       color: var(--ion-color-medium);
+      @media (prefers-color-scheme: dark) {
+        color: var(--ion-color-light-medium);
+      }
       margin: 0;
       line-height: 1.4;
     }
@@ -179,11 +191,17 @@
         font-size: 16px;
         font-weight: 600;
         margin: 0 0 4px 0;
+        @media (prefers-color-scheme: dark) {
+          color: var(--ion-color-light);
+        }
         color: var(--ion-color-dark);
       }
 
       p {
         font-size: 14px;
+        @media (prefers-color-scheme: dark) {
+          color: var(--ion-color-light-medium);
+        }
         color: var(--ion-color-medium);
         margin: 0;
         line-height: 1.4;
@@ -231,11 +249,17 @@
         font-size: 18px;
         font-weight: 600;
         margin: 0 0 8px 0;
+        @media (prefers-color-scheme: dark) {
+          color: var(--ion-color-light-medium);
+        }
         color: var(--ion-color-dark);
       }
 
       p {
         font-size: 14px;
+        @media (prefers-color-scheme: dark) {
+          color: var(--ion-color-light-medium);
+        }
         color: var(--ion-color-medium);
         margin: 0 0 16px 0;
         line-height: 1.5;
