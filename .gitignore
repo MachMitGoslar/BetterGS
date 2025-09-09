@@ -79,3 +79,5 @@ firebase/*
 # Build directories
 ios/
 firebase/
+android/
+*.code-workspace
