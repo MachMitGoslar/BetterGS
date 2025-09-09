@@ -14,6 +14,8 @@ import {
   getDocs,
   getCountFromServer,
   updateDoc,
+  FieldValue,
+  arrayUnion,
 } from '@angular/fire/firestore';
 import {
   Auth,
@@ -37,6 +39,8 @@ import {
   map,
   forkJoin,
   take,
+  Subject,
+  BehaviorSubject,
 } from 'rxjs';
 
 import { User } from '@angular/fire/auth';
@@ -91,7 +95,7 @@ export class UserService {
    * @description Provides real-time access to Firebase Auth user state
    * @public
    */
-  public $currentUser = new ReplaySubject<User | null>(1);
+  public $currentUser = new BehaviorSubject<User | null>(null);
 
   /**
    * Observable stream of current user's private profile
@@ -262,15 +266,9 @@ export class UserService {
     const privateProfileSub = docSnapshots(
       doc(this.firestore, 'user_data', user.uid)
     ).subscribe(async (docSnapshot) => {
-      console.log('New Private profile snapshot:', docSnapshot);
-
       if (docSnapshot.exists()) {
         const data = docSnapshot.data();
         this._currentUserPrivateProfile = await UserPrivateProfile.fromDB(data);
-        console.log(
-          'Current user private profile:',
-          this._currentUserPrivateProfile
-        );
         this.$currentUserPrivateProfile.next(this._currentUserPrivateProfile);
       } else {
         // Create new private profile
@@ -302,15 +300,13 @@ export class UserService {
     const publicProfileSub = docSnapshots(
       doc(this.firestore, 'user_profile', user.uid)
     ).subscribe((docSnapshot) => {
-      console.log('New Public profile snapshot:', docSnapshot);
-
       if (docSnapshot.exists()) {
         const data = docSnapshot.data();
         this._currentUserProfile = UserPublicProfile.fromDB(
           docSnapshot.id,
           data
         );
-        console.log('Current user profile:', this._currentUserProfile);
+
         this.$currentUserProfile.next(this._currentUserProfile);
       } else {
         // Create new public profile
@@ -364,8 +360,49 @@ export class UserService {
 
       // Merge profile data in Firestore
       await this.mergeProfileData(userCredential, email, displayName);
+    } catch (error) {
+      console.error('Error creating user:', error);
+      throw error;
+    }
+  }
+  /**
+   * Register a new user with email and password
+   *
+   * Creates a new user account with Firebase Auth and sets up initial
+   * profile data in Firestore. Handles display name setup if provided.
+   *
+   * @public
+   * @param email - User's email address
+   * @param password - User's chosen password
+   * @param displayName - Optional display name for the user
+   * @returns {Promise<void>} Promise that resolves when registration is complete
+   * @throws Will reject if account creation fails
+   * @since 1.0.0
+   */
+  async registerAnonymousUserWithEmail(
+    email: string,
+    password: string,
+    displayName?: string
+  ): Promise<void> {
+    try {
+      // Create new user with email and password
+      const userCredential = await EmailAuthProvider.credential(
+        email,
+        password
+      );
 
-      console.log('User successfully created:', userCredential.user.uid);
+      linkWithCredential(this.currentUser!, userCredential);
+
+      // Update the user's display name
+      if (displayName) {
+        await updateProfile(this.currentUser!, { displayName });
+      }
+
+      // Merge profile data in Firestore
+      let user_credentials = {
+        user: this.currentUser!,
+      } as UserCredential;
+      await this.mergeProfileData(user_credentials, email, displayName);
     } catch (error) {
       console.error('Error creating user:', error);
       throw error;
@@ -549,9 +586,9 @@ export class UserService {
   ): Promise<void> {
     try {
       const userDocRef = doc(this.firestore, 'user_data', userId);
-      await updateDoc(userDocRef, { needsOnboarding: [device_id] });
-
-      console.log('User onboarding status updated successfully');
+      await updateDoc(userDocRef, {
+        needsOnboarding: arrayUnion(device_id),
+      });
     } catch (error) {
       console.error('Error updating user onboarding status:', error);
       throw error;

@@ -48,12 +48,10 @@ export class TrackingCardComponent implements OnInit {
       );
       return;
     }
-    console.log('this Tracking', this.tracking.activityRef);
     this.activity = this.getActivity();
   }
 
   getActivity(): Activity {
-    console.log(this.activityService.activities);
     return this.activityService.activities.find(
       (a) => a.id === this.tracking?.activityRef?.id
     )!;

@@ -181,7 +181,6 @@ export class MyActivitiesPage implements OnInit, OnDestroy {
     this.activitiesSubscription = this.$activities.subscribe({
       next: (activities) => {
         this.isLoading = false;
-        console.log('Activities loaded:', activities?.length || 0, 'items');
       },
       error: (error) => {
         this.isLoading = false;

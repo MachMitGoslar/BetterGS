@@ -27,7 +27,6 @@ export class UserPublicProfile {
   constructor() {}
 
   static fromDB(id: string, data: DocumentData): UserPublicProfile {
-    console.log('Converting UserPublicProfile from DB format:', data);
     let profile = new UserPublicProfile();
     profile.id = id;
     profile.name = data['name'];
@@ -51,7 +50,6 @@ export class UserPublicProfile {
       updatedAt: serverTimestamp(),
       isActive: this.isActive,
     };
-    console.log('Converting UserPublicProfile to DB format:', data);
     return data;
   }
 }

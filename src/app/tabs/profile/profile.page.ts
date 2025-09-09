@@ -51,7 +51,6 @@ import { I18nPipe } from 'src/app/core/pipes/i18n.pipe';
 import { ActiveTrackingBarComponent } from 'src/app/components/active-tracking-bar/active-tracking-bar.component';
 import { ActivityCardComponent } from 'src/app/components/activity-card/activity-card.component';
 
-
 /**
  * ProfilePage - User Profile Management Component
  *
@@ -119,7 +118,6 @@ import { ActivityCardComponent } from 'src/app/components/activity-card/activity
     I18nPipe,
     ActiveTrackingBarComponent,
     ActivityCardComponent,
-
   ],
 })
 export class ProfilePage implements OnInit, OnDestroy {
@@ -321,7 +319,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     // Subscribe to current user authentication state
     const userSub = this.$user.subscribe((user) => {
       this.user = user;
-      console.log('Current user:', this.user);
+
       this.populateForm();
     });
 
@@ -336,7 +334,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     const publicProfileSub = this.userService.$currentUserProfile.subscribe(
       (profile) => {
         this._publicUserData = profile;
-        console.log('Public user data:', this._publicUserData);
+
         this.populateForm();
       }
     );
@@ -410,8 +408,6 @@ export class ProfilePage implements OnInit, OnDestroy {
    * @returns Promise<void>
    */
   async updateProfile() {
-    console.log('Updating profile with data:', this.profileForm.value);
-
     // Validate form before processing
     if (this.profileForm.invalid || this.passwordMismatch) {
       this.notificationService.addNotification(
@@ -444,7 +440,6 @@ export class ProfilePage implements OnInit, OnDestroy {
       // Update public user data (display name) if changed
       if (formData.displayName !== this._publicUserData.name) {
         this._publicUserData.name = formData.displayName;
-        console.log('Display name changed:', formData.displayName);
 
         await this.applicationService.updateUserProfile(
           this._publicUserData.toDB()
@@ -1024,8 +1019,6 @@ export class ProfilePage implements OnInit, OnDestroy {
    * Provides cancel option for accidental activation.
    */
   async logout() {
-    console.log('Showing logout confirmation...');
-
     try {
       const alert = await this.alertController.create({
         header: 'Logout',
@@ -1043,7 +1036,6 @@ export class ProfilePage implements OnInit, OnDestroy {
       });
 
       await alert.present();
-      console.log('Logout alert presented');
     } catch (error) {
       console.error('Error creating/presenting logout alert:', error);
     }
@@ -1059,8 +1051,6 @@ export class ProfilePage implements OnInit, OnDestroy {
    * @private
    */
   private async performLogout() {
-    console.log('Performing logout...');
-
     try {
       await this.applicationService.logout();
 
@@ -1072,7 +1062,7 @@ export class ProfilePage implements OnInit, OnDestroy {
       // // Reload to reset application state
       // window.location.pathname = "/";
       // window.location.reload();
-      this.router.navigateByUrl('/login');
+      //this.router.navigateByUrl('/login');
     } catch (error) {
       console.error('Error logging out:', error);
       this.notificationService.addNotification(

@@ -90,7 +90,6 @@ export class UserDetailModalComponent implements OnInit, OnChanges {
   }
 
   loadUserActivityStats() {
-    console.log('Loading activity stats for user:', this.user.id!);
     // Get all activities for the user and their tracking statistics
     this.userActivityStats$ = this.activityService
       .getActivitiesByUser(this.user.id!)
