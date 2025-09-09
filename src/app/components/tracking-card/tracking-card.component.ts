@@ -36,14 +36,17 @@ export class TrackingCardComponent implements OnInit {
   activity: Activity = new Activity('unknown');
   public activityService: ActivityService = inject(ActivityService);
   public modalController: ModalController = inject(ModalController);
-  public notificationService: NotificationService = inject(NotificationService)
+  public notificationService: NotificationService = inject(NotificationService);
 
   constructor() {}
 
   ngOnInit() {
-    if (!this.tracking){
-      this.notificationService.addNotification("Kein Tracking verfügbar", "warning");
-      return
+    if (!this.tracking) {
+      this.notificationService.addNotification(
+        'Kein Tracking verfügbar',
+        'warning'
+      );
+      return;
     }
     console.log('this Tracking', this.tracking.activityRef);
     this.activity = this.getActivity();

@@ -77,30 +77,38 @@
           <app-activity-card
             icon="speedometer-outline"
             [value]="(_publicUserData?.total_trackings ?? 0).toString()"
-            i18n_path="@@profile.total.trackings">
-            <ng-container i18n="@@profile.total.trackings">Total Tracked Time</ng-container>
+            i18n_path="@@profile.total.trackings"
+          >
+            <ng-container i18n="@@profile.total.trackings"
+              >Total Tracked Time</ng-container
+            >
           </app-activity-card>
 
           <app-activity-card
             icon="time-outline"
             [value]="(_publicUserData?.trackedTime| elapsedTime).toString()"
-            i18n_path="@@profile.total.trackings">
-            <ng-container i18n="@@profile.total.trackings">Total Tracked Time</ng-container>
+            i18n_path="@@profile.total.trackings"
+          >
+            <ng-container i18n="@@profile.total.trackings"
+              >Total Tracked Time</ng-container
+            >
           </app-activity-card>
 
-        <app-activity-card
+          <app-activity-card
             icon="trophy-outline"
             [value]="((userActiveActivityCount | async) ?? 0).toString()"
-            >
+          >
             <ng-container i18n="@@profile.activities">Activities</ng-container>
-        </app-activity-card>
+          </app-activity-card>
 
-        <app-activity-card
+          <app-activity-card
             icon="calendar-outline"
             [value]="days_active.toString()"
+          >
+            <ng-container i18n="@@profile.days.active"
+              >Days Active</ng-container
             >
-            <ng-container i18n="@@profile.days.active">Days Active</ng-container>
-        </app-activity-card>
+          </app-activity-card>
         </div>
       </ion-card-content>
     </ion-card>

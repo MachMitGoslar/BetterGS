@@ -9,8 +9,8 @@ describe('ActivityCardComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ActivityCardComponent ],
-      imports: [IonicModule.forRoot()]
+      //declarations: [ActivityCardComponent],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ActivityCardComponent);

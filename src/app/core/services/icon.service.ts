@@ -7,8 +7,6 @@ import * as allIcons from 'ionicons/icons';
 })
 export class IconService {
   constructor() {
-  addIcons(allIcons);
+    addIcons(allIcons);
   }
-
-
 }

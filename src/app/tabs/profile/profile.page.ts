@@ -117,10 +117,12 @@ import { ActivityCardComponent } from 'src/app/components/activity-card/activity
     ProfilePictureComponent,
     I18nPipe,
     ActiveTrackingBarComponent,
-    ActivityCardComponent
+    ActivityCardComponent,
   ],
 })
 export class ProfilePage implements OnInit, OnDestroy {
+  private iconService = inject(IconService);
+
   // ==========================================
   // Public State Properties
   // ==========================================
@@ -221,7 +223,7 @@ export class ProfilePage implements OnInit, OnDestroy {
   private platform = inject(Platform);
   private userService = inject(UserService);
 
-  constructor(private iconService: IconService) {
+  constructor() {
     this.initializeForm();
   }
 

@@ -51,19 +51,18 @@
   .display-name {
     font-size: 1.8rem;
     font-weight: 700;
-                  @media (prefers-color-scheme: dark) {
-        color: var(--ion-color-light);
-      }
+    @media (prefers-color-scheme: dark) {
+      color: var(--ion-color-light);
+    }
     color: var(--ion-color-dark);
     margin: 0 0 8px 0;
   }
 
   .user-email {
     font-size: 1.1rem;
-                  @media (prefers-color-scheme: dark) {
-
-        color: var(--ion-color-light-medium);
-      }
+    @media (prefers-color-scheme: dark) {
+      color: var(--ion-color-light-medium);
+    }
     color: var(--ion-color-medium);
     margin: 0 0 4px 0;
   }
@@ -133,8 +132,6 @@
   gap: 20px;
   margin-top: 16px;
 }
-
-
 
 // Action Buttons
 .action-buttons {

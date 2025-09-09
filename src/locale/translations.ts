@@ -96,7 +96,7 @@ const translations: { [key: string]: { [lang: string]: string } } = {
     de: 'Wir alle probieren die Welt ein Stück besser zu machen. Sieh wie viele Anderen das auch tun. Denn du bist nicht allein!',
   },
   'onboarding.step1.feature3.title': {
-    en: 'Sustainability isn\'t boring',
+    en: "Sustainability isn't boring",
     de: 'Nachhaltigkeit ist nicht langweilig',
   },
   'onboarding.step1.feature3.description': {

@@ -1,6 +1,6 @@
-import { Component, OnInit, Input} from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ElapsedTimePipe } from 'src/app/core/pipes/elapsed-time.pipe';
-import {IonIcon} from "@ionic/angular/standalone";
+import { IonIcon } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-activity-card',
@@ -8,16 +8,9 @@ import {IonIcon} from "@ionic/angular/standalone";
   styleUrls: ['./activity-card.component.scss'],
   imports: [ElapsedTimePipe, IonIcon],
 })
-export class ActivityCardComponent  implements OnInit {
-
+export class ActivityCardComponent {
   @Input() icon: string = 'time';
-  @Input() value: string = "" // in seconds
+  @Input() value: string = ''; // in seconds
 
-
-  constructor() { 
-
-  }
-
-  ngOnInit() {}
-
+  constructor() {}
 }
