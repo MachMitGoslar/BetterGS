@@ -54,6 +54,7 @@ import { UserPublicProfile } from '../models/user_public_profile.model';
 import { UserPrivateProfile } from '../models/user_private_profile.model';
 import { ListenerCallback } from '@capacitor/core';
 import { Camera } from '@capacitor/camera';
+import { Router } from '@angular/router';
 
 /**
  * ApplicationService - Main Application Service
@@ -239,6 +240,7 @@ export class ApplicationService implements OnDestroy {
   public i18nService = inject(I18nService);
   public auth = inject(Auth);
   public storage = inject(Storage);
+  public router = inject(Router);
 
   constructor() {
     this.$currentUser = this.usrSrv.$currentUser as Observable<User | null>;
@@ -268,16 +270,16 @@ export class ApplicationService implements OnDestroy {
         console.error('Error initializing app state listeners:', error);
       });
     // Set up user state subscription
+
     this.user_subscription = this.usrSrv.$currentUser.subscribe((user) => {
+      console.log('There is a new user state:', user);
       if (user && user !== null && user != this._currentUser) {
         this._currentUser = user;
-        console.log(
-          'Calling the appSetup for current user:',
-          this._currentUser
-        );
         this.setupAppData();
       } else {
         this._currentUser = undefined;
+        this.activityService.destroy();
+        this.router.navigateByUrl('/login');
       }
     });
     this.subscriptions.push(this.user_subscription);
@@ -396,7 +398,7 @@ export class ApplicationService implements OnDestroy {
    */
   registerUserWithEmail(email: string, password: string): Promise<void> {
     if (this._currentUser && this._currentUser.isAnonymous) {
-      return this.usrSrv.registerUserWithEmail(email, password);
+      return this.usrSrv.registerAnonymousUserWithEmail(email, password);
     } else {
       return Promise.reject(
         this.i18nService.getTranslation('error.no.anonymous.user.to.upgrade')
@@ -562,32 +564,18 @@ export class ApplicationService implements OnDestroy {
    * @since 1.0.0
    */
   logout(): void {
-    if (this._currentUser) {
-      this.activityService.destroy();
-      this.$activeTracking.next(undefined);
-      signOut(this.auth)
-        .then(() => {
-          console.log('User logged out successfully');
-          this.notificationService.addNotification(
-            this.i18nService.getTranslation('success.logged.out'),
-            'success'
-          );
-        })
-        .catch((error) => {
-          console.error('Error logging out user:', error);
-          this.notificationService.addNotification(
-            this.i18nService.getTranslation('error.logout') +
-              ': ' +
-              error.message,
-            'danger'
-          );
-        });
-    } else {
+    this.activityService.destroy();
+    this.$activeTracking.next(undefined);
+    this.usrSrv.logout().catch((error) => {
+      console.error('Error during logout:', error);
       this.notificationService.addNotification(
-        this.i18nService.getTranslation('error.no.user.to.logout'),
-        'warning'
+        this.i18nService.getTranslation('error.logout.failed') +
+          ': ' +
+          error.message,
+        'danger'
       );
-    }
+    });
+    console.log('Remaining User:', this._currentUser);
   }
 
   /**

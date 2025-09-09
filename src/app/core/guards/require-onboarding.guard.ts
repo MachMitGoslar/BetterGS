@@ -9,7 +9,6 @@ export const requireOnboardingGuard: CanActivateFn = (route, state) => {
 
   return userService.$currentUserPrivateProfile.pipe(
     map((userPrivateProfile) => {
-      console.log('User private profile:', userPrivateProfile);
       // Check if user has completed onboarding
       if (userPrivateProfile?.needsOnboarding) {
         // User hasn't completed onboarding, redirect to onboarding

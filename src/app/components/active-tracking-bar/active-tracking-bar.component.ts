@@ -74,13 +74,11 @@ export class ActiveTrackingBarComponent implements OnInit, OnDestroy {
   }
 
   private handleTrackingChange() {
-    console.log('Handling tracking change');
     if (
       this._activeTracking &&
       this._activeTracking.startDate &&
       this.applicationService.isAppActive
     ) {
-      console.log('Starting timer');
       this.startTimer();
     } else {
       this.stopTimer();
@@ -110,8 +108,6 @@ export class ActiveTrackingBarComponent implements OnInit, OnDestroy {
   }
 
   async stopTracking(tracking: Tracking | void): Promise<void> {
-    console.log('Stopping tracking');
-    console.log('Stopping tracking', tracking);
     //if(tracking !== void 0 && tracking !== undefined) {
     this.applicationService.stopTracking();
 

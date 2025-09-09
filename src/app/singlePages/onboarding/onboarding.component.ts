@@ -11,9 +11,6 @@ import { ApplicationService } from '../../core/services/application.service';
 import { User } from '@angular/fire/auth';
 import { Subscription, take } from 'rxjs';
 import {
-  IonHeader,
-  IonToolbar,
-  IonTitle,
   IonContent,
   IonIcon,
   IonSegment,
@@ -43,9 +40,6 @@ import { Device } from '@capacitor/device';
   imports: [
     CommonModule,
     FormsModule,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
     IonContent,
     IonIcon,
     IonSegment,
@@ -105,7 +99,6 @@ export class OnboardingComponent implements OnInit {
     // Check camera permissions
     this.subscriptions = [
       this.applicationService.$cameraPermissionGranted.subscribe((granted) => {
-        console.log('camera permission changed:', granted);
         this.cameraPermissionGranted = granted;
       }),
 

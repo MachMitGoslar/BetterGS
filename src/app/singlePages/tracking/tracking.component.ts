@@ -121,7 +121,6 @@ export class TrackingComponent implements OnInit, OnDestroy {
 
     // TODO: Initialize current tracking from service if available
     this.applicationService.$activeTracking.subscribe((tracking) => {
-      console.log('Active tracking subscription fired', tracking);
       this.currentTracking = tracking;
       if (this.currentTracking) {
         if (this.intervalId) {
@@ -136,7 +135,6 @@ export class TrackingComponent implements OnInit, OnDestroy {
             activity.ref?.id === this.currentTracking?.activityRef?.id
         );
       } else {
-        console.log('Other Tracking came back');
       }
     });
     // this.applicationService.onAppGoesBackground(() => {
@@ -193,7 +191,6 @@ export class TrackingComponent implements OnInit, OnDestroy {
     // Reset state
     this.elapsedTime = 0;
 
-    console.log('Tracking stopped:', finishedTracking);
     let modal = await this.modalCtrl.create({
       component: TrackingEditModalComponent,
       componentProps: {

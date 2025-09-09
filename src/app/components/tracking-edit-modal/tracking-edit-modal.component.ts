@@ -105,7 +105,6 @@ export class TrackingEditModalComponent implements OnInit {
    * Loads existing tracking data into the form
    */
   private loadTrackingData() {
-    console.log(this.tracking);
     if (this.tracking) {
       this.trackingForm.patchValue({
         notes: this.tracking.notes || '',

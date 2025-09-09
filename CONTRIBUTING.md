@@ -231,7 +231,7 @@ Unser ESLint Setup enforced:
 - **Angular Style Guide**
 - **Accessibility Rules**
 - **Import/Export Order**
-- **No Console.log in Production**
+- **No 
 
 ## 🧪 Testing Guidelines
 

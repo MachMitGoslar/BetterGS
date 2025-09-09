@@ -80,5 +80,5 @@ firebase/*
 ios/
 android/
 firebase/
-
+*.code-workspace
 *.psd

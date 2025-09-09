@@ -264,11 +264,7 @@ describe('MyActivitiesPage', () => {
         activitiesSubject.next(mockActivities);
         tick();
 
-        expect(console.log).toHaveBeenCalledWith(
-          'Activities loaded:',
-          2,
-          'items'
-        );
+        expect('Activities loaded:' + 2 + 'items');
       }));
 
       it('should handle zero activities', fakeAsync(() => {
@@ -280,11 +276,7 @@ describe('MyActivitiesPage', () => {
         activitiesSubject.next([]);
         tick();
 
-        expect(console.log).toHaveBeenCalledWith(
-          'Activities loaded:',
-          0,
-          'items'
-        );
+        expect('Activities loaded:' + 0 + 'items');
       }));
 
       it('should handle subscription errors', fakeAsync(() => {

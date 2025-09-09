@@ -33,6 +33,7 @@ export const routes: Routes = [
       import('./singlePages/onboarding/onboarding.component').then(
         (m) => m.OnboardingComponent
       ),
+    canActivate: [loginGuard],
   },
   {
     path: 'tracking/:activityId',
@@ -40,5 +41,6 @@ export const routes: Routes = [
       import('./singlePages/tracking/tracking.component').then(
         (m) => m.TrackingComponent
       ),
+    canActivate: [loginGuard],
   },
 ];
