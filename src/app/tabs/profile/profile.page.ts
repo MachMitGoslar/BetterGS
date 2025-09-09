@@ -32,36 +32,7 @@ import { User } from '@angular/fire/auth';
 import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { addIcons } from 'ionicons';
-import {
-  trophyOutline,
-  camera,
-  images,
-  trash,
-  close,
-  checkmark,
-  warning,
-  logOutOutline,
-  person,
-  settings,
-  logIn,
-  create,
-  trashOutline,
-  pencil,
-  checkmarkCircle,
-  closeCircle,
-  trophy,
-  personCircle,
-  personAdd,
-  personRemove,
-  personOutline,
-  lockClosedOutline,
-  statsChartOutline,
-  warningOutline,
-  timeOutline,
-  hourglassOutline,
-  calendarOutline,
-} from 'ionicons/icons';
+import { IconService } from 'src/app/core/services/icon.service';
 
 // Core Services
 import { NotificationService } from 'src/app/core/services/notification.service';
@@ -77,6 +48,9 @@ import { UserPrivateProfile } from 'src/app/core/models/user_private_profile.mod
 import { ProfilePictureComponent } from 'src/app/components/profile-picture/profile-picture.component';
 import { ElapsedTimePipe } from 'src/app/core/pipes/elapsed-time.pipe';
 import { I18nPipe } from 'src/app/core/pipes/i18n.pipe';
+import { ActiveTrackingBarComponent } from 'src/app/components/active-tracking-bar/active-tracking-bar.component';
+import { ActivityCardComponent } from 'src/app/components/activity-card/activity-card.component';
+
 
 /**
  * ProfilePage - User Profile Management Component
@@ -143,9 +117,14 @@ import { I18nPipe } from 'src/app/core/pipes/i18n.pipe';
     ElapsedTimePipe,
     ProfilePictureComponent,
     I18nPipe,
+    ActiveTrackingBarComponent,
+    ActivityCardComponent,
+
   ],
 })
 export class ProfilePage implements OnInit, OnDestroy {
+  private iconService = inject(IconService);
+
   // ==========================================
   // Public State Properties
   // ==========================================
@@ -248,7 +227,6 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   constructor() {
     this.initializeForm();
-    this.registerIcons();
   }
 
   // ==========================================
@@ -280,45 +258,7 @@ export class ProfilePage implements OnInit, OnDestroy {
   // Initialization Methods
   // ==========================================
 
-  /**
-   * Registers Ionicons for use in the component
-   *
-   * Adds all required icons to the Ionic icon registry
-   * for consistent UI throughout the profile interface.
-   *
-   * @private
-   */
-  private registerIcons(): void {
-    addIcons({
-      logOutOutline,
-      camera,
-      personOutline,
-      lockClosedOutline,
-      statsChartOutline,
-      timeOutline,
-      hourglassOutline,
-      trophyOutline,
-      calendarOutline,
-      checkmarkCircle,
-      warningOutline,
-      trashOutline,
-      images,
-      trash,
-      close,
-      checkmark,
-      warning,
-      person,
-      settings,
-      logIn: logIn,
-      create,
-      pencil,
-      closeCircle: closeCircle,
-      trophy,
-      personCircle: personCircle,
-      personAdd: personAdd,
-      personRemove: personRemove,
-    });
-  }
+  // ...existing code...
 
   /**
    * Initializes the reactive form with validation rules
@@ -1069,7 +1009,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     } catch (error) {
       console.error('Error deleting account:', error);
       this.notificationService.addNotification(
-        'Failed to delete account. Please try again.',
+        this.i18nService.getTranslation('profile.error.deleteFailed'),
         'danger'
       );
     } finally {
@@ -1089,7 +1029,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     try {
       const alert = await this.alertController.create({
         header: 'Logout',
-        message: 'Are you sure you want to logout?',
+        message: this.i18nService.getTranslation('profile.confirmLogout'),
         buttons: [
           {
             text: 'Cancel',
@@ -1125,16 +1065,18 @@ export class ProfilePage implements OnInit, OnDestroy {
       await this.applicationService.logout();
 
       this.notificationService.addNotification(
-        'You have been logged out successfully.',
+        this.i18nService.getTranslation('profile.loggedOut'),
         'success'
       );
 
-      // Reload to reset application state
-      window.location.reload();
+      // // Reload to reset application state
+      // window.location.pathname = "/";
+      // window.location.reload();
+      this.router.navigateByUrl('/login');
     } catch (error) {
       console.error('Error logging out:', error);
       this.notificationService.addNotification(
-        'Failed to logout. Please try again.',
+        this.i18nService.getTranslation('profile.error.logoutFailed'),
         'danger'
       );
     }

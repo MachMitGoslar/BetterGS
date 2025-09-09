@@ -13,18 +13,9 @@ import {
 import { Tracking } from 'src/app/core/models/tracking.model';
 import { ElapsedTimePipe } from 'src/app/core/pipes/elapsed-time.pipe';
 import { ActivityService } from 'src/app/core/services/activity.service';
-import {
-  pencil,
-  imageOutline,
-  timeOutline,
-  playCircleOutline,
-  arrowForwardOutline,
-  stopCircleOutline,
-  documentTextOutline,
-} from 'ionicons/icons';
-import { addIcons } from 'ionicons';
 import { TrackingEditModalComponent } from '../tracking-edit-modal/tracking-edit-modal.component';
 import { Activity } from 'src/app/core/models/activity.model';
+import { NotificationService } from 'src/app/core/services/notification.service';
 
 @Component({
   selector: 'app-tracking-card',
@@ -42,33 +33,30 @@ import { Activity } from 'src/app/core/models/activity.model';
 })
 export class TrackingCardComponent implements OnInit {
   @Input() tracking: Tracking | undefined;
-  activity?: Activity;
+  activity: Activity = new Activity('unknown');
   public activityService: ActivityService = inject(ActivityService);
   public modalController: ModalController = inject(ModalController);
+  public notificationService: NotificationService = inject(NotificationService);
 
-  constructor() {
-    addIcons({
-      imageOutline,
-      pencil,
-      timeOutline,
-      playCircleOutline,
-      arrowForwardOutline,
-      stopCircleOutline,
-      documentTextOutline,
-    });
-  }
+  constructor() {}
 
   ngOnInit() {
-    this.activity = this.activityService.activities.find(
-      (a) => (a.id === this.tracking?.activityRef?.id) || new Activity("unknown")
-    );
+    if (!this.tracking) {
+      this.notificationService.addNotification(
+        'Kein Tracking verfügbar',
+        'warning'
+      );
+      return;
+    }
+    console.log('this Tracking', this.tracking.activityRef);
+    this.activity = this.getActivity();
   }
 
-  getActivityName(): string {
-    if (!this.tracking || !this.tracking.activityRef) {
-      return 'Unknown Activity';
-    }
-    return this.activity ? this.activity.title : 'Unknown Activity';
+  getActivity(): Activity {
+    console.log(this.activityService.activities);
+    return this.activityService.activities.find(
+      (a) => a.id === this.tracking?.activityRef?.id
+    )!;
   }
 
   async editTracking(): Promise<void> {

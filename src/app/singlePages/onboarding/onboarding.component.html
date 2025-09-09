@@ -1,14 +1,8 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>{{ i18nService.getTranslation("onboarding.title") }}</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true" class="onboarding-content">
   <div class="onboarding-container">
     <!-- Progress Header -->
     <div class="progress-header">
-      <ion-icon name="rocket-outline" class="brand-icon"></ion-icon>
+      <img src="assets/icons/icon-512.webp" alt="App Logo" class="app-logo" />
       <h1 class="brand-title">
         {{ i18nService.getTranslation("onboarding.welcome") }}
       </h1>
@@ -343,7 +337,8 @@
       </div>
       }
     </div>
-
+  </div>
+  <div class="buttons">
     <!-- Navigation Buttons -->
     <div class="navigation-buttons">
       @if (currentStep !== 'introduction') {

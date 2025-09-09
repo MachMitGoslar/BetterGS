@@ -9,7 +9,7 @@ import {
 import { I18nService } from '../../core/services/i18n.service';
 import { ApplicationService } from '../../core/services/application.service';
 import { User } from '@angular/fire/auth';
-import { take } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 import {
   IonHeader,
   IonToolbar,
@@ -32,6 +32,8 @@ import {
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UserService } from 'src/app/core/services/user.service';
+import { App } from '@capacitor/app';
+import { Device } from '@capacitor/device';
 
 @Component({
   selector: 'app-onboarding',
@@ -65,6 +67,8 @@ export class OnboardingComponent implements OnInit {
   isLoading = false;
   isMobile = false;
 
+  subscriptions: Subscription[] = [];
+
   // Permission states
   cameraPermissionGranted = false;
   photoLibraryPermissionGranted = false;
@@ -97,20 +101,24 @@ export class OnboardingComponent implements OnInit {
     }
   }
 
-  async checkExistingPermissions() {
-    try {
-      // Check camera permissions
-      const cameraStatus = await Camera.checkPermissions();
-      this.cameraPermissionGranted = cameraStatus.camera === 'granted';
-      this.photoLibraryPermissionGranted = cameraStatus.photos === 'granted';
+  checkExistingPermissions() {
+    // Check camera permissions
+    this.subscriptions = [
+      this.applicationService.$cameraPermissionGranted.subscribe((granted) => {
+        console.log('camera permission changed:', granted);
+        this.cameraPermissionGranted = granted;
+      }),
 
-      // Check notification permissions
-      const notificationStatus = await LocalNotifications.checkPermissions();
-      this.notificationPermissionGranted =
-        notificationStatus.display === 'granted';
-    } catch (error) {
-      console.error('Error checking permissions:', error);
-    }
+      this.applicationService.$photoLibraryPermissionGranted.subscribe(
+        (granted) => {
+          this.photoLibraryPermissionGranted = granted;
+        }
+      ),
+
+      this.applicationService.$notificationsEnabled.subscribe((enabled) => {
+        this.notificationPermissionGranted = enabled;
+      }),
+    ];
   }
 
   onSegmentChanged(event: any) {
@@ -125,8 +133,6 @@ export class OnboardingComponent implements OnInit {
       const result = await Camera.requestPermissions({
         permissions: ['camera'],
       });
-      this.applicationService.cameraPermissionGranted =
-        result.camera === 'granted';
     } catch (error) {
       console.error('Error requesting camera permission:', error);
     } finally {
@@ -142,8 +148,6 @@ export class OnboardingComponent implements OnInit {
       const result = await Camera.requestPermissions({
         permissions: ['photos'],
       });
-      this.applicationService.photoLibraryPermissionGranted =
-        result.photos === 'granted';
     } catch (error) {
       console.error('Error requesting photo library permission:', error);
     } finally {
@@ -157,8 +161,6 @@ export class OnboardingComponent implements OnInit {
     this.isLoading = true;
     try {
       const result = await LocalNotifications.requestPermissions();
-      this.applicationService.notificationsEnabled =
-        result.display === 'granted';
     } catch (error) {
       console.error('Error requesting notification permission:', error);
     } finally {
@@ -196,10 +198,11 @@ export class OnboardingComponent implements OnInit {
 
     this.isLoading = true;
     try {
+      let device_id = (await Device.getId()).identifier;
       // Update user's onboarding status in the database
       await this.userService.updateUserOnboardingStatus(
         this.currentUser.uid,
-        true
+        device_id
       );
     } catch (error) {
       console.error('Error completing onboarding:', error);

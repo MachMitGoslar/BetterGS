@@ -28,14 +28,6 @@ import { Activity } from '../../core/models/activity.model';
 import { Tracking } from '../../core/models/tracking.model';
 import { Observable, forkJoin, of } from 'rxjs';
 import { map, switchMap, catchError } from 'rxjs/operators';
-import {
-  closeOutline,
-  trophyOutline,
-  timeOutline,
-  statsChartOutline,
-  personOutline,
-} from 'ionicons/icons';
-import { addIcons } from 'ionicons';
 import { doc, Firestore } from '@angular/fire/firestore';
 import { UserPublicProfile } from 'src/app/core/models/user_public_profile.model';
 import { ElapsedTimePipe } from 'src/app/core/pipes/elapsed-time.pipe';
@@ -70,6 +62,7 @@ interface UserActivityStats {
     IonGrid,
     IonRow,
     IonCol,
+    IonItem,
   ],
 })
 export class UserDetailModalComponent implements OnInit, OnChanges {
@@ -82,15 +75,7 @@ export class UserDetailModalComponent implements OnInit, OnChanges {
   private trackingService: TrackingService = inject(TrackingService);
   private modalController: ModalController = inject(ModalController);
 
-  constructor() {
-    addIcons({
-      closeOutline,
-      trophyOutline,
-      timeOutline,
-      statsChartOutline,
-      personOutline,
-    });
-  }
+  constructor() {}
 
   ngOnInit() {
     if (this.user) {
@@ -121,14 +106,11 @@ export class UserDetailModalComponent implements OnInit, OnChanges {
               .getTrackingsByActivity(this.user.id!, activity.ref!)
               .pipe(
                 map(
-                  (trackings) =>
+                  ([totalDuration, trackings]) =>
                     ({
                       activity,
                       trackingCount: trackings.length,
-                      totalDuration: trackings.reduce(
-                        (sum, tracking) => sum + (tracking.duration || 0),
-                        0
-                      ),
+                      totalDuration: totalDuration || 0,
                     } as UserActivityStats)
                 ),
                 catchError(() => {

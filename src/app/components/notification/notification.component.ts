@@ -6,6 +6,7 @@ import {
 } from 'src/app/core/services/notification.service';
 import { ToastController } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
+import { I18nService } from 'src/app/core/services/i18n.service';
 
 @Component({
   selector: 'app-notification',
@@ -17,12 +18,12 @@ export class NotificationComponent implements OnInit, OnDestroy {
   private subscription: Subscription = new Subscription();
   private notificationService = inject(NotificationService);
   private toastController = inject(ToastController);
+  private i18nService = inject(I18nService);
   constructor() {}
 
   ngOnInit() {
     this.subscription = this.notificationService.$notifications.subscribe(
       (notifications) => {
-        console.log('Notifications updated:', notifications);
         // Show undisplayed notifications
         const undisplayedNotifications =
           this.notificationService.getUndisplayedNotifications();
@@ -47,7 +48,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
       position: 'top',
       buttons: [
         {
-          text: 'Dismiss',
+          text: this.i18nService.getTranslation('common.dismiss'),
           role: 'cancel',
           handler: () => {
             this.notificationService.removeNotification(notification.id);

@@ -47,6 +47,10 @@ const translations: { [key: string]: { [lang: string]: string } } = {
     en: 'Success',
     de: 'Erfolg',
   },
+  'common.dismiss': {
+    en: 'Dismiss',
+    de: 'Schließen',
+  },
 
   // Onboarding
   'onboarding.title': {
@@ -72,32 +76,32 @@ const translations: { [key: string]: { [lang: string]: string } } = {
 
   // Onboarding Step 1 - Introduction
   'onboarding.step1.title': {
-    en: 'Introduction',
-    de: 'Einführung',
+    en: 'What is "BetterGS" and what does it offer?',
+    de: 'Was ist "BetterGS" und was bringt das?',
   },
   'onboarding.step1.feature1.title': {
-    en: 'Track Your Activities',
-    de: 'Aktivitäten verfolgen',
+    en: 'Sustainability for the Future',
+    de: 'Nachhaltig für die Zukunft',
   },
   'onboarding.step1.feature1.description': {
-    en: 'Keep track of your sustainable activities and monitor your progress over time',
-    de: 'Verfolge deine nachhaltigen Aktivitäten und sammle Zeit',
+    en: "You're on sustainable path? Let others know. Track the time you spend on sustainable activities.",
+    de: 'Du bist bist nachhaltig unterwegs? Dann lass es andere wissen. Tracke deine Zeit die du mit nachhaltigen Tätigkeiten verbringst.',
   },
   'onboarding.step1.feature2.title': {
-    en: 'Compete with Others',
-    de: 'Mit anderen konkurrieren',
+    en: 'You Are Not Alone',
+    de: 'Du bist nicht allein',
   },
   'onboarding.step1.feature2.description': {
-    en: 'Compare your achievements with others and climb the leaderboards',
-    de: 'Vergleiche deine Werte mit Anderen und klettere in den Ranglisten',
+    en: 'We all try to make the world a little better. See how many others are doing the same. Because you are not alone!',
+    de: 'Wir alle probieren die Welt ein Stück besser zu machen. Sieh wie viele Anderen das auch tun. Denn du bist nicht allein!',
   },
   'onboarding.step1.feature3.title': {
-    en: 'Win Prizes after the end of the sustainability challenge',
-    de: 'Gewinne Preise nach dem Ende der Nachhaltigkeits-Challenge',
+    en: "Sustainability isn't boring",
+    de: 'Nachhaltigkeit ist nicht langweilig',
   },
   'onboarding.step1.feature3.description': {
-    en: 'all your trackings will be summed up and you can win prizes',
-    de: 'Alle deine Aktivitäten werden summiert und du kannst zum Abschluss am 27.09. tolle Preise gewinnen',
+    en: 'Why should sustainability be boring? With a wink, we strive to make sustainability exciting and rewarding. At the top of the leaderboard? Then you have a good chance of winning a cool prize on September 27th at the Zukunftsfest.',
+    de: 'Warum sollte Nachhaltigkeit langweilig sein? Mit einem Augenzwinkern kämpfen wir darum, Nachhaltigkeit spannend und lohend zu gestalten. Ganz vorne in der Bestenliste? Dann hast du gute Chancen auf einen coolen Preis am 27.09. zum Zukunftsfest',
   },
 
   // Onboarding Step 2 - Permissions
@@ -246,6 +250,92 @@ const translations: { [key: string]: { [lang: string]: string } } = {
   'login.no.account': {
     en: "Don't have an account?",
     de: 'Noch kein Konto?',
+  },
+
+  // Login form and validation
+  'login.signing_in': {
+    en: 'Signing in...',
+    de: 'Anmeldung läuft...',
+  },
+  'login.failed': {
+    en: 'Login failed. Please try again.',
+    de: 'Anmeldung fehlgeschlagen. Bitte versuche es erneut.',
+  },
+  'login.user_not_found': {
+    en: 'No account found with this email address.',
+    de: 'Kein Konto mit dieser E-Mail-Adresse gefunden.',
+  },
+  'login.wrong_password': {
+    en: 'Incorrect password. Please try again.',
+    de: 'Falsches Passwort. Bitte versuche es erneut.',
+  },
+  'login.invalid_email': {
+    en: 'Please enter a valid email address.',
+    de: 'Bitte gib eine gültige E-Mail-Adresse ein.',
+  },
+  'login.credentials_wrong': {
+    en: 'Invalid email or password.',
+    de: 'Ungültige E-Mail oder Passwort.',
+  },
+  'login.user_disabled': {
+    en: 'This account has been disabled.',
+    de: 'Dieses Konto wurde deaktiviert.',
+  },
+  'login.too_many_requests': {
+    en: 'Too many failed attempts. Please try again later.',
+    de: 'Zu viele fehlgeschlagene Versuche. Bitte versuche es später erneut.',
+  },
+  'login.network_request_failed': {
+    en: 'Network error. Please check your connection.',
+    de: 'Netzwerkfehler. Bitte überprüfe deine Verbindung.',
+  },
+  'login.unexpected_error': {
+    en: 'An unexpected error occurred.',
+    de: 'Ein unerwarteter Fehler ist aufgetreten.',
+  },
+
+  // Guest login
+  'login.signing_in_guest': {
+    en: 'Signing in as guest...',
+    de: 'Als Gast anmelden...',
+  },
+  'login.guest_login_success': {
+    en: 'Successfully signed in as guest.',
+    de: 'Erfolgreich als Gast angemeldet.',
+  },
+  'login.guest_login_failed': {
+    en: 'Failed to sign in as guest. Please try again.',
+    de: 'Anmeldung als Gast fehlgeschlagen. Bitte versuche es erneut.',
+  },
+
+  // Password reset
+  'login.reset_password': {
+    en: 'Reset Password',
+    de: 'Passwort zurücksetzen',
+  },
+  'login.reset_password_message': {
+    en: 'Enter your email address to receive a password reset link.',
+    de: 'Gib deine E-Mail-Adresse ein, um einen Link zum Zurücksetzen des Passworts zu erhalten.',
+  },
+  'login.email_address': {
+    en: 'Email address',
+    de: 'E-Mail-Adresse',
+  },
+  'login.send_reset_link': {
+    en: 'Send Reset Link',
+    de: 'Link senden',
+  },
+  'login.sending_reset_link': {
+    en: 'Sending reset link...',
+    de: 'Link wird gesendet...',
+  },
+  'login.reset_link_sent': {
+    en: 'Password reset link sent to your email.',
+    de: 'Link zum Zurücksetzen des Passworts wurde an deine E-Mail gesendet.',
+  },
+  'login.reset_link_failed': {
+    en: 'Failed to send reset link. Please check your email address.',
+    de: 'Fehler beim Senden des Links. Bitte überprüfe deine E-Mail-Adresse.',
   },
 
   // Signup page
@@ -486,6 +576,22 @@ const translations: { [key: string]: { [lang: string]: string } } = {
   'profile.delete.account': {
     en: 'Delete Account',
     de: 'Konto löschen',
+  },
+  'profile.loggedOut': {
+    en: 'You have been logged out successfully.',
+    de: 'Du wurdest erfolgreich abgemeldet.',
+  },
+  'profile.confirmLogout': {
+    en: 'Are you sure you want to logout?',
+    de: 'Bist du sicher, dass du dich abmelden möchtest?',
+  },
+  'profile.error.logoutFailed': {
+    en: 'Failed to logout. Please try again.',
+    de: 'Abmeldung fehlgeschlagen. Bitte versuche es erneut.',
+  },
+  'profile.error.deleteFailed': {
+    en: 'Failed to delete account. Please try again.',
+    de: 'Konto löschen fehlgeschlagen. Bitte versuche es erneut.',
   },
 
   // Profile picture upload translations
@@ -755,6 +861,10 @@ const translations: { [key: string]: { [lang: string]: string } } = {
   },
 
   // Success Messages
+  'success.tracking.started': {
+    en: 'Tracking started',
+    de: 'Tracking gestartet',
+  },
   'success.tracking.stopped': {
     en: 'Tracking stopped successfully',
     de: 'Tracking erfolgreich beendet',

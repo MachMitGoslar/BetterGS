@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
-import { configureStandaloneComponentTest, createTestingEnvironment } from '../../../../testing/shared-testing-config';
+import {
+  configureStandaloneComponentTest,
+  createTestingEnvironment,
+} from '../../../../testing/shared-testing-config';
 
 import { ActivityItemComponent } from './activity-item.component';
 

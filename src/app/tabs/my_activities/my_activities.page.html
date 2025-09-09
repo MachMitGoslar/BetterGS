@@ -15,12 +15,11 @@
       >
     </ion-toolbar>
   </ion-header>
+  <app-active-tracking-bar></app-active-tracking-bar>
+
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  @if(activeTracking | async; as activeTracking) {
-  <app-active-tracking-bar></app-active-tracking-bar>
-  }
 
   <ion-card class="header-card">
     <ion-card-header>

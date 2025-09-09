@@ -81,8 +81,8 @@ export class I18nService {
    * @public
    */
   public readonly supportedLanguages: Language[] = [
-    { code: 'en', name: 'English', flag: '🇺🇸' },
     { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+    { code: 'en', name: 'English', flag: '🇺🇸' },
   ];
 
   // ========================================

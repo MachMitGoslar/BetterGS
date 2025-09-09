@@ -12,7 +12,7 @@
       <ng-template #activityImage>
         <img
           *ngIf="activity?.imageUrl; else placeholderImage"
-          [src]="activity?.imageUrl"
+          [src]="activity.imageUrl"
           alt="Activity Bild"
           class="header-image"
         />
@@ -44,7 +44,7 @@
     <div class="activity-header">
       <div class="activity-title">
         <ion-icon name="time-outline" class="activity-icon"> </ion-icon>
-        <h2 class="activity-name">{{ getActivityName() }}</h2>
+        <h2 class="activity-name">{{ this.activity.title }}</h2>
       </div>
       <p class="tracking-date">
         {{ tracking?.startDate | date : "dd.MM.yyyy" }}
