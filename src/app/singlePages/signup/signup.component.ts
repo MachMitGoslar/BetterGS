@@ -203,8 +203,6 @@ export class SignupComponent implements OnInit, OnDestroy {
       });
       await loading.present();
 
-      console.log('Creating account with:', { email, password, displayName });
-
       // Create the user account
       await this.applicationService.createUserWithEmailAndDisplayName(
         email,
@@ -238,7 +236,7 @@ export class SignupComponent implements OnInit, OnDestroy {
    */
   private handleSignUpError(error: any) {
     let errorMessage = 'Sign up failed. Please try again.';
-    console.log('Sign up error:', error);
+
     if (error.code) {
       switch (error.code) {
         case 'auth/email-already-in-use':

@@ -7,7 +7,6 @@ import { SplashScreen } from '@capacitor/splash-screen';
 import { Observable } from 'rxjs';
 import { Tracking } from './core/models/tracking.model';
 
-
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',

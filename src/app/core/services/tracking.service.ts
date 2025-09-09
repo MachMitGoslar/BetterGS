@@ -376,9 +376,7 @@ export class TrackingService {
     // Commit batch operation
     batch
       .commit()
-      .then(() => {
-        console.log('Tracking data saved successfully');
-      })
+      .then(() => {})
       .catch((error) => {
         console.error('Error saving tracking data: ', error);
         throw error;
@@ -422,8 +420,6 @@ export class TrackingService {
         this.storage,
         `user_profile/${tracking.userRef.id}/activities/${tracking.activityRef.id}/trackings/${tracking.id}`
       );
-
-      console.log('Uploading image to:', storageRef.fullPath);
 
       uploadString(storageRef, file_string, StringFormat.DATA_URL, metadata)
         .then((snapshot) => {

@@ -23,8 +23,6 @@ describe('ActiveTrackingBarComponent', () => {
       ],
     }).compileComponents();
 
-    console.log('Test providers configured:', testEnv.providers.length);
-
     fixture = TestBed.createComponent(ActiveTrackingBarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

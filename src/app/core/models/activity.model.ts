@@ -30,7 +30,6 @@ export class Activity {
   constructor(
     id = v4() // Using v4() to generate a unique ID
   ) {
-    console.log('Creating new Activity instance with ID:', id);
     this.id = id;
   }
 

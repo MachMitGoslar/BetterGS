@@ -126,8 +126,6 @@ export class ActivityService {
       collection(this.firestore, 'activities')
     ).subscribe({
       next: (snapshots) => {
-        console.log('Activities collection changed:', snapshots);
-
         // Map Firestore document changes to Activity model instances
         this._activities = snapshots.map((snapshot) => {
           const id = snapshot.id;
@@ -136,8 +134,6 @@ export class ActivityService {
           activity.ref = snapshot.ref;
           return activity;
         });
-
-        console.log('Mapped activities:', this._activities);
 
         // Notify subscribers of the updated activities list
         this.$activities.next(this._activities);
@@ -211,7 +207,6 @@ export class ActivityService {
     // Persist to Firestore
     try {
       await setDoc(doc(activitiesCollection, activity.id), activityData);
-      console.log('Activity created successfully');
     } catch (error: any) {
       console.error('Error creating activity:', error);
       throw error;
@@ -239,7 +234,6 @@ export class ActivityService {
     if (activity.ref) {
       try {
         await setDoc(activity.ref, activityData);
-        console.log('Activity updated successfully');
       } catch (error: any) {
         console.error('Error updating activity:', error);
         throw error;
@@ -290,8 +284,6 @@ export class ActivityService {
         const activityDoc = doc(activitiesCollection, activityId);
         await deleteDoc(activityDoc);
       }
-
-      console.log('Activity deleted successfully');
     } catch (error: any) {
       // Revert local state on error
       this._activities.splice(activityIndex, 0, activity);
@@ -328,9 +320,6 @@ export class ActivityService {
 
     return changes.pipe(
       map((change) => {
-        console.log('Activities for user changed:', change);
-        console.log('Activities for user:', this._activities);
-
         change.map((doc) => {
           const data = doc.data();
 
@@ -366,6 +355,5 @@ export class ActivityService {
     for (const subscription of this.subscription) {
       subscription.unsubscribe();
     }
-    console.log('ActivityService subscription destroyed');
   }
 }

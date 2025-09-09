@@ -14,6 +14,7 @@ export const routes: Routes = [
           import('./my_activities/my_activities.page').then(
             (m) => m.MyActivitiesPage
           ),
+        canActivate: [loginGuard],
       },
       {
         path: 'ranking',
