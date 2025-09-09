@@ -51,6 +51,7 @@ import { I18nPipe } from 'src/app/core/pipes/i18n.pipe';
 import { ActiveTrackingBarComponent } from 'src/app/components/active-tracking-bar/active-tracking-bar.component';
 import { ActivityCardComponent } from 'src/app/components/activity-card/activity-card.component';
 
+
 /**
  * ProfilePage - User Profile Management Component
  *
@@ -118,6 +119,7 @@ import { ActivityCardComponent } from 'src/app/components/activity-card/activity
     I18nPipe,
     ActiveTrackingBarComponent,
     ActivityCardComponent,
+
   ],
 })
 export class ProfilePage implements OnInit, OnDestroy {

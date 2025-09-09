@@ -2,7 +2,11 @@ import { Component, inject, OnInit } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { NotificationComponent } from './components/notification/notification.component';
 import { ApplicationService } from './core/services/application.service';
+
 import { SplashScreen } from '@capacitor/splash-screen';
+import { Observable } from 'rxjs';
+import { Tracking } from './core/models/tracking.model';
+
 
 @Component({
   selector: 'app-root',
