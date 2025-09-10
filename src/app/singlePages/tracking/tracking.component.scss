@@ -2,7 +2,15 @@
   max-width: 800px;
   margin: -60px auto 10px;
 }
-
+ion-fab {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  --box-shadow: none;
+  --border: 2px solid var(--ion-color-light);
+  --color: white
+}
 .current-activity-card {
   margin-bottom: 20px;
   text-align: center;

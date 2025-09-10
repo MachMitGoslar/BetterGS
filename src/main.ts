@@ -59,10 +59,10 @@ bootstrapApplication(AppComponent, {
         // popupRedirectResolver: browserPopupRedirectResolver,
       });
       if (!environment.production) {
-        connectAuthEmulator(
+        /*connectAuthEmulator(
           auth,
           `http://${environment.emulatorConfig.host}:9100`
-        );
+        );*/
       }
       return auth;
     }),

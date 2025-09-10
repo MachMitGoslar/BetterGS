@@ -1,3 +1,4 @@
+<ion-card [class]="'activity-card ' + is_active">
 <ion-item
   *ngIf="activity"
   detail="true"
@@ -7,7 +8,7 @@
   <ion-icon
     slot="start"
     [name]="activity.icon || 'bicycle'"
-    [color]="color"
+    [class]="is_active"
   ></ion-icon>
   <ion-label>
     <h2>{{ activity.title }}</h2>
@@ -16,3 +17,4 @@
     <!-- <p><small>{{ activity?.date | date }}</small></p> -->
   </ion-label>
 </ion-item>
+</ion-card>

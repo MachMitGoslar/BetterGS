@@ -6,8 +6,7 @@ import {
   IonIcon,
   IonButtons,
   IonButton,
-  IonRouterLink,
-} from '@ionic/angular/standalone';
+  IonRouterLink, IonCard } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { TrackingService } from 'src/app/core/services/tracking.service';
 import { ApplicationService } from 'src/app/core/services/application.service';
@@ -20,7 +19,7 @@ import { User } from '@angular/fire/auth';
   selector: 'app-activity-item',
   templateUrl: './activity-item.component.html',
   styleUrls: ['./activity-item.component.scss'],
-  imports: [
+  imports: [IonCard, 
     IonItem,
     IonLabel,
     CommonModule,
@@ -36,21 +35,21 @@ export class ActivityItemComponent implements OnInit {
   public applicationService: ApplicationService = inject(ApplicationService);
   public trackingSrv: TrackingService = inject(TrackingService);
   public router: Router = inject(Router);
+
+  public is_active: string = ""
   constructor() {
-    this.applicationService.$currentUser.subscribe((user) => {
-      this.currentUser = user ? user : undefined;
-    });
+
   }
 
   ngOnInit() {
     if (!this.activity) {
-      console.warn('Activity is not defined');
       return;
     }
+      if(this.activity && this.activity.timeSpend > 0) 
+        this.is_active = "active"
+      else
+        this.is_active = "inactive"
     // Icon registration is now handled globally
   }
 
-  get color(): string {
-    return this.activity!.timeSpend > 0 ? 'primary' : 'default';
-  }
 }

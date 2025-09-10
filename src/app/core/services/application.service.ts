@@ -502,7 +502,7 @@ export class ApplicationService implements OnDestroy {
       const storage = getStorage();
       const imageRef = ref(
         storage,
-        `users/${this._currentUser.uid}/profile/${Date.now()}_${fileName}`
+        `users/${this._currentUser.uid}/profile/${fileName}`
       );
 
       // Upload the base64 string

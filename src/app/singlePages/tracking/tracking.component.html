@@ -1,12 +1,12 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title i18n="@@tracking.title"> Tracking</ion-title>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/my_activities"></ion-back-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+
 <ion-content [fullscreen]="true">
+  <ion-fab fixedSlotPlacement="true">
+  <ion-fab-button >
+    <ion-back-button defaultHref="/tabs/my_activities" fill="clear" size="small">
+    <ion-icon name="arrow-back-outline"></ion-icon>
+    </ion-back-button>
+  </ion-fab-button>
+</ion-fab>
   <img
     [src]="currentActivity?.imageUrl"
     class="activity-image"

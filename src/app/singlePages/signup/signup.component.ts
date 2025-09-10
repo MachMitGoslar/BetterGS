@@ -8,10 +8,6 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonButtons,
   IonButton,
   IonIcon,
   IonContent,
@@ -23,8 +19,8 @@ import {
   IonLabel,
   IonText,
   IonSpinner,
-  AlertController,
   LoadingController,
+  ModalController
 } from '@ionic/angular/standalone';
 import { Subscription } from 'rxjs';
 import { ApplicationService } from 'src/app/core/services/application.service';
@@ -40,6 +36,8 @@ import {
   eyeOffOutline,
   warningOutline,
 } from 'ionicons/icons';
+import { PrivacyComponent } from './privacy/privacy.component';
+import { TermsComponent } from './terms/terms.component';
 
 @Component({
   selector: 'app-signup',
@@ -49,10 +47,6 @@ import {
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonButtons,
     IonButton,
     IonIcon,
     IonContent,
@@ -63,8 +57,8 @@ import {
     IonCheckbox,
     IonLabel,
     IonText,
-    IonSpinner,
-  ],
+    IonSpinner
+    ],
 })
 export class SignupComponent implements OnInit, OnDestroy {
   signupForm!: FormGroup;
@@ -78,7 +72,7 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
-  private alertController = inject(AlertController);
+  private modalController = inject(ModalController);
   private loadingController = inject(LoadingController);
   private applicationService = inject(ApplicationService);
   private notificationService = inject(NotificationService);
@@ -279,62 +273,22 @@ export class SignupComponent implements OnInit, OnDestroy {
    * Shows terms of service
    */
   async showTerms() {
-    const alert = await this.alertController.create({
-      header: 'Terms of Service',
-      message: `
-        <div style="text-align: left;">
-          <h4>BetterGS Terms of Service</h4>
-          <p><strong>1. Acceptance of Terms</strong></p>
-          <p>By using BetterGS, you agree to these terms.</p>
-          
-          <p><strong>2. Service Description</strong></p>
-          <p>BetterGS is an activity tracking application.</p>
-          
-          <p><strong>3. User Responsibilities</strong></p>
-          <p>You are responsible for maintaining account security.</p>
-          
-          <p><strong>4. Privacy</strong></p>
-          <p>We respect your privacy and protect your data.</p>
-          
-          <p><strong>5. Modifications</strong></p>
-          <p>We may update these terms from time to time.</p>
-        </div>
-      `,
-      buttons: ['Close'],
+    const modal = await this.modalController.create({
+      component: TermsComponent
     });
 
-    await alert.present();
+    await modal.present();
   }
 
   /**
    * Shows privacy policy
    */
   async showPrivacy() {
-    const alert = await this.alertController.create({
-      header: 'Privacy Policy',
-      message: `
-        <div style="text-align: left;">
-          <h4>BetterGS Privacy Policy</h4>
-          <p><strong>Data Collection</strong></p>
-          <p>We collect minimal data necessary for app functionality.</p>
-          
-          <p><strong>Data Usage</strong></p>
-          <p>Your data is used solely for providing our services.</p>
-          
-          <p><strong>Data Security</strong></p>
-          <p>We implement security measures to protect your information.</p>
-          
-          <p><strong>Data Sharing</strong></p>
-          <p>We do not share your personal data with third parties.</p>
-          
-          <p><strong>Contact</strong></p>
-          <p>For questions, contact us through the app.</p>
-        </div>
-      `,
-      buttons: ['Close'],
+    const modal = await this.modalController.create({
+      component: PrivacyComponent
     });
 
-    await alert.present();
+    await modal.present();
   }
 
   /**

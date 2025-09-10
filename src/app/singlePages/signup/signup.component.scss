@@ -254,3 +254,9 @@
     opacity: 1;
   }
 }
+
+.link {
+  text-decoration: underline;
+  cursor: pointer;
+  color: var(--ion-color-primary);
+}

@@ -18,11 +18,10 @@ import {
   IonRefresher,
   IonRefresherContent,
   IonSkeletonText,
-  ModalController,
-} from '@ionic/angular/standalone';
-import { UserService } from '../../core/services/user.service';
+  ModalController, IonSearchbar } from '@ionic/angular/standalone';
+import { UserRanking, UserService } from '../../core/services/user.service';
 import { I18nService } from '../../core/services/i18n.service';
-import { Observable, Subscription } from 'rxjs';
+import { map, Observable, Subscription } from 'rxjs';
 import { UserDetailModalComponent } from '../../components/user-detail-modal/user-detail-modal.component';
 import {
   trophyOutline,
@@ -60,7 +59,7 @@ import { ActiveTrackingBarComponent } from 'src/app/components/active-tracking-b
   templateUrl: './ranking.page.html',
   styleUrls: ['./ranking.page.scss'],
   standalone: true,
-  imports: [
+  imports: [IonSearchbar, 
     IonContent,
     IonHeader,
     IonTitle,
@@ -93,10 +92,10 @@ export class RankingPage implements OnInit, OnDestroy {
    * Provides real-time updates when user data changes
    *
    * @description Stream containing all users sorted by ranking criteria
-   * @type {Observable<UserPublicProfile[]>}
+   * @type {Observable<UserRanking[]>}
    * @since 1.0.0
    */
-  users$!: Observable<UserPublicProfile[]>;
+  users$!: Observable<UserRanking[]>;
 
   /**
    * Loading state indicator for UI feedback
@@ -112,6 +111,8 @@ export class RankingPage implements OnInit, OnDestroy {
   // ==========================================
   // Private Properties
   // ==========================================
+
+  searchTerm: string = '';
 
   /**
    * Subscription management for memory cleanup
@@ -235,7 +236,7 @@ export class RankingPage implements OnInit, OnDestroy {
    * @since 1.0.0
    */
   private initializeObservables(): void {
-    this.users$ = new Observable<UserPublicProfile[]>();
+    this.users$ = new Observable<UserRanking[]>();
   }
 
   // ==========================================
@@ -261,8 +262,23 @@ export class RankingPage implements OnInit, OnDestroy {
    */
   loadRanking(): void {
     this.isLoading = true;
-    this.users$ = this.userService.getAllUsersForRanking();
+    this.users$ = this.userService.getAllUsersForRanking()
     this.isLoading = false;
+  }
+
+  onSearchChange(): void {
+    this.users$ = this.userService.getAllUsersForRanking().pipe(
+      map(users => {
+        if (this.searchTerm && this.searchTerm.trim().length > 0) {
+          const lowerSearchTerm = this.searchTerm.toLowerCase();
+          return users.filter(user =>
+            user.userProfile.name?.toLowerCase().includes(lowerSearchTerm)
+          );
+        } else {
+          return users;
+        }
+      })
+    );
   }
 
   /**
@@ -380,23 +396,23 @@ export class RankingPage implements OnInit, OnDestroy {
    *
    * @example
    * ```typescript
-   * getRankIcon(0); // Returns "🥇" (gold medal)
-   * getRankIcon(1); // Returns "🥈" (silver medal)
-   * getRankIcon(2); // Returns "🥉" (bronze medal)
-   * getRankIcon(3); // Returns "#4"
-   * getRankIcon(9); // Returns "#10"
+   * getRankIcon(1); // Returns "🥇" (gold medal)
+   * getRankIcon(2); // Returns "🥈" (silver medal)
+   * getRankIcon(3); // Returns "🥉" (bronze medal)
+   * getRankIcon(4); // Returns "#4"
+   * getRankIcon(10); // Returns "#10"
    * ```
    */
   getRankIcon(index: number): string {
     switch (index) {
-      case 0:
-        return '🥇';
       case 1:
-        return '🥈';
+        return '🥇';
       case 2:
+        return '🥈';
+      case 3:
         return '🥉';
       default:
-        return `#${index + 1}`;
+        return `#${index}`;
     }
   }
 
@@ -413,20 +429,20 @@ export class RankingPage implements OnInit, OnDestroy {
    *
    * @example
    * ```typescript
-   * getRankColor(0); // Returns "warning" (gold theme)
-   * getRankColor(1); // Returns "medium" (silver theme)
-   * getRankColor(2); // Returns "tertiary" (bronze theme)
-   * getRankColor(5); // Returns "primary" (default theme)
+   * getRankColor(1); // Returns "warning" (gold theme)
+   * getRankColor(2); // Returns "medium" (silver theme)
+   * getRankColor(3); // Returns "tertiary" (bronze theme)
+   * getRankColor(6); // Returns "primary" (default theme)
    * ```
    */
   getRankColor(index: number): string {
     switch (index) {
-      case 0:
-        return 'warning'; // Gold
       case 1:
-        return 'medium'; // Silver
+        return 'gold'; // Gold
       case 2:
-        return 'tertiary'; // Bronze
+        return 'silver'; // Silver
+      case 3:
+        return 'bronze'; // Bronze
       default:
         return 'primary'; // Default
     }

@@ -1,18 +1,13 @@
 .header-card {
   margin: 16px;
   border-radius: 12px;
-  background: linear-gradient(
-    135deg,
-    var(--ion-color-primary) 0%,
-    var(--ion-color-secondary) 100%
-  );
-  color: white;
+
 
   ion-card-title {
     display: flex;
     align-items: center;
     gap: 8px;
-    color: white;
+    color: var(--ion-color-light);
 
     ion-icon {
       font-size: 1.5rem;
@@ -22,6 +17,20 @@
   ion-card-content p {
     color: rgba(255, 255, 255, 0.9);
     margin: 0;
+  }
+  background: linear-gradient(
+    135deg,
+    var(--ion-color-primary) 0%,
+    var(--ion-color-gold-shade) 100%
+  );
+
+  @media (prefers-color-scheme: dark) {
+    background: linear-gradient(
+      135deg,
+      var(--ion-color-primary) 0%,
+      var(--ion-color-secondary) 100%
+    );
+    
   }
 }
 
@@ -35,6 +44,7 @@
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
 
   &:hover {
     transform: translateY(-2px);
@@ -44,8 +54,8 @@
   &.top-three {
     border: 2px solid;
 
-    &:nth-child(1) {
-      border-color: var(--ion-color-warning);
+    &.rank-1 {
+      border-color: var(--ion-color-gold);
       background: linear-gradient(
         135deg,
         rgba(255, 193, 7, 0.1) 0%,
@@ -53,8 +63,8 @@
       );
     }
 
-    &:nth-child(2) {
-      border-color: var(--ion-color-medium);
+    &.rank-2 {
+      border-color: var(--ion-color-silver);
       background: linear-gradient(
         135deg,
         rgba(108, 117, 125, 0.1) 0%,
@@ -62,8 +72,8 @@
       );
     }
 
-    &:nth-child(3) {
-      border-color: var(--ion-color-tertiary);
+    &.rank-3 {
+      border-color: var(--ion-color-bronze);
       background: linear-gradient(
         135deg,
         rgba(205, 133, 63, 0.1) 0%,
@@ -76,6 +86,8 @@
     --padding-start: 16px;
     --padding-end: 16px;
     --min-height: 80px;
+    --background: transparent;
+    --border-style: 0px
   }
 }
 
@@ -148,12 +160,13 @@ ion-avatar {
     display: flex;
     align-items: center;
     gap: 4px;
+        color: var(--ion-color-medium);
+    font-size: 0.85rem;
     @media (prefers-color-scheme: dark) {
       color: var(--ion-color-medium-light);
     }
 
-    color: var(--ion-color-medium);
-    font-size: 0.85rem;
+
 
     ion-icon {
       font-size: 1rem;
