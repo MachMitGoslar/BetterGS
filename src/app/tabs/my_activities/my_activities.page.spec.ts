@@ -255,8 +255,8 @@ describe('MyActivitiesPage', () => {
         expect(component.isLoading).toBe(false);
       }));
 
-      it('should log successful activity loading', fakeAsync(() => {
-        spyOn(console, 'log');
+      it('should not log an error on successful activity loading', fakeAsync(() => {
+        spyOn(console, 'error');
 
         (component as any).setupActivitySubscription();
         tick();
@@ -264,7 +264,11 @@ describe('MyActivitiesPage', () => {
         activitiesSubject.next(mockActivities);
         tick();
 
-        expect('Activities loaded:' + 2 + 'items');
+        let error = new Error('Load failed');
+        expect(console.error).not.toHaveBeenCalledWith(
+          'Error loading activities:',
+          error
+        );
       }));
 
       it('should handle zero activities', fakeAsync(() => {

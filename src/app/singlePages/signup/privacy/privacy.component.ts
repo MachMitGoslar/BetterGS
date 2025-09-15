@@ -32,14 +32,12 @@ import {
     IonToolbar,
     IonButtons,
     IonButton,
-    IonIcon
+    IonIcon,
   ],
 })
-export class PrivacyComponent implements OnInit {
-  public modalController = inject(ModalController)
+export class PrivacyComponent {
+  public modalController = inject(ModalController);
   constructor() {}
-
-  ngOnInit() {}
 
   dismiss() {
     this.modalController.dismiss();

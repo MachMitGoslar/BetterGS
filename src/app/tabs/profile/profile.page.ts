@@ -608,7 +608,6 @@ export class ProfilePage implements OnInit, OnDestroy {
         resultType: CameraResultType.Base64,
         source: CameraSource.Camera,
         width: 300,
-
       });
 
       if (image?.base64String) {
@@ -733,7 +732,7 @@ export class ProfilePage implements OnInit, OnDestroy {
       const base64String = await this.fileToBase64(selectedFile);
       await this.processImageUpload(
         base64String,
-        "profile-picture",
+        'profile-picture',
         selectedFile.type
       );
     } catch (error) {
@@ -909,27 +908,26 @@ export class ProfilePage implements OnInit, OnDestroy {
       const reader = new FileReader();
       reader.onload = () => {
         if (typeof reader.result === 'string') {
-            let imgSrc = reader.result as string;
-            const img = document.createElement("img");
-            let el = document.body.querySelector("app-profile-picture");
-            
-            img.src = imgSrc;
-                        this.isLoading = true
-                        setTimeout(() => { 
-                          this.isLoading = false 
-                                    const canvas = document.createElement("canvas");
+          let imgSrc = reader.result as string;
+          const img = document.createElement('img');
+          let el = document.body.querySelector('app-profile-picture');
+
+          img.src = imgSrc;
+          this.isLoading = true;
+          setTimeout(() => {
+            this.isLoading = false;
+            const canvas = document.createElement('canvas');
 
             canvas.width = 300;
             canvas.height = 300;
 
-                        const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+            const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
-                        ctx.drawImage(img, 0, 0, 300, 300); // image resize to 300x300
+            ctx.drawImage(img, 0, 0, 300, 300); // image resize to 300x300
 
-            let result = canvas.toDataURL("image/jpeg", 1.0);
-          resolve(result);
-                        }, 1000);
-
+            let result = canvas.toDataURL('image/jpeg', 1.0);
+            resolve(result);
+          }, 1000);
         } else {
           reject(new Error('Failed to convert file to base64'));
         }

@@ -623,11 +623,11 @@ export class UserService {
             const profile = UserPublicProfile.fromDB(doc.id, data);
             return {
               userProfile: profile,
-              rank: 0 // Placeholder for rank
+              rank: 0, // Placeholder for rank
             };
           })
           .sort((a, b) => b.userProfile.trackedTime - a.userProfile.trackedTime) // Sort by tracked time descending
-          .map((item, index) => ({ ...item, rank: index + 1 })) // Assign ranks
+          .map((item, index) => ({ ...item, rank: index + 1 })); // Assign ranks
       })
     );
   }

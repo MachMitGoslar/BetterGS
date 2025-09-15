@@ -3,20 +3,20 @@
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+  box-shadow: var(--inset-shadow-dark) 3px 3px 6px 0px inset,
+    var(--inset-shadow-light) -3px -3px 6px 1px inset;
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--hover-shadow);
   }
-
 
   ion-item {
     --padding-start: 16px;
     --padding-end: 16px;
     --min-height: 80px;
     --background: transparent;
-    --border-style: 0px
+    --border-style: 0px;
   }
   &.active {
     border: 2px solid var(--ion-color-primary);
@@ -45,7 +45,6 @@ ion-icon {
     color: var(--ion-color-medium);
     border: 2px solid var(--ion-color-medium);
   }
-
 
   .rank-number {
     font-size: 1.2rem;

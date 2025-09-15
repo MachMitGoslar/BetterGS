@@ -82,7 +82,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor() {
     this.initializeForm();
-    this.setupIcons();
   }
 
   ngOnInit() {
@@ -94,22 +93,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
-  }
-
-  /**
-   * Sets up Ionicons
-   */
-  private setupIcons() {
-    addIcons({
-      'trophy-outline': trophyOutline,
-      'mail-outline': mailOutline,
-      'lock-closed-outline': lockClosedOutline,
-      'eye-outline': eyeOutline,
-      'eye-off-outline': eyeOffOutline,
-      'person-outline': personOutline,
-      'warning-outline': warningOutline,
-      'log-in-outline': logInOutline,
-    });
   }
 
   /**
@@ -156,6 +139,7 @@ export class LoginComponent implements OnInit, OnDestroy {
    */
   async onLogin() {
     if (this.loginForm.invalid) {
+      console.log('Form is invalid');
       this.markFormGroupTouched();
       return;
     }
@@ -168,42 +152,60 @@ export class LoginComponent implements OnInit, OnDestroy {
     // Show loading
     const loading = await this.loadingController.create({
       message: this.i18nService.getTranslation('login.signing_in'),
-      duration: 30000, // 30 seconds timeout
+      duration: 10000, // 10 seconds timeout
     });
-    await loading.present();
 
-    this.applicationService.loginWithEmail(email, password).then(
-      () => {
-        this.isLoading = false;
-        // Attempt login
+    try {
+      loading.present();
+      await this.applicationService.loginWithEmail(email, password);
+      this.isLoading = false;
 
-        // Handle remember me functionality
-        if (rememberMe) {
-          localStorage.setItem('rememberMe', 'true');
-          localStorage.setItem('userEmail', email);
-        } else {
-          localStorage.removeItem('rememberMe');
-          localStorage.removeItem('userEmail');
-        }
-
-        loading.dismiss();
-      },
-      (error) => {
-        this.isLoading = false;
-        this.loadingController.dismiss();
-        console.error('Login error:', error);
-        this.handleLoginError(error);
+      // Handle remember me functionality
+      if (rememberMe) {
+        localStorage.setItem('rememberMe', 'true');
+        localStorage.setItem('userEmail', email);
+      } else {
+        localStorage.removeItem('rememberMe');
+        localStorage.removeItem('userEmail');
       }
+
+      loading.dismiss();
+    } catch (error) {
+      this.isLoading = false;
+      this.loadingController.dismiss();
+      console.error('Login error:', error);
+      this.handleLoginError(error);
+    } finally {
+      this.isLoading = false;
+      loading.dismiss();
+    }
+  }
+
+  /**
+   * Type guard to check if error is a Firebase Auth error
+   * @param error - Unknown error object
+   * @returns true if error has Firebase Auth error properties
+   */
+  private isFirebaseAuthError(
+    error: unknown
+  ): error is { code: string; message: string } {
+    return (
+      typeof error === 'object' &&
+      error !== null &&
+      'code' in error &&
+      'message' in error
     );
   }
 
   /**
-   * Handles login errors
+   * Handles login errors with proper type safety
+   * @param error - Firebase authentication error or generic error
    */
-  private handleLoginError(error: any) {
+  private handleLoginError(error: unknown) {
     let errorMessage = this.i18nService.getTranslation('login.failed');
 
-    if (error.code) {
+    // Type guard for Firebase Auth errors
+    if (this.isFirebaseAuthError(error)) {
       switch (error.code) {
         case 'auth/user-not-found':
           errorMessage = this.i18nService.getTranslation(
@@ -241,6 +243,12 @@ export class LoginComponent implements OnInit, OnDestroy {
             error.message ||
             this.i18nService.getTranslation('login.unexpected_error');
       }
+    } else {
+      // Handle non-Firebase errors
+      errorMessage =
+        error instanceof Error
+          ? error.message
+          : this.i18nService.getTranslation('login.unexpected_error');
     }
 
     this.errorMessage = errorMessage;
@@ -270,15 +278,16 @@ export class LoginComponent implements OnInit, OnDestroy {
       );
 
       this.router.navigate(['/tabs']);
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.isLoading = false;
       this.loadingController.dismiss();
 
       console.error('Anonymous login error:', error);
-      this.notificationService.addNotification(
-        this.i18nService.getTranslation('login.guest_login_failed'),
-        'danger'
-      );
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : this.i18nService.getTranslation('login.guest_login_failed');
+      this.notificationService.addNotification(errorMessage, 'danger');
     }
 
     this.isLoading = false;
@@ -337,14 +346,14 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.i18nService.getTranslation('login.reset_link_sent'),
         'success'
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.loadingController.dismiss();
 
       console.error('Password reset error:', error);
-      this.notificationService.addNotification(
-        this.i18nService.getTranslation('login.reset_link_failed'),
-        'danger'
-      );
+      const errorMessage = this.isFirebaseAuthError(error)
+        ? error.message
+        : this.i18nService.getTranslation('login.reset_link_failed');
+      this.notificationService.addNotification(errorMessage, 'danger');
     }
   }
 
@@ -358,7 +367,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   /**
    * Marks all form fields as touched
    */
-  private markFormGroupTouched() {
+  public markFormGroupTouched() {
     Object.keys(this.loginForm.controls).forEach((key) => {
       this.loginForm.get(key)?.markAsTouched();
     });

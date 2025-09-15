@@ -11,7 +11,7 @@ import {
   IonToolbar,
   IonButton,
   IonButtons,
-  ModalController
+  ModalController,
 } from '@ionic/angular/standalone';
 import { I18nPipe } from 'src/app/core/pipes/i18n.pipe';
 
@@ -30,15 +30,12 @@ import { I18nPipe } from 'src/app/core/pipes/i18n.pipe';
     I18nPipe,
     IonToolbar,
     IonButton,
-    IonButtons
+    IonButtons,
   ],
 })
-export class TermsComponent implements OnInit {
-
-  public modalController = inject(ModalController)
+export class TermsComponent {
+  public modalController = inject(ModalController);
   constructor() {}
-
-  ngOnInit() {}
 
   dismiss() {
     this.modalController.dismiss();

@@ -18,7 +18,9 @@ import {
   IonRefresher,
   IonRefresherContent,
   IonSkeletonText,
-  ModalController, IonSearchbar } from '@ionic/angular/standalone';
+  ModalController,
+  IonSearchbar,
+} from '@ionic/angular/standalone';
 import { UserRanking, UserService } from '../../core/services/user.service';
 import { I18nService } from '../../core/services/i18n.service';
 import { map, Observable, Subscription } from 'rxjs';
@@ -59,7 +61,8 @@ import { ActiveTrackingBarComponent } from 'src/app/components/active-tracking-b
   templateUrl: './ranking.page.html',
   styleUrls: ['./ranking.page.scss'],
   standalone: true,
-  imports: [IonSearchbar, 
+  imports: [
+    IonSearchbar,
     IonContent,
     IonHeader,
     IonTitle,
@@ -262,16 +265,16 @@ export class RankingPage implements OnInit, OnDestroy {
    */
   loadRanking(): void {
     this.isLoading = true;
-    this.users$ = this.userService.getAllUsersForRanking()
+    this.users$ = this.userService.getAllUsersForRanking();
     this.isLoading = false;
   }
 
   onSearchChange(): void {
     this.users$ = this.userService.getAllUsersForRanking().pipe(
-      map(users => {
+      map((users) => {
         if (this.searchTerm && this.searchTerm.trim().length > 0) {
           const lowerSearchTerm = this.searchTerm.toLowerCase();
-          return users.filter(user =>
+          return users.filter((user) =>
             user.userProfile.name?.toLowerCase().includes(lowerSearchTerm)
           );
         } else {

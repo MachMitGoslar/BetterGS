@@ -10,23 +10,20 @@ import {
   IonIcon,
   ModalController,
   IonButton,
-
   IonCard,
   IonCardHeader,
   IonCardContent,
   IonItem,
   IonLabel,
   IonCardSubtitle,
-
   IonItemDivider,
   IonGrid,
   IonCol,
   IonRow,
-
   IonChip,
   IonFab,
   IonFabButton,
-  IonBackButton
+  IonBackButton,
 } from '@ionic/angular/standalone';
 import { ApplicationService } from 'src/app/core/services/application.service';
 import { ActivatedRoute } from '@angular/router';
@@ -62,8 +59,8 @@ import { I18nService } from 'src/app/core/services/i18n.service';
     IonChip,
     IonFab,
     IonFabButton,
-    IonBackButton
-],
+    IonBackButton,
+  ],
 })
 export class TrackingComponent implements OnInit, OnDestroy {
   // Properties for tracking state

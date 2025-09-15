@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { PrivacyComponent } from './privacy.component';
+import { ModalController } from '@ionic/angular/standalone';
 
 describe('PrivacyComponent', () => {
   let component: PrivacyComponent;
@@ -9,8 +10,8 @@ describe('PrivacyComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ PrivacyComponent ],
-      imports: [IonicModule.forRoot()]
+      imports: [IonicModule.forRoot()],
+      providers: [ModalController],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PrivacyComponent);

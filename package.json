@@ -15,6 +15,7 @@
     "extract-i18n": "ng extract-i18n --output-path=src/locale",
     "watch": "ng build --watch --configuration development,de",
     "test": "ng test",
+    "test:headless": "ng test --browsers=ChromeHeadless",
     "test:watch": "ng test --watch",
     "test:coverage": "ng test --code-coverage --watch=false --browsers=ChromeHeadless",
     "test:ci": "ng test --watch=false --browsers=ChromeHeadless",

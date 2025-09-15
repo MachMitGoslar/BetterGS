@@ -20,7 +20,7 @@ import {
   IonText,
   IonSpinner,
   LoadingController,
-  ModalController
+  ModalController,
 } from '@ionic/angular/standalone';
 import { Subscription } from 'rxjs';
 import { ApplicationService } from 'src/app/core/services/application.service';
@@ -57,8 +57,8 @@ import { TermsComponent } from './terms/terms.component';
     IonCheckbox,
     IonLabel,
     IonText,
-    IonSpinner
-    ],
+    IonSpinner,
+  ],
 })
 export class SignupComponent implements OnInit, OnDestroy {
   signupForm!: FormGroup;
@@ -274,7 +274,7 @@ export class SignupComponent implements OnInit, OnDestroy {
    */
   async showTerms() {
     const modal = await this.modalController.create({
-      component: TermsComponent
+      component: TermsComponent,
     });
 
     await modal.present();
@@ -285,7 +285,7 @@ export class SignupComponent implements OnInit, OnDestroy {
    */
   async showPrivacy() {
     const modal = await this.modalController.create({
-      component: PrivacyComponent
+      component: PrivacyComponent,
     });
 
     await modal.present();

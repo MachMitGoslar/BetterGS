@@ -92,10 +92,13 @@ describe('RankingPage', () => {
   const mockEmptyUsers: UserPublicProfile[] = [];
   const mockEmptyRanking: UserRanking[] = [];
 
-  const mockRanking = mockUsers.map((user, index) => ({
-    rank: index + 1,
-    userProfile: user,
-  } as UserRanking));
+  const mockRanking = mockUsers.map(
+    (user, index) =>
+      ({
+        rank: index + 1,
+        userProfile: user,
+      } as UserRanking)
+  );
 
   beforeEach(async () => {
     // Setup $localize for Angular i18n
@@ -390,39 +393,39 @@ describe('RankingPage', () => {
   describe('Ranking Display', () => {
     describe('getRankIcon', () => {
       it('should return gold medal for first place', () => {
-        expect(component.getRankIcon(0)).toBe('🥇');
+        expect(component.getRankIcon(1)).toBe('🥇');
       });
 
       it('should return silver medal for second place', () => {
-        expect(component.getRankIcon(1)).toBe('🥈');
+        expect(component.getRankIcon(2)).toBe('🥈');
       });
 
       it('should return bronze medal for third place', () => {
-        expect(component.getRankIcon(2)).toBe('🥉');
+        expect(component.getRankIcon(3)).toBe('🥉');
       });
 
       it('should return numbered rank for positions beyond third', () => {
-        expect(component.getRankIcon(3)).toBe('#4');
-        expect(component.getRankIcon(9)).toBe('#10');
-        expect(component.getRankIcon(99)).toBe('#100');
+        expect(component.getRankIcon(4)).toBe('#4');
+        expect(component.getRankIcon(10)).toBe('#10');
+        expect(component.getRankIcon(100)).toBe('#100');
       });
     });
 
     describe('getRankColor', () => {
-      it('should return warning color for first place', () => {
-        expect(component.getRankColor(0)).toBe('warning');
+      it('should return gold color for first place', () => {
+        expect(component.getRankColor(1)).toBe('gold');
       });
 
-      it('should return medium color for second place', () => {
-        expect(component.getRankColor(1)).toBe('medium');
+      it('should return silver color for second place', () => {
+        expect(component.getRankColor(2)).toBe('silver');
       });
 
-      it('should return tertiary color for third place', () => {
-        expect(component.getRankColor(2)).toBe('tertiary');
+      it('should return bronze color for third place', () => {
+        expect(component.getRankColor(3)).toBe('bronze');
       });
 
       it('should return primary color for positions beyond third', () => {
-        expect(component.getRankColor(3)).toBe('primary');
+        expect(component.getRankColor(4)).toBe('primary');
         expect(component.getRankColor(10)).toBe('primary');
         expect(component.getRankColor(99)).toBe('primary');
       });

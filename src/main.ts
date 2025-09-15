@@ -1,4 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
+import { ErrorHandler } from '@angular/core';
 import {
   RouteReuseStrategy,
   provideRouter,
@@ -13,6 +14,7 @@ import {
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { IconService } from './app/core/services/icon.service';
+import { GlobalErrorHandler } from './app/core/handlers/global-error.handler';
 import {
   getFirestore,
   provideFirestore,
@@ -45,6 +47,7 @@ const iconService = new IconService();
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
     provideIonicAngular(),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideFirebaseApp(() => {

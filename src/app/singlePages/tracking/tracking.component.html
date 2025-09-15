@@ -1,12 +1,15 @@
-
 <ion-content [fullscreen]="true">
   <ion-fab fixedSlotPlacement="true">
-  <ion-fab-button >
-    <ion-back-button defaultHref="/tabs/my_activities" fill="clear" size="small">
-    <ion-icon name="arrow-back-outline"></ion-icon>
-    </ion-back-button>
-  </ion-fab-button>
-</ion-fab>
+    <ion-fab-button>
+      <ion-back-button
+        defaultHref="/tabs/my_activities"
+        fill="clear"
+        size="small"
+      >
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-back-button>
+    </ion-fab-button>
+  </ion-fab>
   <img
     [src]="currentActivity?.imageUrl"
     class="activity-image"

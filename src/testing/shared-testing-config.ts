@@ -30,6 +30,7 @@ import { ActivityService } from 'src/app/core/services/activity.service';
 import { TrackingService } from 'src/app/core/services/tracking.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { I18nService } from 'src/app/core/services/i18n.service';
+import { IconService } from 'src/app/core/services/icon.service';
 
 // ==========================================
 // Common Test Data
@@ -210,6 +211,10 @@ export function createServiceMocks(overrides: any = {}) {
     onAppGoesBackground: jasmine
       .createSpy('onAppGoesBackground')
       .and.returnValue(() => {}), // Mock unsubscribe function
+    loginWithEmail: jasmine.createSpy('loginWithEmail'), //.and.returnValue(Promise.resolve({ user: MOCK_USER })),
+    loginAnonymously: jasmine
+      .createSpy('loginAnonymously')
+      .and.returnValue(Promise.resolve({ user: MOCK_ANONYMOUS_USER })),
     isAppActive: true, // Mock property
     $appState: new BehaviorSubject(true), // Mock observable for app state
     $activeTracking: new BehaviorSubject(null), // Mock observable for active tracking
@@ -447,6 +452,7 @@ export function createIonicMocks(overrides: any = {}) {
     create: jasmine
       .createSpy('create')
       .and.returnValue(Promise.resolve(mockLoading)),
+    dismiss: jasmine.createSpy('dismiss').and.returnValue(Promise.resolve()),
     ...overrides.loadingController,
   };
 
@@ -651,6 +657,9 @@ export function createTestingEnvironment(
   const providers = [
     ...firebaseModule.providers,
 
+    {
+      provide: IconService,
+    },
     // Service providers
     { provide: UserService, useValue: serviceMocks.mockUserService },
     {

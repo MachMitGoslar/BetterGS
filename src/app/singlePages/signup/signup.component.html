@@ -128,13 +128,20 @@
               <ion-checkbox formControlName="agreeToTerms"></ion-checkbox>
               <ion-label class="terms-label">
                 I agree to the
-                <span class="link" (click)="showTerms()" fill="clear" size="small"
+                <span
+                  class="link"
+                  (click)="showTerms()"
+                  fill="clear"
+                  size="small"
                   >Terms of Service</span
                 >
                 and
-                <span class="link" (click)="showPrivacy()" fill="clear" size="small"
+                <span
+                  class="link"
+                  (click)="showPrivacy()"
+                  fill="clear"
+                  size="small"
                   >Privacy Policy</span
-                
                 >
               </ion-label>
             </div>
@@ -166,18 +173,15 @@
 
             <!-- Login Link -->
             <div class="login-section">
-              <p>
-                Already have an account?
-                              </p>
-                <ion-button
-                  fill="clear"
-                  size="small"
-                  (click)="onLogin()"
-                  type="button"
-                >
-                  Sign In
-                </ion-button>
-
+              <p>Already have an account?</p>
+              <ion-button
+                fill="clear"
+                size="small"
+                (click)="onLogin()"
+                type="button"
+              >
+                Sign In
+              </ion-button>
             </div>
           </div>
         </ion-card-content>
