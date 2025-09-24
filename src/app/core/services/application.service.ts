@@ -56,6 +56,7 @@ import { UserPrivateProfile } from '../models/user_private_profile.model';
 import { ListenerCallback } from '@capacitor/core';
 import { Camera } from '@capacitor/camera';
 import { Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 /**
  * ApplicationService - Main Application Service

@@ -131,7 +131,7 @@ export class I18nService {
       // In a production app with proper Angular i18n, you would:
       // window.location.href = `/${languageCode}${window.location.pathname}`;
       // if(environment.production) {
-      // console.log('Reloading to:', `./${languageCode}/index.html`);
+      //
       //   window.location.href = `./${languageCode}/index.html`;
       // // } else {
       // window.location.reload();
