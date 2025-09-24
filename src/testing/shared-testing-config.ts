@@ -31,6 +31,8 @@ import { TrackingService } from 'src/app/core/services/tracking.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { I18nService } from 'src/app/core/services/i18n.service';
 import { IconService } from 'src/app/core/services/icon.service';
+import { refresh } from 'ionicons/icons';
+import { getIdToken, ProviderId } from '@firebase/auth';
 
 // ==========================================
 // Common Test Data
@@ -66,6 +68,20 @@ export const MOCK_ANONYMOUS_USER = {
     creationTime: '2024-01-10T00:00:00.000Z',
     lastSignInTime: '2024-01-10T00:00:00.000Z',
   },
+  providerData: [],
+  refreshToken: 'refresh-token-456',
+  tenantId: null,
+  delete: () => Promise.resolve(),
+  getIdToken: (forceRefresh?: boolean) => Promise.resolve('mock-id-token'),
+  getIdTokenResult: (forceRefresh?: boolean) => Promise.resolve({
+    token: 'mock-id-token',
+    expirationTime: Date.now() + 3600 * 1000,
+  }) as any,
+  reload: () => Promise.resolve(),
+  phoneNumber: null,
+  providerId: 'firebase',
+  toJSON: () => ({}),
+
 };
 
 /**

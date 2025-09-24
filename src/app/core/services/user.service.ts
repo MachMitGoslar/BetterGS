@@ -31,6 +31,7 @@ import {
   updateProfile,
   deleteUser,
   signInWithCredential,
+  reauthenticateWithCredential,
 } from '@angular/fire/auth';
 import {
   ReplaySubject,
@@ -199,7 +200,6 @@ export class UserService {
    */
   private initializeAuthStateListener(): void {
     this.auth.onAuthStateChanged((fb_user) => {
-      console.log('Auth state changed:', fb_user);
 
       if (fb_user) {
         this.handleUserSignIn(fb_user);
@@ -400,6 +400,7 @@ export class UserService {
 
       // Update the user's display name
       if (displayName) {
+        
         await updateProfile(this.currentUser!, { displayName });
       }
 
@@ -565,11 +566,14 @@ export class UserService {
    * @throws Will reject if no user is logged in or password change fails
    * @since 1.0.0
    */
-  changePassword(newPassword: string): Promise<void> {
+  changePassword(newPassword: string, current_password: string): Promise<void> {
     if (this.auth.currentUser) {
-      return updatePassword(this.auth.currentUser, newPassword);
+      return reauthenticateWithCredential(this.auth.currentUser, EmailAuthProvider.credential(this.auth.currentUser.email!, current_password))
+        .then(user => updatePassword(user.user, newPassword), error => {
+          return Promise.reject(new Error('Password change failed: ' + error.message));
+        });
     }
-    return Promise.reject(new Error('No user logged in'));
+    return Promise.reject(new Error('Current Password is incorrect'));
   }
 
   /**

@@ -5,7 +5,7 @@ import {
   tick,
 } from '@angular/core/testing';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
-import { of, BehaviorSubject } from 'rxjs';
+import { of, BehaviorSubject, from } from 'rxjs';
 import {
   Platform,
   AlertController,
@@ -26,6 +26,7 @@ import {
   MOCK_USER,
   MOCK_PUBLIC_PROFILE,
   MOCK_PRIVATE_PROFILE,
+  MOCK_ANONYMOUS_USER,
 } from '../../../testing/shared-testing-config';
 
 /**
@@ -839,4 +840,30 @@ describe('ProfilePage', () => {
       });
     });
   });
+
+  ///MY TESTS
+  describe(' MY TESTS', () => {
+    it('should have a method to get the user ID', () => {
+      component.ngOnInit();
+      component.$user = of(MOCK_ANONYMOUS_USER);
+      component.user = MOCK_ANONYMOUS_USER;
+
+      let formGroup = component.profileForm;
+      //let name_spy = spyOnProperty(component._publicUserData!, 'name').and.callThrough();
+      //let email_spy = spyOnProperty(component._privateUserData!, 'email').and.callThrough();
+
+      formGroup.patchValue({
+        displayName: 'Test User',
+        email: 'test@example.com',
+        newPassword: 'newpass123',
+        confirmPassword: 'newpass123',
+      });
+
+      component.updateProfile()
+
+
+      expect(component._privateUserData!.email).toBe("test@example.com");
+      expect(component._publicUserData!.name).toBe("Test User");
+    })
+  })
 });

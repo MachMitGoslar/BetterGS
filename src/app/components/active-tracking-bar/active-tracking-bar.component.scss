@@ -124,7 +124,7 @@
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(255, 255, 255, 0.1),
+      rgba(13, 160, 48, 0.845),
       transparent
     );
     animation: shimmer 3s ease-in-out infinite;
@@ -144,48 +144,8 @@
   }
 }
 
-// Dark mode adjustments
-@media (prefers-color-scheme: dark) {
-  // Override CSS custom properties for dark mode
-  :root {
-    --tracking-gradient-start: var(--ion-color-success-shade);
-    --tracking-gradient-mid: var(--ion-color-success);
-    --tracking-gradient-end: var(--ion-color-success-tint);
-  }
 
-  // Define the dark mode animation using the same variables
-  @keyframes pulse-green-dark {
-    0% {
-      background: linear-gradient(
-        90deg,
-        var(--tracking-gradient-start),
-        var(--tracking-gradient-mid)
-      );
-      box-shadow: 0 0 10px rgba(var(--ion-color-success-rgb), 0.6);
-    }
-    50% {
-      background: linear-gradient(
-        90deg,
-        var(--tracking-gradient-mid),
-        var(--tracking-gradient-end)
-      );
-      box-shadow: 0 0 20px rgba(var(--ion-color-success-rgb), 0.9);
-    }
-    100% {
-      background: linear-gradient(
-        90deg,
-        var(--tracking-gradient-start),
-        var(--tracking-gradient-mid)
-      );
-      box-shadow: 0 0 10px rgba(var(--ion-color-success-rgb), 0.6);
-    }
-  }
 
-  .tracking_bar {
-    // Apply the dark mode animation
-    animation: pulse-green-dark 2s ease-in-out infinite;
-  }
-}
 
 // Reduced motion accessibility
 @media (prefers-reduced-motion: reduce) {

@@ -16,6 +16,8 @@
   <ion-refresher slot="fixed" (ionRefresh)="onRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+    <app-active-tracking-bar></app-active-tracking-bar>
+
   <ion-searchbar
     [(ngModel)]="searchTerm"
     (ionInput)="onSearchChange()"
@@ -23,7 +25,6 @@
     debounce="300"
     animated="true"
   ></ion-searchbar>
-  <app-active-tracking-bar></app-active-tracking-bar>
 
   <!-- Header Card -->
   <ion-card class="header-card">
