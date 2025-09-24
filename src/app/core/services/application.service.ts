@@ -397,9 +397,17 @@ export class ApplicationService implements OnDestroy {
    * @returns {Promise<void>}
    * @since 1.0.0
    */
-  registerUserWithEmail(email: string, password: string, displayName: string): Promise<void> {
+  registerUserWithEmail(
+    email: string,
+    password: string,
+    displayName: string
+  ): Promise<void> {
     if (this._currentUser && this._currentUser.isAnonymous) {
-      return this.usrSrv.registerAnonymousUserWithEmail(email, password, displayName);
+      return this.usrSrv.registerAnonymousUserWithEmail(
+        email,
+        password,
+        displayName
+      );
     } else {
       return Promise.reject(
         this.i18nService.getTranslation('error.no.anonymous.user.to.upgrade')
@@ -459,7 +467,7 @@ export class ApplicationService implements OnDestroy {
         );
         await updateProfile(this._currentUser, {
           displayName: profile_data.name,
-          photoURL: profile_data.profilePictureUrl || ""
+          photoURL: profile_data.profilePictureUrl || '',
         });
         await setDoc(userDocRef, profile_data, { merge: true });
         return Promise.resolve();

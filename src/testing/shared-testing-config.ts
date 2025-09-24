@@ -73,15 +73,15 @@ export const MOCK_ANONYMOUS_USER = {
   tenantId: null,
   delete: () => Promise.resolve(),
   getIdToken: (forceRefresh?: boolean) => Promise.resolve('mock-id-token'),
-  getIdTokenResult: (forceRefresh?: boolean) => Promise.resolve({
-    token: 'mock-id-token',
-    expirationTime: Date.now() + 3600 * 1000,
-  }) as any,
+  getIdTokenResult: (forceRefresh?: boolean) =>
+    Promise.resolve({
+      token: 'mock-id-token',
+      expirationTime: Date.now() + 3600 * 1000,
+    }) as any,
   reload: () => Promise.resolve(),
   phoneNumber: null,
   providerId: 'firebase',
   toJSON: () => ({}),
-
 };
 
 /**
@@ -234,6 +234,7 @@ export function createServiceMocks(overrides: any = {}) {
     isAppActive: true, // Mock property
     $appState: new BehaviorSubject(true), // Mock observable for app state
     $activeTracking: new BehaviorSubject(null), // Mock observable for active tracking
+    $user_activities: new BehaviorSubject(MOCK_ACTIVITIES), // Mock observable for user activities
     ...overrides.applicationService,
   };
 

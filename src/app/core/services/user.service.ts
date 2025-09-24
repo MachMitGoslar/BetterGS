@@ -200,7 +200,6 @@ export class UserService {
    */
   private initializeAuthStateListener(): void {
     this.auth.onAuthStateChanged((fb_user) => {
-
       if (fb_user) {
         this.handleUserSignIn(fb_user);
       } else {
@@ -400,7 +399,6 @@ export class UserService {
 
       // Update the user's display name
       if (displayName) {
-        
         await updateProfile(this.currentUser!, { displayName });
       }
 
@@ -568,10 +566,18 @@ export class UserService {
    */
   changePassword(newPassword: string, current_password: string): Promise<void> {
     if (this.auth.currentUser) {
-      return reauthenticateWithCredential(this.auth.currentUser, EmailAuthProvider.credential(this.auth.currentUser.email!, current_password))
-        .then(user => updatePassword(user.user, newPassword), error => {
-          return Promise.reject(new Error('Password change failed: ' + error.message));
-        });
+      return reauthenticateWithCredential(
+        this.auth.currentUser,
+        EmailAuthProvider.credential(
+          this.auth.currentUser.email!,
+          current_password
+        )
+      ).then(
+        (user) => updatePassword(user.user, newPassword),
+        (error) => {
+          return Promise.reject(error);
+        }
+      );
     }
     return Promise.reject(new Error('Current Password is incorrect'));
   }

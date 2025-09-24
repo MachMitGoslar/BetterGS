@@ -1,46 +1,85 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, OnDestroy, Input, inject } from '@angular/core';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { ApplicationService } from '@services/application.service';
 import { NotificationService } from '@services/notification.service';
 import { User } from '@angular/fire/auth';
 import { UserPrivateProfile } from '@models/user_private_profile.model';
 import { UserPublicProfile } from '@models/user_public_profile.model';
-import { IonCard, IonButton, IonCardContent, IonCardHeader, IonInput, IonItem, IonLabel, IonSpinner, ModalController, IonIcon, IonCardTitle, IonText, IonNote  } from "@ionic/angular/standalone";
+import {
+  IonCard,
+  IonButton,
+  IonCardContent,
+  IonCardHeader,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonSpinner,
+  ModalController,
+  IonIcon,
+  IonCardTitle,
+  IonText,
+  IonNote,
+  IonContent,
+  IonButtons,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+} from '@ionic/angular/standalone';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-profile-edit-modal',
   templateUrl: './profile-edit-modal.component.html',
   styleUrls: ['./profile-edit-modal.component.scss'],
   standalone: true,
-  imports: [IonCard, IonIcon, IonNote, IonText, IonCardTitle, ReactiveFormsModule, IonCardHeader, IonCardContent, IonItem, IonLabel, IonInput, IonButton, IonSpinner],
+  imports: [
+    IonCard,
+    IonIcon,
+    IonNote,
+    IonText,
+    IonCardTitle,
+    ReactiveFormsModule,
+    IonCardHeader,
+    IonCardContent,
+    IonItem,
+    IonInput,
+    IonButton,
+    IonSpinner,
+    IonContent,
+    IonHeader,
+    IonButtons,
+    IonToolbar,
+    IonTitle,
+    CommonModule,
+  ],
 })
-export class ProfileEditModalComponent implements OnInit, OnDestroy {
+export class ProfileEditModalComponent implements OnInit {
+  private formBuilder = inject(FormBuilder);
+  private modalController = inject(ModalController);
+  private applicationService = inject(ApplicationService);
+  private notificationService = inject(NotificationService);
+
   profileForm!: FormGroup;
-  @Input() user_obj: {
-    user: User;
-    privateData: UserPrivateProfile;
-    publicData: UserPublicProfile;
-  } | undefined;
+  @Input() user_obj:
+    | {
+        user: User;
+        privateProfile: UserPrivateProfile;
+        publicProfile: UserPublicProfile;
+      }
+    | undefined;
 
   isLoading = false;
   passwordMismatch = false;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private modalController: ModalController,
-    private applicationService: ApplicationService,
-    private notificationService: NotificationService
-  ) {
-   
-  }
-
   ngOnInit() {
-    console.log('User object received in modal:', this.user_obj);
     this.initializeForm();
   }
-
-  ngOnDestroy() {}
 
   /**
    * Closes the modal
@@ -80,6 +119,8 @@ export class ProfileEditModalComponent implements OnInit, OnDestroy {
     if (!this.user_obj?.user.isAnonymous) {
       this.profileForm.get('email')?.disable();
     }
+
+    this.populateForm();
   }
 
   /**
@@ -88,7 +129,7 @@ export class ProfileEditModalComponent implements OnInit, OnDestroy {
   private populateForm() {
     if (this.user_obj) {
       this.profileForm.patchValue({
-        displayName: this.user_obj.publicData.name || '',
+        displayName: this.user_obj.publicProfile.name || '',
         email: this.user_obj.user.email || '',
       });
     }
@@ -109,8 +150,10 @@ export class ProfileEditModalComponent implements OnInit, OnDestroy {
    * Updates user profile
    */
   async updateProfile() {
+    console.log('Name: ', this.user_obj?.publicProfile.name);
     console.log('Updating profile with data:', this.profileForm.value);
     if (this.profileForm.invalid || this.passwordMismatch) {
+      console.warn('Form is invalid or passwords do not match');
       this.notificationService.addNotification(
         'Please fix the form errors before saving.',
         'danger'
@@ -122,11 +165,13 @@ export class ProfileEditModalComponent implements OnInit, OnDestroy {
 
     const formData = this.profileForm.value;
 
-    if(!this.user_obj) {
-        this.isLoading = false;
-        return;
+    if (!this.user_obj) {
+      console.warn('No user object available');
+      this.isLoading = false;
+      return;
     }
     if (this.user_obj.user.isAnonymous) {
+      console.log('Anonymous user registering with email:', formData.email);
       try {
         await this.applicationService.registerUserWithEmail(
           formData.email,
@@ -149,11 +194,10 @@ export class ProfileEditModalComponent implements OnInit, OnDestroy {
     } else {
       try {
         // Update display name if changed
-        if (formData.displayName != this.user_obj.publicData.name) {
-          this.user_obj.publicData.name = formData.displayName;
-          console.log('Display name changed:', formData.displayName);
-          this.applicationService.updateUserProfile(
-            this.user_obj.publicData.toDB()
+        if (this.user_obj.publicProfile.name != formData.displayName) {
+          this.user_obj.publicProfile.name = formData.displayName;
+          await this.applicationService.updateUserProfile(
+            this.user_obj.publicProfile.toDB()
           );
         }
         //Handle password change
@@ -169,11 +213,14 @@ export class ProfileEditModalComponent implements OnInit, OnDestroy {
             confirmPassword: '',
           });
         }
-      } catch(error: any) {
-        if (error.code && error.code === 'auth/wrong-password') {
+        await this.closeModal();
+      } catch (error: any) {
+        if (error.code == 'auth/invalid-credential') {
+          console.log('Auth was invalid, possibly due to session expiration.');
           this.profileForm
             .get('currentPassword')
             ?.setErrors({ incorrect: true });
+          return;
         }
         console.error('Error updating profile:', error);
         this.notificationService.addNotification(

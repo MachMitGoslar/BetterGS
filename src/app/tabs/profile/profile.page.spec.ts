@@ -4,12 +4,12 @@ import {
   fakeAsync,
   tick,
 } from '@angular/core/testing';
-import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { of, BehaviorSubject, from } from 'rxjs';
 import {
   Platform,
   AlertController,
   ActionSheetController,
+  ModalController,
 } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 
@@ -34,8 +34,8 @@ import {
  *
  * Comprehensive tests covering:
  * - Component initialization and lifecycle
- * - Form validation and management
- * - Profile data loading and updating
+ * - Profile data loading and display
+ * - Modal interaction (edit profile modal)
  * - Image upload functionality
  * - Account management
  * - Error handling and edge cases
@@ -54,6 +54,7 @@ describe('ProfilePage', () => {
   let mockRouter: any;
   let mockAlertController: any;
   let mockActionSheetController: any;
+  let mockModalController: any;
 
   // Observable subjects
   let userSubject: BehaviorSubject<any>;
@@ -130,11 +131,11 @@ describe('ProfilePage', () => {
     mockRouter = testEnv.mocks.ionic.mockRouter;
     mockAlertController = testEnv.mocks.ionic.mockAlertController;
     mockActionSheetController = testEnv.mocks.ionic.mockActionSheetController;
+    mockModalController = jasmine.createSpyObj('ModalController', ['create']);
 
     await TestBed.configureTestingModule({
-      imports: [ProfilePage, ReactiveFormsModule],
+      imports: [ProfilePage],
       providers: [
-        FormBuilder,
         ...testEnv.providers,
         // Override services to ensure our mocks are used
         { provide: ApplicationService, useValue: mockApplicationService },
@@ -145,6 +146,7 @@ describe('ProfilePage', () => {
         { provide: Router, useValue: mockRouter },
         { provide: AlertController, useValue: mockAlertController },
         { provide: ActionSheetController, useValue: mockActionSheetController },
+        { provide: ModalController, useValue: mockModalController },
       ],
     }).compileComponents();
 
@@ -153,7 +155,9 @@ describe('ProfilePage', () => {
   });
 
   afterEach(() => {
-    fixture.destroy();
+    if (fixture) {
+      fixture.destroy();
+    }
   });
 
   // ==========================================
@@ -168,40 +172,8 @@ describe('ProfilePage', () => {
     it('should initialize with correct default values', () => {
       expect(component.user).toBeNull();
       expect(component.isLoading).toBeFalse();
-      expect(component.passwordMismatch).toBeFalse();
       expect(component._publicUserData).toBeUndefined();
       expect(component._privateUserData).toBeUndefined();
-    });
-
-    it('should initialize reactive form with correct structure', () => {
-      expect(component.profileForm).toBeDefined();
-      expect(component.profileForm.get('displayName')).toBeDefined();
-      expect(component.profileForm.get('email')).toBeDefined();
-      expect(component.profileForm.get('currentPassword')).toBeDefined();
-      expect(component.profileForm.get('newPassword')).toBeDefined();
-      expect(component.profileForm.get('confirmPassword')).toBeDefined();
-    });
-
-    it('should set up form validators correctly', () => {
-      const form = component.profileForm;
-
-      // Test displayName validators
-      form.get('displayName')?.setValue('a'); // Too short
-      expect(form.get('displayName')?.hasError('minlength')).toBeTruthy();
-
-      form.get('displayName')?.setValue(''); // Required
-      expect(form.get('displayName')?.hasError('required')).toBeTruthy();
-
-      // Test email validators
-      form.get('email')?.setValue('invalid-email');
-      expect(form.get('email')?.hasError('email')).toBeTruthy();
-
-      form.get('email')?.setValue('');
-      expect(form.get('email')?.hasError('required')).toBeTruthy();
-
-      // Test password validators
-      form.get('newPassword')?.setValue('12345'); // Too short
-      expect(form.get('newPassword')?.hasError('minlength')).toBeTruthy();
     });
   });
 
@@ -276,88 +248,13 @@ describe('ProfilePage', () => {
         expect(component._privateUserData).toBe(mockPrivateProfile);
       }));
 
-      it('should populate form when user data is loaded', fakeAsync(() => {
-        spyOn(component as any, 'populateForm');
-
+      it('should handle user data loading', fakeAsync(() => {
+        // Since populateForm was moved to the modal, we just test that user data is set
         userSubject.next(mockUser);
         tick();
 
-        expect((component as any).populateForm).toHaveBeenCalled();
+        expect(component.user).toBe(mockUser);
       }));
-    });
-
-    describe('populateForm', () => {
-      beforeEach(() => {
-        component.user = mockUser;
-        component._publicUserData = mockPublicProfile as any;
-        component._privateUserData = mockPrivateProfile as any;
-      });
-
-      it('should populate form with user data', () => {
-        (component as any).populateForm();
-
-        expect(component.profileForm.get('displayName')?.value).toBe(
-          mockPublicProfile.name
-        );
-        expect(component.profileForm.get('email')?.value).toBe(mockUser.email);
-      });
-
-      it('should use private profile email if user email is not available', () => {
-        component.user = { ...mockUser, email: null };
-
-        (component as any).populateForm();
-
-        expect(component.profileForm.get('email')?.value).toBe(
-          mockPrivateProfile.email
-        );
-      });
-
-      it('should handle missing user data gracefully', () => {
-        component.user = null;
-
-        expect(() => (component as any).populateForm()).not.toThrow();
-      });
-    });
-  });
-
-  // ==========================================
-  // Form Validation Tests
-  // ==========================================
-
-  describe('Form Validation', () => {
-    describe('checkPasswordMatch', () => {
-      it('should set passwordMismatch to true when passwords do not match', () => {
-        component.profileForm.patchValue({
-          newPassword: 'password123',
-          confirmPassword: 'password456',
-        });
-
-        (component as any).checkPasswordMatch();
-
-        expect(component.passwordMismatch).toBeTruthy();
-      });
-
-      it('should set passwordMismatch to false when passwords match', () => {
-        component.profileForm.patchValue({
-          newPassword: 'password123',
-          confirmPassword: 'password123',
-        });
-
-        (component as any).checkPasswordMatch();
-
-        expect(component.passwordMismatch).toBeFalsy();
-      });
-
-      it('should set passwordMismatch to false when either field is empty', () => {
-        component.profileForm.patchValue({
-          newPassword: 'password123',
-          confirmPassword: '',
-        });
-
-        (component as any).checkPasswordMatch();
-
-        expect(component.passwordMismatch).toBeFalsy();
-      });
     });
   });
 
@@ -365,56 +262,85 @@ describe('ProfilePage', () => {
   // Profile Update Tests
   // ==========================================
 
-  describe('Profile Update', () => {
-    beforeEach(() => {
-      component.user = mockUser;
-      component._publicUserData = mockPublicProfile as any;
-      component._privateUserData = mockPrivateProfile as any;
+  describe('Modal Management', () => {
+    describe('openEditModal', () => {
+      it('should create and present the edit modal', async () => {
+        const mockModal = jasmine.createSpyObj('HTMLIonModalElement', [
+          'present',
+        ]);
+        mockModalController.create.and.returnValue(Promise.resolve(mockModal));
 
-      component.profileForm.patchValue({
-        displayName: 'Updated Name',
-        email: 'updated@example.com',
-        currentPassword: 'oldpass',
-        newPassword: 'newpass123',
-        confirmPassword: 'newpass123',
+        component.user = mockUser;
+        component._publicUserData = mockPublicProfile as any;
+        component._privateUserData = mockPrivateProfile as any;
+
+        await component.openEditModal();
+
+        expect(mockModalController.create).toHaveBeenCalledWith({
+          component: jasmine.any(Function), // ProfileEditModalComponent
+          componentProps: {
+            user_obj: {
+              user: mockUser,
+              publicProfile: mockPublicProfile,
+              privateProfile: mockPrivateProfile,
+            },
+          },
+        });
+        expect(mockModal.present).toHaveBeenCalled();
+        expect(component.isLoading).toBeFalse();
+      });
+
+      it('should handle missing user data gracefully', async () => {
+        const mockModal = jasmine.createSpyObj('HTMLIonModalElement', [
+          'present',
+        ]);
+        mockModalController.create.and.returnValue(Promise.resolve(mockModal));
+
+        component.user = null;
+        component._publicUserData = undefined;
+        component._privateUserData = undefined;
+
+        await component.openEditModal();
+
+        expect(mockModalController.create).toHaveBeenCalledWith({
+          component: jasmine.any(Function),
+          componentProps: {
+            user_obj: {
+              user: null,
+              publicProfile: undefined,
+              privateProfile: undefined,
+            },
+          },
+        });
+        expect(mockModal.present).toHaveBeenCalled();
+      });
+
+      it('should set loading state during modal creation', async () => {
+        const mockModal = jasmine.createSpyObj('HTMLIonModalElement', [
+          'present',
+        ]);
+        mockModalController.create.and.returnValue(Promise.resolve(mockModal));
+
+        component.user = mockUser;
+        expect(component.isLoading).toBeFalse();
+
+        const modalPromise = component.openEditModal();
+        expect(component.isLoading).toBeTrue();
+
+        await modalPromise;
+        expect(component.isLoading).toBeFalse();
       });
     });
+  });
 
-    describe('updateProfile', () => {
-      it('should show error notification for invalid form', async () => {
-        component.profileForm.patchValue({ displayName: '' }); // Invalid
-
-        await component.updateProfile();
-
-        expect(mockNotificationService.addNotification).toHaveBeenCalledWith(
-          'Please fix the form errors before saving.',
-          'danger'
-        );
-      });
-
-      it('should show error notification for password mismatch', async () => {
-        component.passwordMismatch = true;
-
-        await component.updateProfile();
-
-        expect(mockNotificationService.addNotification).toHaveBeenCalledWith(
-          'Please fix the form errors before saving.',
-          'danger'
-        );
-      });
-
-      it('should show error notification when user data is missing', async () => {
-        component.user = null;
-
-        await component.updateProfile();
-
-        expect(mockNotificationService.addNotification).toHaveBeenCalledWith(
-          'User data not available. Please try again.',
-          'danger'
-        );
-      });
-
-      it('should update public profile when display name changes', async () => {
+  // ==========================================
+  // Image Management Tests
+  // ==========================================
+  /*
+  // TODO: These tests need to be updated after profile update logic was moved to modal
+  describe('Profile Update - OLD TESTS TO BE UPDATED', () => {
+    xdescribe('updateProfile', () => {
+      xit('should update public profile when display name changes', async () => {
         // Set the initial value to something different than the new value
         component._publicUserData!.name = 'Old Name';
         component.profileForm.patchValue({ displayName: 'New Name' });
@@ -499,6 +425,7 @@ describe('ProfilePage', () => {
       });
     });
   });
+  */
 
   // ==========================================
   // Image Management Tests
@@ -698,6 +625,7 @@ describe('ProfilePage', () => {
 
     describe('confirmDeleteAccount', () => {
       it('should show confirmation alert with warning', async () => {
+        component.ngOnInit();
         await component.confirmDeleteAccount();
 
         expect(mockAlertController.create).toHaveBeenCalledWith(
@@ -750,18 +678,36 @@ describe('ProfilePage', () => {
 
     describe('days_active getter', () => {
       it('should return same value as getDaysSinceMember', () => {
-        spyOn(component, 'getDaysSinceMember').and.returnValue(15);
+        // Both methods calculate days independently, so they should return the same value
+        const daysActive = component.days_active;
+        const daysSinceMember = component.getDaysSinceMember();
+        expect(daysActive).toBe(daysSinceMember);
+      });
 
-        expect(component.days_active).toBe(15);
-        expect(component.getDaysSinceMember).toHaveBeenCalled();
+      it('should return 0 when no public user data', () => {
+        component._publicUserData = undefined;
+        expect(component.days_active).toBe(0);
+      });
+
+      it('should calculate days since creation correctly', () => {
+        const testDate = new Date('2024-01-01');
+        component._publicUserData = {
+          ...MOCK_PUBLIC_PROFILE,
+          createdAt: testDate,
+        };
+
+        // Test that it returns a reasonable number of days since the test date
+        const result = component.days_active;
+        expect(result).toBeGreaterThan(0);
+        expect(result).toBeLessThan(800); // Reasonable upper bound for ~2 years
       });
     });
   });
 
   // ==========================================
-  // Integration Tests
+  // Integration Tests - TODO: Update after modal separation
   // ==========================================
-
+  /*
   describe('Integration Tests', () => {
     it('should handle complete profile update workflow', fakeAsync(() => {
       // Setup initial state
@@ -840,30 +786,5 @@ describe('ProfilePage', () => {
       });
     });
   });
-
-  ///MY TESTS
-  describe(' MY TESTS', () => {
-    it('should have a method to get the user ID', () => {
-      component.ngOnInit();
-      component.$user = of(MOCK_ANONYMOUS_USER);
-      component.user = MOCK_ANONYMOUS_USER;
-
-      let formGroup = component.profileForm;
-      //let name_spy = spyOnProperty(component._publicUserData!, 'name').and.callThrough();
-      //let email_spy = spyOnProperty(component._privateUserData!, 'email').and.callThrough();
-
-      formGroup.patchValue({
-        displayName: 'Test User',
-        email: 'test@example.com',
-        newPassword: 'newpass123',
-        confirmPassword: 'newpass123',
-      });
-
-      component.updateProfile()
-
-
-      expect(component._privateUserData!.email).toBe("test@example.com");
-      expect(component._publicUserData!.name).toBe("Test User");
-    })
-  })
+  */
 });

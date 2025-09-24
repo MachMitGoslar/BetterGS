@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule,
@@ -27,10 +27,18 @@ import {
   IonLabel,
   AlertController,
   ActionSheetController,
-  ModalController
+  ModalController,
 } from '@ionic/angular/standalone';
 import { User } from '@angular/fire/auth';
-import { count, defaultIfEmpty, map, Observable, Subscription, switchMap, tap } from 'rxjs';
+import {
+  count,
+  defaultIfEmpty,
+  map,
+  Observable,
+  Subscription,
+  switchMap,
+  tap,
+} from 'rxjs';
 import { NotificationService } from '@services/notification.service';
 import { ApplicationService } from '@services/application.service';
 import { ElapsedTimePipe } from 'src/app/core/pipes/elapsed-time.pipe';
@@ -44,7 +52,7 @@ import { UserPublicProfile } from '@models/user_public_profile.model';
 import { UserPrivateProfile } from '@models/user_private_profile.model';
 import { UserService } from '@services/user.service';
 import { ActiveTrackingBarComponent } from '@components/active-tracking-bar/active-tracking-bar.component';
-import { ActivityCardComponent} from '@components/activity-card/activity-card.component';
+import { ActivityCardComponent } from '@components/activity-card/activity-card.component';
 import { ProfileEditModalComponent } from '@components/profile-edit-modal/profile-edit-modal.component';
 @Component({
   selector: 'app-profile',
@@ -75,10 +83,21 @@ import { ProfileEditModalComponent } from '@components/profile-edit-modal/profil
     //LanguageSelectorComponent,
     I18nPipe,
     ActiveTrackingBarComponent,
-    ActivityCardComponent
+    ActivityCardComponent,
   ],
 })
 export class ProfilePage implements OnInit, OnDestroy {
+  private formBuilder = inject(FormBuilder);
+  private alertController = inject(AlertController);
+  private actionSheetController = inject(ActionSheetController);
+  private notificationService = inject(NotificationService);
+  applicationService = inject(ApplicationService);
+  router = inject(Router);
+  private i18nService = inject(I18nService);
+  private platform = inject(Platform);
+  private userService = inject(UserService);
+  private modalController = inject(ModalController);
+
   user: User | null = null;
   $user = new Observable<User | null>();
   _publicUserData: UserPublicProfile | undefined;
@@ -90,24 +109,13 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private alertController: AlertController,
-    private actionSheetController: ActionSheetController,
-    private notificationService: NotificationService,
-    public applicationService: ApplicationService,
-    public router: Router,
-    private i18nService: I18nService,
-    private platform: Platform,
-    private userService: UserService,
-    private modalController: ModalController
-  ) {
+  constructor() {
     this.$userActivityCount = this.applicationService.$user_activities.pipe(
-      map(activities => {
-        return activities.filter(a => a.timeSpend > 0).length
+      map((activities) => {
+        return activities.filter((a) => a.timeSpend > 0).length;
       }),
       defaultIfEmpty(0)
-    )
+    );
   }
 
   ngOnInit() {
@@ -120,7 +128,6 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
-
   /**
    * Loads user profile data
    */
@@ -130,7 +137,6 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.$user.subscribe((user) => {
       this.user = user;
       console.log('Current user:', this.user);
-
     });
     this.userService.$currentUserPrivateProfile.subscribe((profile) => {
       this._privateUserData = profile;
@@ -141,13 +147,6 @@ export class ProfilePage implements OnInit, OnDestroy {
       console.log('Public user data:', this._publicUserData);
     });
   }
-
-
-
- 
-
-  
-
 
   /**
    * Changes profile picture
@@ -187,12 +186,10 @@ export class ProfilePage implements OnInit, OnDestroy {
           },
         ],
       };
-    } 
-    else {
+    } else {
       sheet_options = {
         header: this.i18nService.getTranslation('profile.changePicture'),
         buttons: [
-
           {
             text: this.i18nService.getTranslation('profile.uploadPhoto'),
             icon: 'images',
@@ -217,7 +214,9 @@ export class ProfilePage implements OnInit, OnDestroy {
       };
     }
 
-    const actionSheet = await this.actionSheetController.create(sheet_options as any);
+    const actionSheet = await this.actionSheetController.create(
+      sheet_options as any
+    );
 
     await actionSheet.present();
   }
@@ -228,16 +227,18 @@ export class ProfilePage implements OnInit, OnDestroy {
   private async takePhoto() {
     try {
       this.isLoading = true;
-      
+
       // Check camera permissions
       const permissions = await Camera.checkPermissions();
       if (permissions.camera !== 'granted') {
         const permissionResult = await Camera.requestPermissions({
-          permissions: ['camera']
+          permissions: ['camera'],
         });
         if (permissionResult.camera !== 'granted') {
           this.notificationService.addNotification(
-            this.i18nService.getTranslation('profile.error.cameraPermissionDenied'),
+            this.i18nService.getTranslation(
+              'profile.error.cameraPermissionDenied'
+            ),
             'danger'
           );
           return;
@@ -249,13 +250,16 @@ export class ProfilePage implements OnInit, OnDestroy {
         quality: 90,
         allowEditing: true,
         resultType: CameraResultType.Base64,
-        source: CameraSource.Camera
+        source: CameraSource.Camera,
       });
 
       if (image?.base64String) {
-        await this.processImageUpload(image.base64String, 'camera-photo.jpg', 'image/jpeg');
+        await this.processImageUpload(
+          image.base64String,
+          'camera-photo.jpg',
+          'image/jpeg'
+        );
       }
-      
     } catch (error) {
       console.error('Error taking photo:', error);
       this.notificationService.addNotification(
@@ -273,16 +277,18 @@ export class ProfilePage implements OnInit, OnDestroy {
   private async chooseFromGallery() {
     try {
       this.isLoading = true;
-      
+
       // Check and request permissions
       const permissions = await Camera.checkPermissions();
       if (permissions.photos !== 'granted') {
         const permissionResult = await Camera.requestPermissions({
-          permissions: ['photos']
+          permissions: ['photos'],
         });
         if (permissionResult.photos !== 'granted') {
           this.notificationService.addNotification(
-            this.i18nService.getTranslation('profile.error.galleryPermissionDenied'),
+            this.i18nService.getTranslation(
+              'profile.error.galleryPermissionDenied'
+            ),
             'danger'
           );
           return;
@@ -293,22 +299,23 @@ export class ProfilePage implements OnInit, OnDestroy {
       const result = await Camera.pickImages({
         quality: 90,
         limit: 1,
-        correctOrientation: true
+        correctOrientation: true,
       });
 
       if (result.photos && result.photos.length > 0) {
         const photo = result.photos[0];
-        
+
         // GalleryPhoto has webPath, we need to convert it to base64
         if (photo.webPath) {
           const base64 = await this.convertWebPathToBase64(photo.webPath);
-          const fileType = photo.format ? `image/${photo.format}` : 'image/jpeg';
+          const fileType = photo.format
+            ? `image/${photo.format}`
+            : 'image/jpeg';
           await this.processImageUpload(base64, 'gallery-photo.jpg', fileType);
         } else {
           throw new Error('No image data available');
         }
       }
-      
     } catch (error) {
       console.error('Error choosing from gallery:', error);
       this.notificationService.addNotification(
@@ -349,19 +356,17 @@ export class ProfilePage implements OnInit, OnDestroy {
    */
   private async removeProfilePicture() {
     if (this.user) {
-      this.applicationService.updateUserProfile(
-        {
-          name: this._publicUserData?.name || '',
-          profilePictureUrl: undefined,
-        }
-      );
+      this.applicationService.updateUserProfile({
+        name: this._publicUserData?.name || '',
+        profilePictureUrl: undefined,
+      });
       this.notificationService.addNotification(
         'Profile picture removed',
         'success'
       );
     }
   }
-  
+
   /**
    * Uploads an image from file input
    */
@@ -372,40 +377,43 @@ export class ProfilePage implements OnInit, OnDestroy {
       fileInput.type = 'file';
       fileInput.accept = 'image/*';
       fileInput.style.display = 'none';
-      
+
       // Create a promise to handle the file selection
       const fileSelectionPromise = new Promise<File | null>((resolve) => {
         fileInput.onchange = (event: any) => {
           const file = event.target?.files?.[0];
           resolve(file || null);
         };
-        
+
         fileInput.oncancel = () => {
           resolve(null);
         };
       });
-      
+
       // Add to DOM and trigger click
       document.body.appendChild(fileInput);
       fileInput.click();
-      
+
       // Wait for file selection
       const selectedFile = await fileSelectionPromise;
-      
+
       // Clean up
       document.body.removeChild(fileInput);
-      
+
       if (!selectedFile) {
         return; // User cancelled
       }
-      
+
       this.isLoading = true;
-      
+
       // Convert file to base64 for upload
       const base64String = await this.fileToBase64(selectedFile);
-      
-      await this.processImageUpload(base64String, selectedFile.name, selectedFile.type);
-      
+
+      await this.processImageUpload(
+        base64String,
+        selectedFile.name,
+        selectedFile.type
+      );
     } catch (error) {
       console.error('Error in uploadImage:', error);
       this.notificationService.addNotification(
@@ -420,7 +428,11 @@ export class ProfilePage implements OnInit, OnDestroy {
   /**
    * Common method to process image upload with validation
    */
-  private async processImageUpload(base64String: string, fileName: string, fileType: string) {
+  private async processImageUpload(
+    base64String: string,
+    fileName: string,
+    fileType: string
+  ) {
     try {
       if (!this.user) {
         this.notificationService.addNotification(
@@ -456,11 +468,11 @@ export class ProfilePage implements OnInit, OnDestroy {
           contentType: fileType,
           customMetadata: {
             uploadedAt: new Date().toISOString(),
-            originalName: fileName
-          }
+            originalName: fileName,
+          },
         }
       );
-      
+
       // Update user profile
       if (!this._publicUserData) {
         this._publicUserData = new UserPublicProfile();
@@ -475,7 +487,6 @@ export class ProfilePage implements OnInit, OnDestroy {
         this.i18nService.getTranslation('profile.success.pictureUploaded'),
         'success'
       );
-      
     } catch (error) {
       console.error('Error processing image upload:', error);
       this.notificationService.addNotification(
@@ -490,7 +501,13 @@ export class ProfilePage implements OnInit, OnDestroy {
    * Validates image file type
    */
   private isValidImageType(fileType: string): boolean {
-    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    const validTypes = [
+      'image/jpeg',
+      'image/jpg',
+      'image/png',
+      'image/gif',
+      'image/webp',
+    ];
     return validTypes.includes(fileType.toLowerCase());
   }
 
@@ -500,7 +517,7 @@ export class ProfilePage implements OnInit, OnDestroy {
   private isValidImageSize(base64String: string): boolean {
     const maxSize = 5 * 1024 * 1024; // 5MB in bytes
     // Base64 encoding increases size by ~33%, so we need to account for that
-    const estimatedSize = (base64String.length * 0.75);
+    const estimatedSize = base64String.length * 0.75;
     return estimatedSize <= maxSize;
   }
 
@@ -508,10 +525,13 @@ export class ProfilePage implements OnInit, OnDestroy {
    * Legacy method for backwards compatibility
    * @deprecated Use processImageUpload instead
    */
-  async uploadFileToProfile(base64String: string, name: string, type: string = 'image/jpeg') {
+  async uploadFileToProfile(
+    base64String: string,
+    name: string,
+    type: string = 'image/jpeg'
+  ) {
     await this.processImageUpload(base64String, name, type);
   }
-
 
   /**x
    * Converts a File to base64 string
@@ -592,7 +612,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     console.log('Logging out user...', this.alertController);
 
     try {
-      const  alert = await this.alertController.create({
+      const alert = await this.alertController.create({
         header: 'Logout',
         message: 'Are you sure you want to logout?',
         buttons: [
@@ -624,26 +644,28 @@ export class ProfilePage implements OnInit, OnDestroy {
    */
   public openEditModal() {
     this.isLoading = true;
-    this.modalController.create({
-      component: ProfileEditModalComponent,
-      componentProps: {
-        user_obj: {
-          user: this.user,
-          publicProfile: this._publicUserData,
-          privateProfile: this._privateUserData
-        }
-      }
-    }).then(modal => {
-      modal.present();
-      this.isLoading = false;
-    });
+    this.modalController
+      .create({
+        component: ProfileEditModalComponent,
+        componentProps: {
+          user_obj: {
+            user: this.user,
+            publicProfile: this._publicUserData,
+            privateProfile: this._privateUserData,
+          },
+        },
+      })
+      .then((modal) => {
+        modal.present();
+        this.isLoading = false;
+      });
   }
 
   /**
    * Performs logout
    */
   private async performLogout() {
-          console.log('Logging out user...');
+    console.log('Logging out user...');
 
     try {
       // TODO: Implement logout logic
@@ -669,7 +691,6 @@ export class ProfilePage implements OnInit, OnDestroy {
    * Gets days since member
    */
   getDaysSinceMember(): number {
-
     if (!this._publicUserData || !this._publicUserData.createdAt) return 0;
 
     const now = new Date();
@@ -683,8 +704,10 @@ export class ProfilePage implements OnInit, OnDestroy {
   get days_active(): number {
     let now = new Date();
     if (!this._publicUserData || !this._publicUserData.createdAt) return 0;
-    const diffTime = Math.abs(now.getTime() - this._publicUserData.createdAt.getTime());
+    const diffTime = Math.abs(
+      now.getTime() - this._publicUserData.createdAt.getTime()
+    );
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
     return diffDays;
-  } 
+  }
 }
