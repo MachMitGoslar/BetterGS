@@ -136,7 +136,6 @@ export class ProfilePage implements OnInit, OnDestroy {
     // For now, create a mock user
     this.$user.subscribe((user) => {
       this.user = user;
-
     });
     this.userService.$currentUserPrivateProfile.subscribe((profile) => {
       this._privateUserData = profile;
