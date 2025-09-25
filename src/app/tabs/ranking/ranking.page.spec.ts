@@ -8,7 +8,7 @@ import { of, BehaviorSubject } from 'rxjs';
 import { ModalController } from '@ionic/angular/standalone';
 
 import { RankingPage } from './ranking.page';
-import { UserService } from '../../core/services/user.service';
+import { UserRanking, UserService } from '../../core/services/user.service';
 import { I18nService } from '../../core/services/i18n.service';
 import { UserPublicProfile } from 'src/app/core/models/user_public_profile.model';
 import { UserDetailModalComponent } from '../../components/user-detail-modal/user-detail-modal.component';
@@ -17,6 +17,7 @@ import {
   MOCK_PUBLIC_PROFILE,
   triggerObservableUpdate,
 } from '../../../testing/shared-testing-config';
+import { User } from '@angular/fire/auth';
 
 /**
  * Test Suite for RankingPage Component
@@ -40,7 +41,7 @@ describe('RankingPage', () => {
   let mockModalController: any;
 
   // Observable subjects
-  let usersSubject: BehaviorSubject<UserPublicProfile[]>;
+  let usersSubject: BehaviorSubject<UserRanking[]>;
 
   // Mock data
   const mockUsers: UserPublicProfile[] = [
@@ -89,6 +90,15 @@ describe('RankingPage', () => {
   ];
 
   const mockEmptyUsers: UserPublicProfile[] = [];
+  const mockEmptyRanking: UserRanking[] = [];
+
+  const mockRanking = mockUsers.map(
+    (user, index) =>
+      ({
+        rank: index + 1,
+        userProfile: user,
+      } as UserRanking)
+  );
 
   beforeEach(async () => {
     // Setup $localize for Angular i18n
@@ -113,7 +123,7 @@ describe('RankingPage', () => {
     });
 
     // Create behavior subjects
-    usersSubject = new BehaviorSubject<UserPublicProfile[]>([]);
+    usersSubject = new BehaviorSubject<UserRanking[]>([]);
 
     // Override UserService with ranking-specific functionality
     mockUserService = {
@@ -383,39 +393,39 @@ describe('RankingPage', () => {
   describe('Ranking Display', () => {
     describe('getRankIcon', () => {
       it('should return gold medal for first place', () => {
-        expect(component.getRankIcon(0)).toBe('🥇');
+        expect(component.getRankIcon(1)).toBe('🥇');
       });
 
       it('should return silver medal for second place', () => {
-        expect(component.getRankIcon(1)).toBe('🥈');
+        expect(component.getRankIcon(2)).toBe('🥈');
       });
 
       it('should return bronze medal for third place', () => {
-        expect(component.getRankIcon(2)).toBe('🥉');
+        expect(component.getRankIcon(3)).toBe('🥉');
       });
 
       it('should return numbered rank for positions beyond third', () => {
-        expect(component.getRankIcon(3)).toBe('#4');
-        expect(component.getRankIcon(9)).toBe('#10');
-        expect(component.getRankIcon(99)).toBe('#100');
+        expect(component.getRankIcon(4)).toBe('#4');
+        expect(component.getRankIcon(10)).toBe('#10');
+        expect(component.getRankIcon(100)).toBe('#100');
       });
     });
 
     describe('getRankColor', () => {
-      it('should return warning color for first place', () => {
-        expect(component.getRankColor(0)).toBe('warning');
+      it('should return gold color for first place', () => {
+        expect(component.getRankColor(1)).toBe('gold');
       });
 
-      it('should return medium color for second place', () => {
-        expect(component.getRankColor(1)).toBe('medium');
+      it('should return silver color for second place', () => {
+        expect(component.getRankColor(2)).toBe('silver');
       });
 
-      it('should return tertiary color for third place', () => {
-        expect(component.getRankColor(2)).toBe('tertiary');
+      it('should return bronze color for third place', () => {
+        expect(component.getRankColor(3)).toBe('bronze');
       });
 
       it('should return primary color for positions beyond third', () => {
-        expect(component.getRankColor(3)).toBe('primary');
+        expect(component.getRankColor(4)).toBe('primary');
         expect(component.getRankColor(10)).toBe('primary');
         expect(component.getRankColor(99)).toBe('primary');
       });
@@ -515,7 +525,7 @@ describe('RankingPage', () => {
       component.ngOnInit();
 
       // Simulate users data loading
-      usersSubject.next(mockUsers);
+      usersSubject.next(mockRanking);
       tick();
 
       // Verify loading state
@@ -523,7 +533,7 @@ describe('RankingPage', () => {
 
       // Verify users data is available
       component.users$.subscribe((users) => {
-        expect(users).toEqual(mockUsers);
+        expect(users).toEqual(mockRanking);
         expect(users.length).toBe(3);
       });
     }));
@@ -531,11 +541,11 @@ describe('RankingPage', () => {
     it('should handle empty ranking state', fakeAsync(() => {
       component.ngOnInit();
 
-      usersSubject.next(mockEmptyUsers);
+      usersSubject.next(mockEmptyRanking);
       tick();
 
       component.users$.subscribe((users) => {
-        expect(users).toEqual(mockEmptyUsers);
+        expect(users).toEqual(mockEmptyRanking);
         expect(users.length).toBe(0);
       });
     }));
@@ -622,7 +632,7 @@ describe('RankingPage', () => {
     });
 
     it('should handle observable stream lifecycle', fakeAsync(() => {
-      let receivedUsers: UserPublicProfile[] = [];
+      let receivedUsers: UserRanking[] = [];
 
       component.ngOnInit();
       component.users$.subscribe((users) => {
@@ -635,9 +645,9 @@ describe('RankingPage', () => {
       expect(receivedUsers).toEqual([]);
 
       // Test with data
-      usersSubject.next(mockUsers);
+      usersSubject.next(mockRanking);
       tick();
-      expect(receivedUsers).toEqual(mockUsers);
+      expect(receivedUsers).toEqual(mockRanking);
     }));
   });
 });

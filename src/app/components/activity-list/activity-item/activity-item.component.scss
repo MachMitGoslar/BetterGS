@@ -1,0 +1,52 @@
+.activity-card {
+  margin-bottom: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--inset-shadow-dark) 3px 3px 6px 0px inset,
+    var(--inset-shadow-light) -3px -3px 6px 1px inset;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--hover-shadow);
+  }
+
+  ion-item {
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --min-height: 80px;
+    --background: transparent;
+    --border-style: 0px;
+  }
+  &.active {
+    border: 2px solid var(--ion-color-primary);
+  }
+}
+
+ion-icon {
+  display: flex;
+  padding: 5px;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 12px;
+  font-weight: bold;
+  font-size: 0.9rem;
+
+  &.active {
+    background: var(--ion-color-light);
+    color: var(--ion-color-primary);
+    border: 2px solid var(--ion-color-primary);
+  }
+  &.inactive {
+    background: var(--ion-color-light-medium);
+    color: var(--ion-color-medium);
+    border: 2px solid var(--ion-color-medium);
+  }
+
+  .rank-number {
+    font-size: 1.2rem;
+  }
+}

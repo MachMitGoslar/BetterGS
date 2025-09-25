@@ -18,6 +18,7 @@ import {
   deleteUser,
   sendPasswordResetEmail,
   signOut,
+  updateProfile,
   UserCredential,
 } from '@angular/fire/auth';
 import {
@@ -396,9 +397,17 @@ export class ApplicationService implements OnDestroy {
    * @returns {Promise<void>}
    * @since 1.0.0
    */
-  registerUserWithEmail(email: string, password: string): Promise<void> {
+  registerUserWithEmail(
+    email: string,
+    password: string,
+    displayName: string
+  ): Promise<void> {
     if (this._currentUser && this._currentUser.isAnonymous) {
-      return this.usrSrv.registerAnonymousUserWithEmail(email, password);
+      return this.usrSrv.registerAnonymousUserWithEmail(
+        email,
+        password,
+        displayName
+      );
     } else {
       return Promise.reject(
         this.i18nService.getTranslation('error.no.anonymous.user.to.upgrade')
@@ -414,12 +423,13 @@ export class ApplicationService implements OnDestroy {
    *
    * @public
    * @param newPassword - The new password to set
+   * @param current_password - The current password for re-authentication
    * @returns Promise<void>
    * @since 1.0.1
    */
-  changePassword(newPassword: string): Promise<void> {
+  changePassword(newPassword: string, current_password: string): Promise<void> {
     if (this._currentUser && this._currentUser) {
-      return this.usrSrv.changePassword(newPassword);
+      return this.usrSrv.changePassword(newPassword, current_password);
     } else {
       return Promise.reject(
         this.i18nService.getTranslation('error.no.user.logged.in')
@@ -455,13 +465,17 @@ export class ApplicationService implements OnDestroy {
           'user_profile',
           this._currentUser?.uid
         );
+        await updateProfile(this._currentUser, {
+          displayName: profile_data.name,
+          photoURL: profile_data.profilePictureUrl || '',
+        });
         await setDoc(userDocRef, profile_data, { merge: true });
         return Promise.resolve();
       } catch (error) {
         return Promise.reject(
           new Error(
             this.i18nService.getTranslation(
-              'Failed to update user public profile'
+              'Failed to update user public profile:' + error
             )
           )
         );
@@ -502,7 +516,7 @@ export class ApplicationService implements OnDestroy {
       const storage = getStorage();
       const imageRef = ref(
         storage,
-        `users/${this._currentUser.uid}/profile/${Date.now()}_${fileName}`
+        `users/${this._currentUser.uid}/profile/${fileName}`
       );
 
       // Upload the base64 string

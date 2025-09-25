@@ -31,6 +31,7 @@ import {
   updateProfile,
   deleteUser,
   signInWithCredential,
+  reauthenticateWithCredential,
 } from '@angular/fire/auth';
 import {
   ReplaySubject,
@@ -48,6 +49,11 @@ import { UserPrivateProfile } from '../models/user_private_profile.model';
 import { UserPublicProfile } from '../models/user_public_profile.model';
 import { ref } from '@angular/fire/storage';
 import { create } from 'ionicons/icons';
+
+export interface UserRanking {
+  userProfile: UserPublicProfile;
+  rank: number;
+}
 
 /**
  * UserService - User Authentication and Profile Management Service
@@ -194,8 +200,6 @@ export class UserService {
    */
   private initializeAuthStateListener(): void {
     this.auth.onAuthStateChanged((fb_user) => {
-      console.log('Auth state changed:', fb_user);
-
       if (fb_user) {
         this.handleUserSignIn(fb_user);
       } else {
@@ -560,11 +564,22 @@ export class UserService {
    * @throws Will reject if no user is logged in or password change fails
    * @since 1.0.0
    */
-  changePassword(newPassword: string): Promise<void> {
+  changePassword(newPassword: string, current_password: string): Promise<void> {
     if (this.auth.currentUser) {
-      return updatePassword(this.auth.currentUser, newPassword);
+      return reauthenticateWithCredential(
+        this.auth.currentUser,
+        EmailAuthProvider.credential(
+          this.auth.currentUser.email!,
+          current_password
+        )
+      ).then(
+        (user) => updatePassword(user.user, newPassword),
+        (error) => {
+          return Promise.reject(error);
+        }
+      );
     }
-    return Promise.reject(new Error('No user logged in'));
+    return Promise.reject(new Error('Current Password is incorrect'));
   }
 
   /**
@@ -609,16 +624,20 @@ export class UserService {
    * @returns {Observable<UserPublicProfile[]>} Stream of users sorted by tracked time
    * @since 1.0.0
    */
-  getAllUsersForRanking(): Observable<UserPublicProfile[]> {
+  getAllUsersForRanking(): Observable<UserRanking[]> {
     return collectionSnapshots(collection(this.firestore, 'user_profile')).pipe(
       map((docs) => {
         return docs
           .map((doc) => {
             const data = doc.data();
             const profile = UserPublicProfile.fromDB(doc.id, data);
-            return profile;
+            return {
+              userProfile: profile,
+              rank: 0, // Placeholder for rank
+            };
           })
-          .sort((a, b) => b.trackedTime - a.trackedTime); // Sort by tracked time descending
+          .sort((a, b) => b.userProfile.trackedTime - a.userProfile.trackedTime) // Sort by tracked time descending
+          .map((item, index) => ({ ...item, rank: index + 1 })); // Assign ranks
       })
     );
   }

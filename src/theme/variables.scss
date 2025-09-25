@@ -1,5 +1,6 @@
 // For information on how to create your own theme, please see:
 // http://ionicframework.com/docs/theming/
+
 :root {
   --ion-color-primary: #866811;
   --ion-color-primary-rgb: 134, 104, 17;
@@ -8,12 +9,12 @@
   --ion-color-primary-shade: #765c0f;
   --ion-color-primary-tint: #927729;
 
-  --ion-color-secondary: #fcce4c;
-  --ion-color-secondary-rgb: 252, 206, 76;
-  --ion-color-secondary-contrast: #000000;
-  --ion-color-secondary-contrast-rgb: 0, 0, 0;
-  --ion-color-secondary-shade: #deb543;
-  --ion-color-secondary-tint: #fcd35e;
+  --ion-color-secondary: #600132;
+  --ion-color-secondary-rgb: 96, 1, 50;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #54012c;
+  --ion-color-secondary-tint: #701a47;
 
   --ion-color-tertiary: #6e1370;
   --ion-color-tertiary-rgb: 110, 19, 112;
@@ -63,4 +64,74 @@
   --ion-color-dark-contrast-rgb: 255, 255, 255;
   --ion-color-dark-shade: #292929;
   --ion-color-dark-tint: #444444;
+
+  //GOLD
+  --ion-color-gold: #ffca00;
+  --ion-color-gold-rgb: 255, 202, 0;
+  --ion-color-gold-contrast: #000000;
+  --ion-color-gold-contrast-rgb: 0, 0, 0;
+  --ion-color-gold-shade: #e0b200;
+  --ion-color-gold-tint: #ffcf1a;
+
+  //SILVER
+
+  --ion-color-silver: #ebebeb;
+  --ion-color-silver-rgb: 235, 235, 235;
+  --ion-color-silver-contrast: #000000;
+  --ion-color-silver-contrast-rgb: 0, 0, 0;
+  --ion-color-silver-shade: #cfcfcf;
+  --ion-color-silver-tint: #ededed;
+
+  //BRONZE
+  --ion-color-bronze: #d54a00;
+  --ion-color-bronze-rgb: 213, 74, 0;
+  --ion-color-bronze-contrast: #000000;
+  --ion-color-bronze-contrast-rgb: 0, 0, 0;
+  --ion-color-bronze-shade: #bb4100;
+  --ion-color-bronze-tint: #d95c1a;
+
+  // Inset shadow variables for light mode
+  --inset-shadow-dark: rgba(204, 219, 232, 0.8);
+  --inset-shadow-light: rgba(255, 255, 255, 0.5);
+  --hover-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  @media (prefers-color-scheme: dark) {
+    --ion-color-primary: #bd9007;
+    --ion-color-primary-rgb: 189, 144, 7;
+    --ion-color-primary-contrast: #ffffff;
+    --ion-color-primary-contrast-rgb: 255, 255, 255;
+    --ion-color-primary-shade: #765c0f;
+    --ion-color-primary-tint: #edb91c;
+
+    // Inset shadow variables for dark mode - much more subtle
+    --inset-shadow-dark: rgba(0, 0, 0, 0.4);
+    --inset-shadow-light: rgba(255, 255, 255, 0.03);
+    --hover-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  }
+}
+
+.ion-color-gold {
+  --ion-color-base: var(--ion-color-gold);
+  --ion-color-base-rgb: var(--ion-color-gold-rgb);
+  --ion-color-contrast: var(--ion-color-gold-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-gold-contrast-rgb);
+  --ion-color-shade: var(--ion-color-gold-shade);
+  --ion-color-tint: var(--ion-color-gold-tint);
+}
+.ion-color-silver {
+  --ion-color-base: var(--ion-color-silver);
+  --ion-color-base-rgb: var(--ion-color-silver-rgb);
+  --ion-color-contrast: var(--ion-color-silver-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-silver-contrast-rgb);
+  --ion-color-shade: var(--ion-color-silver-shade);
+  --ion-color-tint: var(--ion-color-silver-tint);
+}
+
+.ion-color-bronze {
+  --ion-color-base: var(--ion-color-bronze);
+  --ion-color-base-rgb: var(--ion-color-bronze-rgb);
+  --ion-color-contrast: var(--ion-color-bronze-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-bronze-contrast-rgb);
+  --ion-color-shade: var(--ion-color-bronze-shade);
+  --ion-color-tint: var(--ion-color-bronze-tint);
 }

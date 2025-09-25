@@ -1,0 +1,198 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Edit Profile</ion-title>
+    <ion-buttons slot="end">
+      <ion-button
+        (click)="closeModal()"
+        fill="clear"
+        color="medium"
+        i18n="@@common.close"
+      >
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
+    <!-- Personal Information -->
+    <ion-card class="form-section">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="person-outline" class="section-icon"></ion-icon>
+          <span i18n="@@profile.your.information">Your Information</span>
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-item>
+          <ion-input
+            formControlName="displayName"
+            type="text"
+            label="Username"
+            i18n-label="@@profile.username"
+            labelPlacement="floating"
+            placeholder="Enter your username"
+            i18n-placeholder="@@profile.enter.username"
+            [clearOnEdit]="false"
+          >
+          </ion-input>
+        </ion-item>
+
+        <ion-item *ngIf="user_obj?.user?.isAnonymous">
+          <ion-input
+            formControlName="email"
+            label="Email Address"
+            i18n-label="@@profile.email.address"
+            labelPlacement="floating"
+            type="email"
+            placeholder="Enter your email address"
+            i18n-placeholder="@@profile.enter.email"
+            [clearOnEdit]="false"
+          >
+          </ion-input>
+        </ion-item>
+
+        <div
+          class="form-errors"
+          *ngIf="
+            profileForm.get('email')?.invalid &&
+            profileForm.get('email')?.touched
+          "
+        >
+          <ion-text color="danger">
+            <small i18n="@@validation.email.required"
+              >Please enter a valid email address</small
+            >
+          </ion-text>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Password Section -->
+    <ion-card class="form-section">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="lock-closed-outline" class="section-icon"></ion-icon>
+          <span i18n="@@profile.password.security"
+            >Password &amp; Security</span
+          >
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-item *ngIf="!user_obj?.user?.isAnonymous">
+          <ion-input
+            formControlName="currentPassword"
+            label="Current Password"
+            i18n-label="@@profile.current.password"
+            labelPlacement="floating"
+            type="password"
+            placeholder="Enter current password"
+            [clearOnEdit]="false"
+          >
+          </ion-input>
+          <div
+            class="form-errors"
+            *ngIf="
+              profileForm.get('currentPassword')?.invalid &&
+              profileForm.get('currentPassword')?.touched
+            "
+          >
+            <ion-text color="danger">
+              <small i18n="@@validation.current.password.incorrect"
+                >Current Password is incorrect</small
+              >
+            </ion-text>
+          </div>
+        </ion-item>
+
+        <ion-item>
+          <ion-input
+            label="New Password"
+            i18n-label="@@profile.new.password"
+            labelPlacement="floating"
+            formControlName="newPassword"
+            type="password"
+            [clearOnEdit]="false"
+          >
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-input
+            formControlName="confirmPassword"
+            type="password"
+            label="Confirm new Password"
+            i18n-label="@@profile.confirm.new.password"
+            labelPlacement="floating"
+            i18n-placeholder="@@profile.confirm.new.password"
+            [clearOnEdit]="false"
+          >
+          </ion-input>
+        </ion-item>
+
+        <div
+          class="form-errors"
+          *ngIf="
+            profileForm.get('newPassword')?.invalid &&
+            profileForm.get('newPassword')?.touched
+          "
+        >
+          <ion-text color="danger">
+            <small i18n="@@validation.password.minlength"
+              >Password must be at least 6 characters long</small
+            >
+          </ion-text>
+        </div>
+
+        <div class="form-errors" *ngIf="passwordMismatch">
+          <ion-text color="danger">
+            <small i18n="@@validation.passwords.mismatch"
+              >Passwords do not match</small
+            >
+          </ion-text>
+        </div>
+
+        <ion-note
+          class="password-hint"
+          *ngIf="!user_obj?.user?.isAnonymous"
+          i18n="@@profile.password.hint"
+        >
+          Leave password fields empty if you don't want to change your password
+        </ion-note>
+      </ion-card-content>
+    </ion-card>
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <ion-button
+        expand="block"
+        type="submit"
+        [disabled]="profileForm.invalid || isLoading"
+        class="save-button"
+      >
+        <ion-icon
+          name="checkmark-circle"
+          slot="start"
+          *ngIf="!isLoading"
+        ></ion-icon>
+        <ion-spinner name="crescent" *ngIf="isLoading"></ion-spinner>
+        <span *ngIf="isLoading" i18n="@@profile.saving">Saving...</span>
+        <span *ngIf="!isLoading" i18n="@@profile.save.changes"
+          >Save Changes</span
+        >
+      </ion-button>
+
+      <ion-button
+        expand="block"
+        fill="clear"
+        color="medium"
+        (click)="resetForm()"
+        [disabled]="isLoading"
+        i18n="@@profile.reset.changes"
+      >
+        Reset Changes
+      </ion-button>
+    </div>
+  </form>
+</ion-content>

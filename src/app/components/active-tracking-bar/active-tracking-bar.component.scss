@@ -1,16 +1,32 @@
 // Green pulsing background animation for active tracking
+// Using CSS custom properties for better theme consistency
+:root {
+  --tracking-gradient-start: var(--ion-color-success);
+  --tracking-gradient-mid: var(--ion-color-success-tint);
+  --tracking-gradient-end: var(--ion-color-success-shade);
+}
+
 @keyframes pulse-green {
   0% {
-    background: linear-gradient(90deg, #10dc60, #28e070);
-    //box-shadow: 0 0 10px rgba(16, 220, 96, 0.5);
+    background: linear-gradient(
+      90deg,
+      var(--tracking-gradient-start),
+      var(--tracking-gradient-mid)
+    );
   }
   50% {
-    background: linear-gradient(90deg, #28e070, #42ed8d);
-    //box-shadow: 0 0 20px rgba(16, 220, 96, 0.8);
+    background: linear-gradient(
+      90deg,
+      var(--tracking-gradient-mid),
+      var(--tracking-gradient-end)
+    );
   }
   100% {
-    background: linear-gradient(90deg, #42ed8d, #10dc60);
-    //box-shadow: 0 0 10px rgba(16, 220, 96, 0.5);
+    background: linear-gradient(
+      90deg,
+      var(--tracking-gradient-end),
+      var(--tracking-gradient-start)
+    );
   }
 }
 
@@ -108,7 +124,7 @@
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(255, 255, 255, 0.1),
+      rgba(13, 160, 48, 0.845),
       transparent
     );
     animation: shimmer 3s ease-in-out infinite;
@@ -125,30 +141,6 @@
   }
   100% {
     left: 100%;
-  }
-}
-
-// Dark mode adjustments
-@media (prefers-color-scheme: dark) {
-  // Define the dark mode animation first
-  @keyframes pulse-green-dark {
-    0% {
-      background: linear-gradient(90deg, #0d8f4b, #189c5a);
-      box-shadow: 0 0 10px rgba(13, 143, 75, 0.6);
-    }
-    50% {
-      background: linear-gradient(90deg, #189c5a, #22b96a);
-      box-shadow: 0 0 20px rgba(13, 143, 75, 0.9);
-    }
-    100% {
-      background: linear-gradient(90deg, #0d8f4b, #189c5a);
-      box-shadow: 0 0 10px rgba(13, 143, 75, 0.6);
-    }
-  }
-
-  .tracking_bar {
-    // Apply the dark mode animation
-    animation: pulse-green-dark 2s ease-in-out infinite;
   }
 }
 

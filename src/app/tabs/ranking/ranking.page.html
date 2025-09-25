@@ -18,6 +18,14 @@
   </ion-refresher>
   <app-active-tracking-bar></app-active-tracking-bar>
 
+  <ion-searchbar
+    [(ngModel)]="searchTerm"
+    (ionInput)="onSearchChange()"
+    [placeholder]="i18nService.getTranslation('ranking.searchPlaceholder')"
+    debounce="300"
+    animated="true"
+  ></ion-searchbar>
+
   <!-- Header Card -->
   <ion-card class="header-card">
     <ion-card-header>
@@ -51,41 +59,45 @@
 
   <!-- User Ranking List -->
   <div *ngIf="!isLoading" class="ranking-container">
+    @for (user of users$| async; track user.rank) {
     <ion-card
-      *ngFor="let user of users$ | async; let i = index"
       class="user-card"
-      [class.top-three]="i < 3"
-      (click)="openModal(user)"
+      [class.top-three]="user.rank <= 3"
+      [class]="'rank-' + (user.rank)"
+      (click)="openModal(user.userProfile)"
     >
       <ion-item>
         <!-- Rank Badge -->
-        <div slot="start" class="rank-badge" [class]="'rank-' + (i + 1)">
-          <span class="rank-number">{{ getRankIcon(i) }}</span>
+        <div slot="start" class="rank-badge" [class]="'rank-' + (user.rank)">
+          <span class="rank-number">{{ getRankIcon(user.rank) }}</span>
         </div>
 
         <!-- User Avatar -->
         <ion-avatar slot="start">
           <img
-            *ngIf="user.profilePictureUrl"
-            [src]="user.profilePictureUrl"
-            [alt]="user.name"
+            *ngIf="user.userProfile.profilePictureUrl"
+            [src]="user.userProfile.profilePictureUrl"
+            [alt]="user.userProfile.name"
           />
-          <div *ngIf="!user.profilePictureUrl" class="avatar-placeholder">
-            {{ getInitials(user.name || "unknown") }}
+          <div
+            *ngIf="!user.userProfile.profilePictureUrl"
+            class="avatar-placeholder"
+          >
+            {{ getInitials(user.userProfile.name || "unknown") }}
           </div>
         </ion-avatar>
 
         <!-- User Info -->
         <ion-label>
-          <h2 class="user-name">{{ user.name }}</h2>
+          <h2 class="user-name">{{ user.userProfile.name }}</h2>
           <div class="user-stats">
             <span class="stat">
               <ion-icon name="time-outline"></ion-icon>
-              {{ user.trackedTime | elapsedTime: 's' }}
+              {{ user.userProfile.trackedTime | elapsedTime: 's' }}
             </span>
             <span class="stat">
               <ion-icon name="medal-outline"></ion-icon>
-              {{ user.total_trackings }} {{
+              {{ user.userProfile.total_trackings }} {{
               i18nService.getTranslation('ranking.sessions') }}
             </span>
           </div>
@@ -93,12 +105,12 @@
 
         <!-- Activity Status -->
         <div slot="end" class="user-status">
-          <ion-badge [color]="getRankColor(i)" class="rank-badge-end">
-            #{{ i + 1 }}
+          <ion-badge [color]="getRankColor(user.rank)" class="rank-badge-end">
+            #{{ user.rank }}
           </ion-badge>
           <ion-badge
             color="success"
-            *ngIf="user.isActive"
+            *ngIf="user.userProfile.isActive"
             class="activity-badge"
           >
             {{ i18nService.getTranslation('user.status.active') }}
@@ -106,7 +118,7 @@
         </div>
       </ion-item>
     </ion-card>
-
+    }
     <!-- Empty State -->
     <div *ngIf="(users$ | async)?.length === 0" class="empty-state">
       <ion-icon name="person-outline" class="empty-icon"></ion-icon>

@@ -82,3 +82,6 @@ android/
 firebase/
 *.code-workspace
 *.psd
+.lighthouseci/
+.vscode/
+backend/

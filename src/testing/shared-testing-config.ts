@@ -30,6 +30,9 @@ import { ActivityService } from 'src/app/core/services/activity.service';
 import { TrackingService } from 'src/app/core/services/tracking.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { I18nService } from 'src/app/core/services/i18n.service';
+import { IconService } from 'src/app/core/services/icon.service';
+import { refresh } from 'ionicons/icons';
+import { getIdToken, ProviderId } from '@firebase/auth';
 
 // ==========================================
 // Common Test Data
@@ -65,6 +68,20 @@ export const MOCK_ANONYMOUS_USER = {
     creationTime: '2024-01-10T00:00:00.000Z',
     lastSignInTime: '2024-01-10T00:00:00.000Z',
   },
+  providerData: [],
+  refreshToken: 'refresh-token-456',
+  tenantId: null,
+  delete: () => Promise.resolve(),
+  getIdToken: (forceRefresh?: boolean) => Promise.resolve('mock-id-token'),
+  getIdTokenResult: (forceRefresh?: boolean) =>
+    Promise.resolve({
+      token: 'mock-id-token',
+      expirationTime: Date.now() + 3600 * 1000,
+    }) as any,
+  reload: () => Promise.resolve(),
+  phoneNumber: null,
+  providerId: 'firebase',
+  toJSON: () => ({}),
 };
 
 /**
@@ -210,9 +227,14 @@ export function createServiceMocks(overrides: any = {}) {
     onAppGoesBackground: jasmine
       .createSpy('onAppGoesBackground')
       .and.returnValue(() => {}), // Mock unsubscribe function
+    loginWithEmail: jasmine.createSpy('loginWithEmail'), //.and.returnValue(Promise.resolve({ user: MOCK_USER })),
+    loginAnonymously: jasmine
+      .createSpy('loginAnonymously')
+      .and.returnValue(Promise.resolve({ user: MOCK_ANONYMOUS_USER })),
     isAppActive: true, // Mock property
     $appState: new BehaviorSubject(true), // Mock observable for app state
     $activeTracking: new BehaviorSubject(null), // Mock observable for active tracking
+    $user_activities: new BehaviorSubject(MOCK_ACTIVITIES), // Mock observable for user activities
     ...overrides.applicationService,
   };
 
@@ -447,6 +469,7 @@ export function createIonicMocks(overrides: any = {}) {
     create: jasmine
       .createSpy('create')
       .and.returnValue(Promise.resolve(mockLoading)),
+    dismiss: jasmine.createSpy('dismiss').and.returnValue(Promise.resolve()),
     ...overrides.loadingController,
   };
 
@@ -651,6 +674,9 @@ export function createTestingEnvironment(
   const providers = [
     ...firebaseModule.providers,
 
+    {
+      provide: IconService,
+    },
     // Service providers
     { provide: UserService, useValue: serviceMocks.mockUserService },
     {

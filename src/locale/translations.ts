@@ -497,6 +497,10 @@ const translations: { [key: string]: { [lang: string]: string } } = {
     en: 'No activities found for this user.',
     de: 'Keine Aktivitäten für diesen Benutzer gefunden.',
   },
+  'ranking.searchPlaceholder': {
+    en: 'Search',
+    de: 'Suche',
+  },
 
   // User status
   'user.status.active': {
